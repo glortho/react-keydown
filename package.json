@@ -14,12 +14,14 @@
   },
   "keywords": [
     "react",
+    "react-component",
     "decorator",
     "higher-order-component",
     "keypress",
     "keydown",
     "keyboard",
-    "keynav"
+    "keynav",
+    "key-navigation"
   ],
   "author": "Jed Verity",
   "license": "MIT",
