@@ -5,7 +5,7 @@ Use react-keydown as a higher-order component or decorator to pass keydown
 events to the wrapped component.
 
 One of the main advantages of this library is that it only passes events
-into the component when the user appears to be active inside the DOM elemnts
+into the component when the user appears to be active inside the DOM elements
 corresponding to that component and its children.
 
 ## Install
@@ -34,7 +34,7 @@ class MyComponent extends React.Component {
 
   render() {
     return (
-      &lt;div&gt;keydown events will only get passed down when this DOM node mounts or is clicked on&lt;/div&gt;
+      <div>keydown events will only get passed down when this DOM node mounts or is clicked on</div>
     );
   }
 }
@@ -42,7 +42,7 @@ class MyComponent extends React.Component {
 export default keydown( MyComponent );
 ```
 
-#### Use es7 decorator pattern via Babel:
+#### Use ES7/2016 decorator pattern via Babel:
 
 ```javascript
 @keydown
