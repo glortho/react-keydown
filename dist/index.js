@@ -74,9 +74,7 @@ function componentWrapper(WrappedComponent) {
     }, {
       key: 'render',
       value: function render() {
-        return _react2['default'].createElement(WrappedComponent, _extends({}, this.props, {
-          keydown: this.state
-        }));
+        return _react2['default'].createElement(WrappedComponent, _extends({}, this.props, { keydown: this.state }));
       }
     }]);
 
