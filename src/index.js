@@ -41,8 +41,8 @@ function componentWrapper( WrappedComponent, KEYS = null ) {
       return (
         <WrappedComponent 
           {...this.props} 
-          keyboard = {this.state}
-          ref      = "component"
+          keydown = {this.state}
+          ref     = "component"
         />
       );
     }

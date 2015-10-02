@@ -26,9 +26,10 @@ class MyComponent extends React.Component {
     super( props );
   }
 
-  componentWillReceiveProps( nextProps ) {
-    if ( nextProps.keydown.event ) {
+  componentWillReceiveProps( { keydown } ) {
+    if ( keydown.event ) {
       // do something with the keydown event
+      console.log( keydown.event.which );
     }
   }
 

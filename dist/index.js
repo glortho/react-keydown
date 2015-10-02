@@ -75,7 +75,7 @@ function componentWrapper(WrappedComponent) {
       key: 'render',
       value: function render() {
         return _react2['default'].createElement(WrappedComponent, _extends({}, this.props, {
-          keyboard: this.state,
+          keydown: this.state,
           ref: 'component'
         }));
       }
