@@ -2,7 +2,8 @@
 > Lightweight keydown wrapper for React components.
 
 Use react-keydown as a higher-order component or decorator to pass keydown
-events to the wrapped component.
+events to the wrapped component. Good for implementing keyboard navigation or
+other shortcuts.
 
 One of the main advantages of this library is that it only passes events
 into the component when the user appears to be active inside the DOM elements
@@ -68,3 +69,15 @@ class MyComponent extends React.Component {
   ...
 }
 ```
+Or no need for an array:
+```javascript
+@keydown( 13 ) // just the enter key
+```
+
+## Questions
+
+Why is this so limited, only working on `keydown` and such?
+
+> I published this out of my particular need on a project. If anyone else ever
+arrives here and needs something else let me know via issues or a pull request.
+
