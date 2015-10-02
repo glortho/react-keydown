@@ -16,7 +16,7 @@ npm install --save react-keydown
 
 ## Use
 
-```javascript
+```jsx
 import React from 'react';
 import keydown from 'react-keydown';
 
