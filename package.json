@@ -1,0 +1,36 @@
+{
+  "name": "react-keydown",
+  "version": "1.0.0",
+  "description": "Lightweight keydown wrapper for React components",
+  "main": "dist/index.js",
+  "scripts": {
+    "compile": "babel -o dist/index.js src/index.js",
+    "prepublish": "npm run compile",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedverity/react-keydown.git"
+  },
+  "keywords": [
+    "react",
+    "decorator",
+    "higher-order-component",
+    "keypress",
+    "keydown",
+    "keyboard",
+    "keynav"
+  ],
+  "author": "Jed Verity",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedverity/react-keydown/issues"
+  },
+  "homepage": "https://github.com/jedverity/react-keydown#readme",
+  "devDependencies": {
+    "babel": "^5.8.23"
+  },
+  "dependencies": {
+    "react": "^0.13.3"
+  }
+}
