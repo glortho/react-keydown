@@ -38,12 +38,7 @@ function componentWrapper( WrappedComponent, KEYS = null ) {
     }
 
     render() {
-      return (
-        <WrappedComponent 
-          {...this.props} 
-          keydown = {this.state}
-        />
-      );
+      return <WrappedComponent {...this.props} keydown={this.state} />;
     }
   };
 }
