@@ -36,7 +36,7 @@ class MyComponent extends React.Component {
 
   render() {
     return (
-      <div>keydown events will only get passed down when this DOM node mounts or is clicked on</div>
+      <div>keydown events will only get passed down after this DOM node mounts or is clicked on</div>
     );
   }
 }
