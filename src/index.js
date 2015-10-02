@@ -16,7 +16,7 @@ function componentWrapper( WrappedComponent, KEYS = null ) {
     componentDidMount() {
       document.addEventListener( 'keydown', this.handleKeyDown );
       document.addEventListener( 'click', this.handleClick );
-      this._node = React.findDOMNode( this.refs.component );
+      this._node = React.findDOMNode( this );
       this._hasFocus = true;
     }
 
@@ -42,7 +42,6 @@ function componentWrapper( WrappedComponent, KEYS = null ) {
         <WrappedComponent 
           {...this.props} 
           keydown = {this.state}
-          ref     = "component"
         />
       );
     }

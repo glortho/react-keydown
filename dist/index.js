@@ -42,7 +42,7 @@ function componentWrapper(WrappedComponent) {
       value: function componentDidMount() {
         document.addEventListener('keydown', this.handleKeyDown);
         document.addEventListener('click', this.handleClick);
-        this._node = _react2['default'].findDOMNode(this.refs.component);
+        this._node = _react2['default'].findDOMNode(this);
         this._hasFocus = true;
       }
     }, {
@@ -75,8 +75,7 @@ function componentWrapper(WrappedComponent) {
       key: 'render',
       value: function render() {
         return _react2['default'].createElement(WrappedComponent, _extends({}, this.props, {
-          keydown: this.state,
-          ref: 'component'
+          keydown: this.state
         }));
       }
     }]);
