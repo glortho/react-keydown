@@ -90,7 +90,7 @@ class MyComponent extends React.Component {
 
 Humanize key codes:
 ```javascript
-import { ENTER } from 'react-Keydown'
+import { ENTER } from 'react-keydown'
 
 @keydown( ENTER )
 ```
