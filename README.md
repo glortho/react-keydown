@@ -74,6 +74,20 @@ Or no need for an array:
 @keydown( 13 ) // just the enter key
 ```
 
+## Coming Up
+
+Decorate class methods to assign keys to them:
+```javascript
+class MyComponent extends React.Component {
+  ...
+
+  @keydown( 13 )
+  submit() {
+    // triggered by pressing enter
+  }
+}
+```
+
 ## Questions
 
 Why is this so limited, only working on `keydown` and such?
