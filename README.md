@@ -88,6 +88,13 @@ class MyComponent extends React.Component {
 }
 ```
 
+Humanize key codes:
+```javascript
+import { ENTER } from 'react-Keydown'
+
+@keydown( ENTER )
+```
+
 ## Questions
 
 Why is this so limited, only working on `keydown` and such?
