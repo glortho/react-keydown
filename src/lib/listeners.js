@@ -7,39 +7,48 @@ function handleClick( node, event ) {
 }
 
 function handleKeyDown( { which } ) {
-  if ( this._keyDownHasFocus ) {
-    const bindings = handlers.get( this ).bindings;
-    bindings.forEach( ( fn, keys ) => ( !keys || ~keys.indexOf( which ) ) && fn.call( this, event ) );
+  const focusedComponent = [ ...handlers ].find( ( [ component ] ) => component._keyDownHasFocus );
+  if ( focusedComponent ) {
+    const [ component, { bindings } ] = focusedComponent;
+    bindings.forEach( ( fn, keys ) => ( !keys || ~keys.indexOf( which ) ) && fn.call( component, event ) );
   }
 }
 
-export const onMount = function onMount( { keys, fn } ) {
+function bindListeners() {
+  document.addEventListener( 'keydown', handleKeyDown );
+}
+
+function unbindListeners() {
+  document.removeEventListener( 'keydown', handleKeyDown );
+}
+
+function onMount( { keys, fn } ) {
   const handlerDict = handlers.get( this );
   if ( !handlerDict ) {
+    if ( !handlers.size ) bindListeners();
     const node = React.findDOMNode( this );
     const onClickBound = handleClick.bind( this, node );
-    const onKeyDownBound = handleKeyDown.bind( this );
 
     handlers.set( this, { 
       bindings: new Map( [ [ keys, fn ] ] ),
-      onClick: onClickBound,
-      onKeyDown: onKeyDownBound
+      onClick: onClickBound
     });
 
-    document.addEventListener( 'keydown', onKeyDownBound );
     document.addEventListener( 'click', onClickBound );
     this._keyDownHasFocus = true;
   } else {
     handlerDict.bindings.set( keys, fn );
   }
-};
+}
 
-export const onUnmount = function onUnmount() {
+function onUnmount() {
   const handler = handlers.get( this );
   if ( handler ) {
-    document.removeEventListener( 'keydown', handler.onKeyDown );
     document.removeEventListener( 'click', handler.onClick );
+    handlers.delete( this );
   }
+  if ( !handlers.size ) unbindListeners();
   this._keyDownHasFocus = false;
-};
+}
 
+export { onMount, onUnmount };
