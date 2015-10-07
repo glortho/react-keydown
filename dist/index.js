@@ -14,6 +14,10 @@ var _libMethod_decorator = require('./lib/method_decorator');
 
 var _libMethod_decorator2 = _interopRequireDefault(_libMethod_decorator);
 
+var _libKeys = require('./lib/keys');
+
+var _libKeys2 = _interopRequireDefault(_libKeys);
+
 function keyboardDecorator() {
   for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
@@ -38,4 +42,4 @@ function keyboardDecorator() {
 }
 
 exports['default'] = keyboardDecorator;
-module.exports = exports['default'];
+exports.Keys = _libKeys2['default'];

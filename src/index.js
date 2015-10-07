@@ -1,5 +1,6 @@
 import classWrapper  from './lib/class_decorator';
 import methodWrapper from './lib/method_decorator';
+import Keys          from './lib/keys';
 
 function keyboardDecorator( ...args ) {
   const testArg = args[0];
@@ -17,3 +18,5 @@ function keyboardDecorator( ...args ) {
 }
 
 export default keyboardDecorator;
+
+export { Keys };
