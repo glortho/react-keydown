@@ -2,7 +2,7 @@ import React from 'react';
 
 import { onMount, onUnmount } from './listeners';
 
-function componentWrapper( WrappedComponent, keys ) {
+function componentWrapper( WrappedComponent, keys = null ) {
   
   return class KeyBoardHelper extends React.Component {
 
