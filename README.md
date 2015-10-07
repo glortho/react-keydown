@@ -2,8 +2,8 @@
 > Lightweight keydown wrapper for React components.
 
 Use react-keydown as a higher-order component or decorator to pass keydown
-events to the wrapped component. Good for implementing keyboard navigation or
-other shortcuts.
+events to the wrapped component, or call methods directly via designated keys. Good 
+for implementing keyboard navigation or other shortcuts.
 
 One of the main advantages of this library is that it only passes events
 into the component when the user appears to be active inside the DOM elements
@@ -16,6 +16,8 @@ npm install --save react-keydown
 ```
 
 ## Use
+
+### For classes: Pass keydown events into your component
 
 ```jsx
 import React from 'react';
@@ -74,25 +76,33 @@ Or no need for an array:
 @keydown( 13 ) // just the enter key
 ```
 
-## Coming Up
+### For methods: Decorate with keys that should trigger method
 
-Decorate class methods to assign keys to them:
 ```javascript
+import React from 'react';
+import keydown, { Keys } from 'react-keydown';
+
+const { ENTER } = Keys;
+
 class MyComponent extends React.Component {
+
   ...
 
-  @keydown( 13 )
-  submit() {
-    // triggered by pressing enter
+  @keydown( ENTER ) // or specify `which` code directly, in this case 13
+  submit( event ) {
+    event.preventDefault(); // optional
+    MyApi.post( this.state );
   }
 }
 ```
 
-Humanize key codes:
-```javascript
-import { ENTER } from 'react-keydown'
+#### Specify multiple keys that should trigger the method
 
-@keydown( ENTER )
+```javascript
+@keydown( ENTER, TAB )
+autocomplete( event ) {
+  MyApi.get( this.state );
+}
 ```
 
 ## Questions
