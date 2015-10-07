@@ -1,15 +1,16 @@
-import classWrapper  from './lib/class_decorator';
-import methodWrapper from './lib/method_decorator';
-import Keys          from './lib/keys';
+import classWrapper        from './lib/class_decorator';
+import methodWrapper       from './lib/method_decorator';
+import methodWrapperScoped from './lib/method_decorator_scoped';
+import Keys                from './lib/keys';
 
-function keyboardDecorator( ...args ) {
+function keyboardDecorator( methodFn, ...args ) {
   const testArg = args[0];
   const isArray = Array.isArray( testArg );
   if ( isArray || parseInt( testArg, 10 ) ) {
     const keys = isArray ? testArg : args;
     return ( target, methodName, descriptor ) => {
       return methodName ?
-        methodWrapper( { target, descriptor, keys } ) :
+        methodFn( { target, descriptor, keys } ) :
         classWrapper( target, keys );
     };
   } else {
@@ -17,6 +18,14 @@ function keyboardDecorator( ...args ) {
   }
 }
 
-export default keyboardDecorator;
+function keydownScoped( ...args ) {
+  return keyboardDecorator( methodWrapperScoped, ...args );
+}
 
-export { Keys };
+function keydown( ...args ) {
+  return keyboardDecorator( methodWrapper, ...args );
+}
+
+export default keydown;
+
+export { Keys, keydownScoped };
