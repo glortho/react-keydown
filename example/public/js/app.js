@@ -20641,11 +20641,15 @@
 	          null,
 	          'Class Decorator Example'
 	        ),
-	        'Last key code pressed: ',
 	        _react2['default'].createElement(
-	          'strong',
-	          null,
-	          this.state.key
+	          'div',
+	          { style: { padding: '8px 5px', border: 'rgba(0, 146, 255, 0.54) solid', borderLeftStyle: 'none', borderRightStyle: 'none' } },
+	          'Last key code pressed: ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            this.state.key
+	          )
 	        ),
 	        _react2['default'].createElement(
 	          'ol',
@@ -21237,7 +21241,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var code = '<code>import React from &#x27;react&#x27;;\nimport keydown, { Keys } from &#x27;keydown&#x27;;\n\nconst { ENTER } = Keys;\n\nclass MethodDecorator extends React.Component {\n  constructor( props ) {\n    super( props );\n    this.state = {\n      hello: false\n    };\n  }\n\n  @keydown( ENTER )\n  toggleHello() {\n    this.setState( { hello: !this.state.hello } );\n  }\n\n  render() {\n    return (\n      &#x3C;div&#x3E;\n        &#x3C;h3&#x3E;Method Decorator Example&#x3C;/h3&#x3E;\n        &#x3C;div&#x3E;Press the &#x3C;strong&#x3E;enter&#x3C;/strong&#x3E; key to toggle hello.&#x3C;/div&#x3E;\n        { this.state.hello &#x26;&#x26;\n          &#x3C;h1&#x3E;Hello!&#x3C;/h1&#x3E;\n        }\n        &#x3C;div&#x3E;And click again outside box to see scoping.&#x3C;/div&#x3E;\n      &#x3C;/div&#x3E;\n    );\n  }\n}</code>';
+	var code = '<code>import React from &#x27;react&#x27;;\nimport keydown, { Keys } from &#x27;keydown&#x27;;\n\nconst { ENTER } = Keys;\n\nclass MethodDecoratorExample extends React.Component {\n  constructor( props ) {\n    super( props );\n    this.state = {\n      hello: false\n    };\n  }\n\n  @keydown( ENTER )\n  toggleHello() {\n    this.setState( { hello: !this.state.hello } );\n  }\n\n  render() {\n    return (\n      &#x3C;div&#x3E;\n        &#x3C;h3&#x3E;Method Decorator Example&#x3C;/h3&#x3E;\n        &#x3C;div&#x3E;Press the &#x3C;strong&#x3E;enter&#x3C;/strong&#x3E; key to toggle hello.&#x3C;/div&#x3E;\n        { this.state.hello &#x26;&#x26;\n          &#x3C;h1&#x3E;Hello!&#x3C;/h1&#x3E;\n        }\n        &#x3C;div&#x3E;And click again outside box to see scoping.&#x3C;/div&#x3E;\n      &#x3C;/div&#x3E;\n    );\n  }\n}</code>';
 
 	var Code = (function (_React$Component) {
 	  _inherits(Code, _React$Component);

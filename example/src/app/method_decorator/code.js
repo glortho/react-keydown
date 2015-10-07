@@ -6,7 +6,7 @@ import keydown, { Keys } from &#x27;keydown&#x27;;
 
 const { ENTER } = Keys;
 
-class MethodDecorator extends React.Component {
+class MethodDecoratorExample extends React.Component {
   constructor( props ) {
     super( props );
     this.state = {
