@@ -7,10 +7,10 @@ function handleClick( node, event ) {
 }
 
 function handleKeyDown( { which } ) {
-  const focusedComponent = [ ...handlers ].find( ( [ component ] ) => component._keyDownHasFocus );
-  if ( focusedComponent ) {
-    const [ component, { bindings } ] = focusedComponent;
-    bindings.forEach( ( fn, keys ) => ( !keys || ~keys.indexOf( which ) ) && fn.call( component, event ) );
+  const handler = [ ...handlers ].find( ( [ componentInstance ] ) => componentInstance._keyDownHasFocus );
+  if ( handler ) {
+    const [ componentInstance, { bindings } ] = handler;
+    bindings.forEach( ( fn, keys ) => ( !keys || ~keys.indexOf( which ) ) && fn.call( componentInstance, event ) );
   }
 }
 
