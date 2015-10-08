@@ -105,6 +105,12 @@ autocomplete( event ) {
 }
 ```
 
+## Demo
+
+Just open `./example/public/index.html` in a browser.
+
+Note that this is very much a work in progress!
+
 ## Notes and disclaimers
 
 * The decorator pattern `@keydown` currently requires transpilation by
