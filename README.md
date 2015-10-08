@@ -115,7 +115,7 @@ Or no need for an array:
 ## Demo
 
 ```
-$ open `./example/public/index.html`
+$ open example/public/index.html
 ```
 
 Note that this is very much a work in progress!
