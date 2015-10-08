@@ -11,7 +11,8 @@ Key advantages:
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys
 * **Component scoping**: Key bindings respond only when component mounts and/or
   the user appears to be active there
-* **Tiny**: 2kb compressed and gzipped
+* **Tiny**: 2kb compressed and gzipped (with UMD module wrapping -- smaller
+  without it)
 
 ## Install
 
