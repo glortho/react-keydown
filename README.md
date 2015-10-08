@@ -113,7 +113,9 @@ Or no need for an array:
 
 ## Demo
 
-Just open `./example/public/index.html` in a browser.
+```
+$ open `./example/public/index.html`
+```
 
 Note that this is very much a work in progress!
 
