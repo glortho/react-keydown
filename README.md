@@ -17,6 +17,35 @@ npm install --save react-keydown
 
 ## Use
 
+### For methods: Decorate with keys that should trigger method
+
+```javascript
+import React from 'react';
+import keydown, { Keys } from 'react-keydown';
+
+const { ENTER } = Keys;
+
+class MyComponent extends React.Component {
+
+  ...
+
+  @keydown( ENTER ) // or specify `which` code directly, in this case 13
+  submit( event ) {
+    event.preventDefault(); // optional
+    MyApi.post( this.state );
+  }
+}
+```
+
+#### Specify multiple keys that should trigger the method
+
+```javascript
+@keydown( ENTER, TAB )
+autocomplete( event ) {
+  MyApi.get( this.state );
+}
+```
+
 ### For classes: Pass keydown events into your component
 
 ```jsx
@@ -74,35 +103,6 @@ class MyComponent extends React.Component {
 Or no need for an array:
 ```javascript
 @keydown( 13 ) // just the enter key
-```
-
-### For methods: Decorate with keys that should trigger method
-
-```javascript
-import React from 'react';
-import keydown, { Keys } from 'react-keydown';
-
-const { ENTER } = Keys;
-
-class MyComponent extends React.Component {
-
-  ...
-
-  @keydown( ENTER ) // or specify `which` code directly, in this case 13
-  submit( event ) {
-    event.preventDefault(); // optional
-    MyApi.post( this.state );
-  }
-}
-```
-
-#### Specify multiple keys that should trigger the method
-
-```javascript
-@keydown( ENTER, TAB )
-autocomplete( event ) {
-  MyApi.get( this.state );
-}
 ```
 
 ## Demo
