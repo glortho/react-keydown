@@ -2,14 +2,14 @@ import React from 'react';
 
 const handlers = new Map();
 
-function handleClick( node, event ) {
-  this._keyDownHasFocus = event.target === node || node.contains( event.target );
+function handleClick( node, { target } ) {
+  handlers.get( this ).hasFocus = target === node || node.contains( target );
 }
 
 function handleKeyDown( { which } ) {
-  const handler = [ ...handlers ].find( ( [ componentInstance ] ) => componentInstance._keyDownHasFocus );
-  if ( handler ) {
-    const [ componentInstance, { bindings } ] = handler;
+  const focusedComponent = [ ...handlers ].find( ( [, data ] ) => data.hasFocus );
+  if ( focusedComponent ) {
+    const [ componentInstance, { bindings } ] = focusedComponent;
     bindings.forEach( ( fn, keys ) => ( !keys || ~keys.indexOf( which ) ) && fn.call( componentInstance, event ) );
   }
 }
@@ -35,10 +35,10 @@ function onMount( { keys, fn } ) {
     });
 
     document.addEventListener( 'click', onClickBound );
-    this._keyDownHasFocus = true;
   } else {
     handlerDict.bindings.set( keys, fn );
   }
+  handlers.get( this ).hasFocus = true;
 }
 
 function onUnmount() {
@@ -48,7 +48,6 @@ function onUnmount() {
     handlers.delete( this );
   }
   if ( !handlers.size ) unbindListeners();
-  this._keyDownHasFocus = false;
 }
 
 export { onMount, onUnmount };
