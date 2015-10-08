@@ -46,7 +46,7 @@ class MyComponent extends React.Component {
 export default keydown( MyComponent );
 ```
 
-#### Use ES7/2016 decorator pattern via Babel:
+#### Use ES7/2016 decorator pattern via Babel (stage 1):
 
 ```javascript
 @keydown
@@ -104,6 +104,17 @@ autocomplete( event ) {
   MyApi.get( this.state );
 }
 ```
+
+## Notes and disclaimers
+
+* The decorator pattern `@keydown` currently requires transpilation by
+  [Babel](babeljs.io/) (set to
+  stage 1) or the equivalent
+* This lib has only been tested using ES2015 classes. Some method decoration
+  functionality may work on other types of object methods.
+* The method decorators wrap React lifecycle methods in order to work
+  as seamlessly and efficiently as possible. The class decorator does not do
+  this, functioning instead as a higher-order component.
 
 ## Questions
 
