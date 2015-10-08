@@ -1,21 +1,20 @@
 import React from 'react';
 
-import { onMount, onUnmount } from './listeners';
+import { addBinding, onMount, onUnmount } from './listeners';
 
 function componentWrapper( WrappedComponent, keys = null ) {
-  
-  return class KeyBoardHelper extends React.Component {
+
+  class KeyBoardHelper extends React.Component {
 
     constructor( props ) {
       super( props );
       this.state = {
         event: null
       };
-      this.handleKeyDown = this.handleKeyDown.bind( this );
     }
 
     componentDidMount() {
-      onMount.call( this, { keys, fn: this.handleKeyDown } );
+      onMount.call( this );
     }
 
     componentWillUnmount() {
@@ -29,7 +28,11 @@ function componentWrapper( WrappedComponent, keys = null ) {
     render() {
       return <WrappedComponent {...this.props} keydown={this.state} />;
     }
-  };
+  }
+
+  addBinding( { keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
+
+  return KeyBoardHelper;
 }
 
 export default componentWrapper;
