@@ -23,8 +23,8 @@ function unbindListeners() {
 }
 
 function onMount( { keys, fn } ) {
-  const handlerDict = handlers.get( this );
-  if ( !handlerDict ) {
+  const handler = handlers.get( this );
+  if ( !handler ) {
     if ( !handlers.size ) bindListeners();
     const node = React.findDOMNode( this );
     const onClickBound = handleClick.bind( this, node );
@@ -36,7 +36,7 @@ function onMount( { keys, fn } ) {
 
     document.addEventListener( 'click', onClickBound );
   } else {
-    handlerDict.bindings.set( keys, fn );
+    handler.bindings.set( keys, fn );
   }
   handlers.get( this ).hasFocus = true;
 }
