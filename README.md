@@ -114,6 +114,9 @@ Or no need for an array:
 
 ## Demo
 
+Go to the [live
+demo](http://jedverity.github.io/react-keydown/example/index.html) or:
+
 ```
 $ open example/public/index.html
 ```
