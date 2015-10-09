@@ -189,22 +189,24 @@
    */
   function _bindInputs(instance) {
     if (document.querySelectorAll) {
-      var onFocus = function onFocus(element) {
-        var onFocusPrev = element.onfocus;
-        return function (event) {
-          _activate(instance);
-          if (onFocusPrev) onFocusPrev.call(element, event);
-        };
-      };
       var node = _React['default'].findDOMNode(instance);
       if (node) {
         var focusables = node.querySelectorAll('a[href], button, input, object, select, textarea, [tabindex]');
+        if (focusables.length) {
+          var onFocus = function onFocus(element) {
+            var onFocusPrev = element.onfocus;
+            return function (event) {
+              _activate(instance);
+              if (onFocusPrev) onFocusPrev.call(element, event);
+            };
+          };
 
-        var _arr = [].concat(_toConsumableArray(focusables));
+          var _arr = [].concat(_toConsumableArray(focusables));
 
-        for (var _i = 0; _i < _arr.length; _i++) {
-          var element = _arr[_i];
-          element.onfocus = onFocus(element);
+          for (var _i = 0; _i < _arr.length; _i++) {
+            var element = _arr[_i];
+            element.onfocus = onFocus(element);
+          }
         }
       }
     }
