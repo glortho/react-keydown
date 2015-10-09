@@ -87,12 +87,12 @@
   }
 
   /**
-   * _focus
+   * _activate
    *
    * @access private
    * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
    */
-  function _focus(instance) {
+  function _activate(instance) {
     _focusedInstance = instance;
     return instance ? _bindKeys() : _unbindKeys();
   }
@@ -139,7 +139,7 @@
       }
     }
 
-    _focus(focusedInstance);
+    _activate(focusedInstance);
   }
 
   /**
@@ -192,18 +192,20 @@
       var onFocus = function onFocus(element) {
         var onFocusPrev = element.onfocus;
         return function (event) {
-          _focus(instance);
+          _activate(instance);
           if (onFocusPrev) onFocusPrev.call(element, event);
         };
       };
       var node = _React['default'].findDOMNode(instance);
-      var focusables = node.querySelectorAll('a[href], button, input, object, select, textarea, [tabindex]');
+      if (node) {
+        var focusables = node.querySelectorAll('a[href], button, input, object, select, textarea, [tabindex]');
 
-      var _arr = [].concat(_toConsumableArray(focusables));
+        var _arr = [].concat(_toConsumableArray(focusables));
 
-      for (var _i = 0; _i < _arr.length; _i++) {
-        var element = _arr[_i];
-        element.onfocus = onFocus(element);
+        for (var _i = 0; _i < _arr.length; _i++) {
+          var element = _arr[_i];
+          element.onfocus = onFocus(element);
+        }
       }
     }
   }
@@ -310,7 +312,7 @@
     // have to bump this to next event loop because component mounting routinely
     // preceeds the dom click event that triggered the mount (wtf?)
     setTimeout(function () {
-      return _focus(instance);
+      return _activate(instance);
     }, 0);
   }
 
@@ -322,7 +324,7 @@
   function onUnmount(instance) {
     _deleteInstance(instance);
     _unbindClicks();
-    if (_focusedInstance === instance) _focus(null);
+    if (_focusedInstance === instance) _activate(null);
   }
 
   exports.setBinding = setBinding;
