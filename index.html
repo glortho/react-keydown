@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>React-keydown by jedverity</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>React-keydown</h1>
+        <h2>Lightweight keydown wrapper for React components</h2>
+        <a href="https://github.com/jedverity/react-keydown" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="react-keydown" class="anchor" href="#react-keydown" aria-hidden="true"><span class="octicon octicon-link"></span></a>react-keydown</h1>
+
+<blockquote>
+<p>Lightweight keydown wrapper for React components.</p>
+</blockquote>
+
+<p>Use react-keydown as a higher-order component or decorator to pass keydown
+events to the wrapped component, or call methods directly via designated keys. Good 
+for implementing keyboard navigation or other shortcuts.</p>
+
+<p>Key advantages:</p>
+
+<ul>
+<li>
+<strong>Declarative syntax</strong>: Components say what keys they will respond to.</li>
+<li>
+<strong>Intuitive DX</strong>: Decorate a class or method to bind it to specified keys</li>
+<li>
+<strong>Component scoping</strong>: Key bindings respond only when component mounts and/or
+the user appears to be active there</li>
+<li>
+<strong>Tiny</strong>: 2kb compressed and gzipped (with UMD module wrapping -- smaller
+without it)</li>
+</ul>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<pre><code>npm install --save react-keydown
+</code></pre>
+
+<h2>
+<a id="use" class="anchor" href="#use" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use</h2>
+
+<h3>
+<a id="for-methods-decorate-with-keys-that-should-trigger-method" class="anchor" href="#for-methods-decorate-with-keys-that-should-trigger-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>For methods: Decorate with keys that should trigger method</h3>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> React <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> keydown, { Keys } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-keydown<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">const</span> { <span class="pl-c1">ENTER</span> } <span class="pl-k">=</span> Keys;
+
+<span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
+
+  ...
+
+  @keydown( <span class="pl-c1">ENTER</span> ) <span class="pl-c">// or specify `which` code directly, in this case 13</span>
+  <span class="pl-en">submit</span>() {
+    MyApi.post( <span class="pl-v">this</span>.state );
+  }
+}</pre></div>
+
+<p>Note: The keydown event will be passed to the decorated method for further
+processing, if desired. For example, you may went to <code>event.preventDefault()</code>.</p>
+
+<h4>
+<a id="specify-multiple-keys-that-should-trigger-the-method" class="anchor" href="#specify-multiple-keys-that-should-trigger-the-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Specify multiple keys that should trigger the method</h4>
+
+<div class="highlight highlight-source-js"><pre>@keydown( <span class="pl-c1">ENTER</span>, <span class="pl-c1">TAB</span> )
+<span class="pl-en">autocomplete</span>() {
+  MyApi.get( <span class="pl-v">this</span>.state );
+}</pre></div>
+
+<h3>
+<a id="for-classes-pass-keydown-events-into-your-component" class="anchor" href="#for-classes-pass-keydown-events-into-your-component" aria-hidden="true"><span class="octicon octicon-link"></span></a>For classes: Pass keydown events into your component</h3>
+
+<div class="highlight highlight-source-js-jsx"><pre><span class="pl-k">import</span><span class="pl-smi"> React</span><span class="pl-k"> from</span><span class="pl-s"><span class="pl-pds"> '</span>react<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span><span class="pl-smi"> keydown</span><span class="pl-k"> from</span><span class="pl-s"><span class="pl-pds"> '</span>react-keydown<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React</span><span class="pl-k">.</span><span class="pl-smi">Component</span> {
+
+  <span class="pl-en">constructor</span>(<span class="pl-smi"> props</span> ) {
+    <span class="pl-en">super</span>(<span class="pl-smi"> props</span> );
+  }
+
+  <span class="pl-en">componentWillReceiveProps</span>( {<span class="pl-smi"> keydown</span> } ) {
+<span class="pl-k">    if</span> (<span class="pl-smi"> keydown</span><span class="pl-k">.</span><span class="pl-smi">event</span> ) {
+<span class="pl-c">      // do something with the keydown event</span>
+      <span class="pl-c1">console</span><span class="pl-k">.</span><span class="pl-c1">log</span>(<span class="pl-smi"> keydown</span><span class="pl-k">.</span><span class="pl-smi">event</span><span class="pl-k">.</span><span class="pl-smi">which</span> );
+    }
+  }
+
+  <span class="pl-en">render</span>() {
+<span class="pl-k">    return</span> (
+      &lt;<span class="pl-ent">div</span>&gt;keydown events will only get passed down after this DOM node mounts or is clicked on&lt;/<span class="pl-ent">div</span>&gt;
+    );
+  }
+}
+
+<span class="pl-k">export default</span> <span class="pl-en">keydown</span>(<span class="pl-smi"> MyComponent</span> );</pre></div>
+
+<h4>
+<a id="use-es72016-decorator-pattern-via-babel-stage-1" class="anchor" href="#use-es72016-decorator-pattern-via-babel-stage-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use ES7/2016 decorator pattern via Babel (stage 1):</h4>
+
+<div class="highlight highlight-source-js"><pre>@keydown
+<span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
+  ...
+}
+
+<span class="pl-k">export</span> <span class="pl-k">default</span> MyComponent;</pre></div>
+
+<h4>
+<a id="monitor-only-key-codes-which-you-care-about" class="anchor" href="#monitor-only-key-codes-which-you-care-about" aria-hidden="true"><span class="octicon octicon-link"></span></a>Monitor only key codes <code>which</code> you care about:</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">const</span> <span class="pl-c1">KEYS</span> <span class="pl-k">=</span> [
+  <span class="pl-c1">38</span>, <span class="pl-c">// up</span>
+  <span class="pl-c1">40</span>, <span class="pl-c">// down</span>
+  <span class="pl-c1">13</span>  <span class="pl-c">// enter</span>
+];
+
+@keydown( <span class="pl-c1">KEYS</span> )
+<span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
+  ...
+}</pre></div>
+
+<p>Or no need for an array:</p>
+
+<div class="highlight highlight-source-js"><pre>@keydown( <span class="pl-c1">13</span> ) <span class="pl-c">// just the enter key</span></pre></div>
+
+<h2>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<pre><code>$ open example/public/index.html
+</code></pre>
+
+<p>Note that this is very much a work in progress!</p>
+
+<h2>
+<a id="notes-and-disclaimers" class="anchor" href="#notes-and-disclaimers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notes and disclaimers</h2>
+
+<ul>
+<li>The decorator pattern <code>@keydown</code> currently requires transpilation by
+<a href="babeljs.io/">Babel</a> (set to
+stage 1) or the equivalent</li>
+<li>Since the only context we have for keydown events is the component, decorated
+methods receive the event as their sole argument and the component instance as
+context.</li>
+<li>This lib has only been tested using ES2015 classes. Some method decoration
+functionality may work on other types of object methods.</li>
+<li>The method decorators wrap React lifecycle methods in order to work
+as seamlessly and efficiently as possible. The class decorator does not do
+this, functioning instead as a higher-order component.</li>
+</ul>
+
+<h2>
+<a id="questions" class="anchor" href="#questions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Questions</h2>
+
+<p>Why is this so limited, only working on <code>keydown</code> and such?</p>
+
+<blockquote>
+<p>I published this out of my particular need on a project. If anyone else ever
+arrives here and needs something else let me know via issues or a pull request.</p>
+</blockquote>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/jedverity/react-keydown/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/jedverity/react-keydown/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/jedverity/react-keydown"></a> is maintained by <a href="https://github.com/jedverity">jedverity</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
