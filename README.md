@@ -9,8 +9,7 @@ Key advantages:
 
 * **Declarative syntax**: Components say what keys they will respond to.
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys
-* **Component scoping**: Key bindings respond only when component mounts and/or
-  the user appears to be active there
+* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
 * **Tiny**: 2kb compressed and gzipped (with UMD module wrapping -- smaller
   without it)
 
@@ -128,21 +127,17 @@ Note that this is very much a work in progress!
 * The decorator pattern `@keydown` currently requires transpilation by
   [Babel](babeljs.io/) (set to
   stage 1) or the equivalent
+* This lib has only been tested using ES2015 classes. Some method decoration
+  functionality may work on other types of object methods.
+* In order to avoid unintended side effects, only one component (and its children) can receive
+  keydown events at a time (the most recently mounted, clicked, or focused component). If you want multiple     
+  components to receive keydown events simultaneously, decorate a common ancestor component class with `@keydown`     and then decorate your methods in the child components with `@keydownScoped( myKeyCode )` (or manually work with    the keydown.event props flowing into your components). For example, if you want app-wide shortcuts, decorate (or    wrap) the root component with `@keydown` and then all descendent components will receive the `keydown.event` prop   when a key is pressed.
 * Since the only context we have for keydown events is the component, decorated
   methods receive the event as their sole argument and the component instance as
   context.
-* This lib has only been tested using ES2015 classes. Some method decoration
-  functionality may work on other types of object methods.
 * The method decorators wrap React lifecycle methods in order to work
   as seamlessly and efficiently as possible. The class decorator does not do
   this, functioning instead as a higher-order component.
-* In order to avoid unintended side effects, only one component can receive
-  keydown events at a time. This will be the most recently mounted or clicked
-  component with key bindings. If you want multiple components to receive
-  keydown events simultaneously, decorate a common ancestor component class with
-  `@keydown` and then decorate your methods in the child components with 
-  `@keydownScoped( myKeyCode )` (or manually work with the keydown.event props
-  flowing into your components).
 
 ## Questions
 
