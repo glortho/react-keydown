@@ -129,18 +129,20 @@ function _handleKeyDown( event ) {
  */
 function _bindInputs( instance ) {
   if ( document.querySelectorAll ) {
-    const onFocus = element => {
-      const onFocusPrev = element.onfocus;
-      return function( event ) {
-        _activate( instance );
-        if ( onFocusPrev ) onFocusPrev.call( element, event );
-      };
-    };
     const node = React.findDOMNode( instance );
     if ( node ) {
       const focusables = node.querySelectorAll( 'a[href], button, input, object, select, textarea, [tabindex]' );
-      for ( let element of [ ...focusables ] ) {
-        element.onfocus = onFocus( element );
+      if ( focusables.length ) {
+        const onFocus = element => {
+          const onFocusPrev = element.onfocus;
+          return function( event ) {
+            _activate( instance );
+            if ( onFocusPrev ) onFocusPrev.call( element, event );
+          };
+        };
+        for ( let element of [ ...focusables ] ) {
+          element.onfocus = onFocus( element );
+        }
       }
     }
   }
