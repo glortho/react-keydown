@@ -11,6 +11,10 @@
     global.class_decorator = mod.exports;
   }
 })(this, function (exports, module, _react, _listeners) {
+  /**
+   * @module componentWrapper
+   *
+   */
   'use strict';
 
   var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -27,6 +31,14 @@
 
   var _React = _interopRequireDefault(_react);
 
+  /**
+   * componentWrapper
+   *
+   * @access public
+   * @param {object} WrappedComponent React component class to be wrapped
+   * @param {array} [keys] The key(s) bound to the class
+   * @return {object} The higher-order function that wraps the decorated class
+   */
   function componentWrapper(WrappedComponent) {
     var keys = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
@@ -57,6 +69,7 @@
         value: function handleKeyDown(event) {
           var _this = this;
 
+          // to simulate a keypress, set the event and then clear it in the callback
           this.setState({ event: event }, function () {
             return _this.setState({ event: null });
           });

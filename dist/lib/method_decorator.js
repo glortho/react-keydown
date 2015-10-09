@@ -11,29 +11,48 @@
     global.method_decorator = mod.exports;
   }
 })(this, function (exports, module, _listeners) {
+  /**
+   * @module methodWrapper
+   *
+   */
   'use strict';
 
+  /**
+   * methodWrapper
+   *
+   * @access public
+   * @param {object} args All arguments necessary for wrapping method
+   * @param {object} args.target The decorated class
+   * @param {object} args.descriptor Method descriptor
+   * @param {array} args.keys The array of keys bound to the given method
+   * @return {object} The method descriptor
+   */
   function methodWrapper(_ref) {
     var target = _ref.target;
     var descriptor = _ref.descriptor;
     var keys = _ref.keys;
-    var componentDidMount = target.componentDidMount;
-    var componentWillUnmount = target.componentWillUnmount;
 
-    var fn = descriptor.value;
-
+    // if we haven't already created a binding for this class (via another
+    // decorated method), wrap these lifecycle methods.
     if (!(0, _listeners.getBinding)(target)) {
-      target.componentDidMount = function () {
-        _listeners.onMount.call(this);
-        if (componentDidMount) return componentDidMount.call(this);
-      };
-      target.componentWillUnmount = function () {
-        _listeners.onUnmount.call(this);
-        if (componentWillUnmount) return componentWillUnmount.call(this);
-      };
+      (function () {
+        var componentDidMount = target.componentDidMount;
+        var componentWillUnmount = target.componentWillUnmount;
+
+        target.componentDidMount = function () {
+          _listeners.onMount.call(this);
+          if (componentDidMount) return componentDidMount.call(this);
+        };
+
+        target.componentWillUnmount = function () {
+          _listeners.onUnmount.call(this);
+          if (componentWillUnmount) return componentWillUnmount.call(this);
+        };
+      })();
     }
 
-    (0, _listeners.setBinding)({ keys: keys, fn: fn, target: target });
+    // add this binding of keys and method to the target's bindings
+    (0, _listeners.setBinding)({ keys: keys, target: target, fn: descriptor.value });
 
     return descriptor;
   }
