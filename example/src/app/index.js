@@ -10,31 +10,25 @@ class Index extends React.Component {
   constructor( props ) {
     super( props );
     this.state = {
-      showCode: false,
       example: 'class'
     };
     this.getStyle = this.getStyle.bind( this );
   }
 
   selectExample( label ) {
-    this.setState( { example: label, showCode: false } );
-  }
-
-  showCode( label ) {
-    this.setState( ( { showCode } ) => {
-      let value = null;
-      if ( showCode !== label ) value = label;
-      return { showCode: value };
-    });
+    this.setState( { example: label } );
   }
 
   getStyle( match ) {
     const style = {
       backgroundColor: 'white',
-      color: '#0084FF'
+      color:           '#0084FF',
+      padding:         '0.6em',
+      fontSize:        '1.1em',
+      margin:          '1em'
     };
     if ( this.state.example === match ) {
-      style.backgroundColor = 'rgba(0, 132, 255, 0.42)';
+      style.backgroundColor = 'rgba(0, 132, 255, 0.32)';
       style.color = 'black';
     }
     return style;
@@ -43,26 +37,21 @@ class Index extends React.Component {
   render() {
     return (
       <div>
-        <div><h2>react-keydown Examples</h2></div>
+        <div style={{textAlign: 'center', padding: '0.8em 0.4em', fontSize: '2em'}}>React Keydown Examples</div>
         <div>
-          <div style={{marginTop: '0px', float: 'left'}}>
+          <div style={{marginTop: '0px', textAlign: 'center'}}>
             <a style={this.getStyle( 'class' )} onClick={() => this.selectExample( 'class' )}>Class Decorator</a>
             <a style={this.getStyle( 'method' )} onClick={() => this.selectExample( 'method' )}>Method Decorator</a>
           </div>
-          <div style={{height: '100%', borderLeft: '1px #ccc solid', marginLeft: '150px', paddingLeft: '20px'}}>
-            { this.state.example === 'class' &&
-              <ClassDecorator />
-            }
-            { this.state.example === 'method' &&
-              <MethodDecorator />
-            }
-            <button onClick={() => this.showCode( this.state.example )}>Toggle Code</button>
-            { this.state.showCode === 'class' &&
-              <ClassDecoratorCode />
-            }
-            { this.state.showCode === 'method' &&
-              <MethodDecoratorCode />
-            }
+          <div style={{marginTop: '1.7em', textAlign: 'center'}}>
+            { this.state.example === 'class' && [
+              <ClassDecorator />,
+              <div style={{display: 'inline-block'}}><ClassDecoratorCode /></div>
+            ]}
+            { this.state.example === 'method' && [
+              <MethodDecorator />,
+              <div style={{display: 'inline-block'}}><MethodDecoratorCode /></div>
+            ]}
           </div>
         </div>
       </div>

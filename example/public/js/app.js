@@ -20482,7 +20482,6 @@
 
 	    _get(Object.getPrototypeOf(Index.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      showCode: false,
 	      example: 'class'
 	    };
 	    this.getStyle = this.getStyle.bind(this);
@@ -20491,28 +20490,20 @@
 	  _createClass(Index, [{
 	    key: 'selectExample',
 	    value: function selectExample(label) {
-	      this.setState({ example: label, showCode: false });
-	    }
-	  }, {
-	    key: 'showCode',
-	    value: function showCode(label) {
-	      this.setState(function (_ref) {
-	        var showCode = _ref.showCode;
-
-	        var value = null;
-	        if (showCode !== label) value = label;
-	        return { showCode: value };
-	      });
+	      this.setState({ example: label });
 	    }
 	  }, {
 	    key: 'getStyle',
 	    value: function getStyle(match) {
 	      var style = {
 	        backgroundColor: 'white',
-	        color: '#0084FF'
+	        color: '#0084FF',
+	        padding: '0.6em',
+	        fontSize: '1.1em',
+	        margin: '1em'
 	      };
 	      if (this.state.example === match) {
-	        style.backgroundColor = 'rgba(0, 132, 255, 0.42)';
+	        style.backgroundColor = 'rgba(0, 132, 255, 0.32)';
 	        style.color = 'black';
 	      }
 	      return style;
@@ -20527,19 +20518,15 @@
 	        null,
 	        _react2['default'].createElement(
 	          'div',
-	          null,
-	          _react2['default'].createElement(
-	            'h2',
-	            null,
-	            'react-keydown Examples'
-	          )
+	          { style: { textAlign: 'center', padding: '0.8em 0.4em', fontSize: '2em' } },
+	          'React Keydown Examples'
 	        ),
 	        _react2['default'].createElement(
 	          'div',
 	          null,
 	          _react2['default'].createElement(
 	            'div',
-	            { style: { marginTop: '0px', float: 'left' } },
+	            { style: { marginTop: '0px', textAlign: 'center' } },
 	            _react2['default'].createElement(
 	              'a',
 	              { style: this.getStyle('class'), onClick: function () {
@@ -20557,18 +20544,17 @@
 	          ),
 	          _react2['default'].createElement(
 	            'div',
-	            { style: { height: '100%', borderLeft: '1px #ccc solid', marginLeft: '150px', paddingLeft: '20px' } },
-	            this.state.example === 'class' && _react2['default'].createElement(_class_decorator2['default'], null),
-	            this.state.example === 'method' && _react2['default'].createElement(_method_decorator2['default'], null),
-	            _react2['default'].createElement(
-	              'button',
-	              { onClick: function () {
-	                  return _this.showCode(_this.state.example);
-	                } },
-	              'Toggle Code'
-	            ),
-	            this.state.showCode === 'class' && _react2['default'].createElement(_class_decoratorCode2['default'], null),
-	            this.state.showCode === 'method' && _react2['default'].createElement(_method_decoratorCode2['default'], null)
+	            { style: { marginTop: '1.7em', textAlign: 'center' } },
+	            this.state.example === 'class' && [_react2['default'].createElement(_class_decorator2['default'], null), _react2['default'].createElement(
+	              'div',
+	              { style: { display: 'inline-block' } },
+	              _react2['default'].createElement(_class_decoratorCode2['default'], null)
+	            )],
+	            this.state.example === 'method' && [_react2['default'].createElement(_method_decorator2['default'], null), _react2['default'].createElement(
+	              'div',
+	              { style: { display: 'inline-block' } },
+	              _react2['default'].createElement(_method_decoratorCode2['default'], null)
+	            )]
 	          )
 	        )
 	      );
@@ -20635,10 +20621,10 @@
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'div',
-	        { style: { width: '250px', padding: '20px', backgroundColor: 'rgba(0, 132, 255, 0.42)' } },
+	        { style: { verticalAlign: 'top', margin: '1em 3em 0em 0em', textAlign: 'left', display: 'inline-block', padding: '2em', backgroundColor: 'rgba(0, 132, 255, 0.32)' } },
 	        _react2['default'].createElement(
-	          'h3',
-	          null,
+	          'div',
+	          { style: { margin: '0em', paddingBottom: '0.4em', fontSize: '1.4em' } },
 	          'Class Decorator Example'
 	        ),
 	        _react2['default'].createElement(
@@ -20809,6 +20795,10 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * @module componentWrapper
+	 *
+	 */
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -20833,10 +20823,18 @@
 
 	var _listeners = __webpack_require__(161);
 
+	/**
+	 * componentWrapper
+	 *
+	 * @access public
+	 * @param {object} WrappedComponent React component class to be wrapped
+	 * @param {array} [keys] The key(s) bound to the class
+	 * @return {object} The higher-order function that wraps the decorated class
+	 */
 	function componentWrapper(WrappedComponent) {
 	  var keys = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-	  return (function (_React$Component) {
+	  var KeyBoardHelper = (function (_React$Component) {
 	    _inherits(KeyBoardHelper, _React$Component);
 
 	    function KeyBoardHelper(props) {
@@ -20846,13 +20844,12 @@
 	      this.state = {
 	        event: null
 	      };
-	      this.handleKeyDown = this.handleKeyDown.bind(this);
 	    }
 
 	    _createClass(KeyBoardHelper, [{
 	      key: 'componentDidMount',
 	      value: function componentDidMount() {
-	        _listeners.onMount.call(this, { keys: keys, fn: this.handleKeyDown });
+	        _listeners.onMount.call(this);
 	      }
 	    }, {
 	      key: 'componentWillUnmount',
@@ -20864,6 +20861,7 @@
 	      value: function handleKeyDown(event) {
 	        var _this = this;
 
+	        // to simulate a keypress, set the event and then clear it in the callback
 	        this.setState({ event: event }, function () {
 	          return _this.setState({ event: null });
 	        });
@@ -20877,6 +20875,10 @@
 
 	    return KeyBoardHelper;
 	  })(_react2['default'].Component);
+
+	  (0, _listeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+
+	  return KeyBoardHelper;
 	}
 
 	exports['default'] = componentWrapper;
@@ -20886,6 +20888,10 @@
 /* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * @module listeners
+	 *
+	 */
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -20902,75 +20908,257 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var handlers = new Map();
+	/**
+	 * private
+	 * 
+	 */
 
-	function handleClick(node, event) {
-	  this._keyDownHasFocus = event.target === node || node.contains(event.target);
+	// dict for class prototypes => { bindings, instances }
+	var _handlers = new Map();
+
+	// the currently focused instance that should receive key presses
+	var _focusedInstance = null;
+
+	// flag for whether click listener has been bound to document
+	var _clicksBound = false;
+
+	// flag for whether keydown listener has been bound to document
+	var _keysBound = false;
+
+	/**
+	 * _addInstance
+	 *
+	 * @access private
+	 * @param {object} target Instantiated class that extended React.Component
+	 * @return {set} The set of instances for the passed in class
+	 */
+	function _addInstance(target) {
+	  return getBinding(target.constructor.prototype).instances.add(target);
 	}
 
-	function handleKeyDown(_ref) {
-	  var which = _ref.which;
+	/**
+	 * _deleteInstance
+	 *
+	 * @access private
+	 * @param {object} target Instantiated class that extended React.Component
+	 * @return {boolean} The value set.has( target ) would have returned prior to deletion
+	 */
+	function _deleteInstance(target) {
+	  return getBinding(target.constructor.prototype).instances['delete'](target);
+	}
 
-	  var handler = [].concat(_toConsumableArray(handlers)).find(function (_ref2) {
-	    var _ref22 = _slicedToArray(_ref2, 1);
+	/**
+	 * _findFocused
+	 *
+	 * @access private
+	 * @param {object} data Criteria to use for finding the focused node
+	 * @param {object} data.instance The instantiated React.Component that is
+	 * a candidate for being focuse
+	 * @param {object} data.target The DOM node from the click event
+	 * @return {boolean} Success or failure in matching the node to the event target
+	 */
+	function _findFocused(_ref) {
+	  var target = _ref.target;
+	  var instance = _ref.instance;
 
-	    var componentInstance = _ref22[0];
-	    return componentInstance._keyDownHasFocus;
+	  var node = _react2['default'].findDOMNode(instance);
+	  return target === node || node.contains(target);
+	}
+
+	/**
+	 * _focus
+	 *
+	 * @access private
+	 * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
+	 */
+	function _focus(instance) {
+	  _focusedInstance = instance;
+	  return instance ? _bindKeys() : _unbindKeys();
+	}
+
+	/**
+	 * _handleClick
+	 *
+	 * @access private
+	 * @param {object} event The click event object
+	 * @param {object} event.target The DOM node from the click event
+	 */
+	function _handleClick(_ref2) {
+	  var target = _ref2.target;
+
+	  var findFocused = function findFocused(instance) {
+	    return _findFocused({ target: target, instance: instance });
+	  };
+	  var focusedInstance = null;
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+
+	  try {
+	    for (var _iterator = _handlers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var _step$value = _slicedToArray(_step.value, 2);
+
+	      var instances = _step$value[1].instances;
+
+	      focusedInstance = [].concat(_toConsumableArray(instances)).find(findFocused);
+	      if (focusedInstance) break;
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator['return']) {
+	        _iterator['return']();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+
+	  _focus(focusedInstance);
+	}
+
+	/**
+	 * _handleKeyDown
+	 *
+	 * @access private
+	 * @param {object} event The keydown event object
+	 * @param {number} event.which The key code (which) received from the keydown event
+	 */
+	function _handleKeyDown(_ref3) {
+	  var which = _ref3.which;
+
+	  var _getBinding = getBinding(_focusedInstance.constructor.prototype);
+
+	  var bindings = _getBinding.bindings;
+
+	  bindings.forEach(function (fn, keys) {
+	    return (!keys || ~keys.indexOf(which)) && fn.call(_focusedInstance, event);
 	  });
-	  if (handler) {
-	    (function () {
-	      var _handler = _slicedToArray(handler, 2);
+	}
 
-	      var componentInstance = _handler[0];
-	      var bindings = _handler[1].bindings;
-
-	      bindings.forEach(function (fn, keys) {
-	        return (!keys || ~keys.indexOf(which)) && fn.call(componentInstance, event);
-	      });
-	    })();
+	/**
+	 * _bindKeys
+	 *
+	 * @access private
+	 */
+	function _bindKeys() {
+	  if (!_keysBound) {
+	    document.addEventListener('keydown', _handleKeyDown);
+	    _keysBound = true;
 	  }
 	}
 
-	function bindListeners() {
-	  document.addEventListener('keydown', handleKeyDown);
-	}
-
-	function unbindListeners() {
-	  document.removeEventListener('keydown', handleKeyDown);
-	}
-
-	function onMount(_ref3) {
-	  var keys = _ref3.keys;
-	  var fn = _ref3.fn;
-
-	  var handlerDict = handlers.get(this);
-	  if (!handlerDict) {
-	    if (!handlers.size) bindListeners();
-	    var node = _react2['default'].findDOMNode(this);
-	    var onClickBound = handleClick.bind(this, node);
-
-	    handlers.set(this, {
-	      bindings: new Map([[keys, fn]]),
-	      onClick: onClickBound
-	    });
-
-	    document.addEventListener('click', onClickBound);
-	    this._keyDownHasFocus = true;
-	  } else {
-	    handlerDict.bindings.set(keys, fn);
+	/**
+	 * _unbindKeys
+	 *
+	 * @access private
+	 */
+	function _unbindKeys() {
+	  if (_keysBound) {
+	    document.removeEventListener('keydown', _handleKeyDown);
+	    _keysBound = false;
 	  }
 	}
 
+	/**
+	 * _bindClicks
+	 *
+	 * @access private
+	 */
+	function _bindClicks() {
+	  if (!_clicksBound) {
+	    document.addEventListener('click', _handleClick);
+	    _clicksBound = true;
+	  }
+	}
+
+	/**
+	 * _unbindClicks
+	 *
+	 * @access private
+	 */
+	function _unbindClicks() {
+	  if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref4) {
+	    var _ref42 = _slicedToArray(_ref4, 2);
+
+	    var instances = _ref42[1].instances;
+	    return instances.size;
+	  })) {
+	    document.removeEventListener('click', _handleClick);
+	    _clicksBound = false;
+	  }
+	}
+
+	/**
+	 * public
+	 *
+	 */
+
+	/**
+	 * getBinding
+	 *
+	 * @access public
+	 * @param {object} target Class used as key in dict of bindings and instances
+	 * @return {object} The object containing bindings and instances for the given class
+	 */
+	function getBinding(target) {
+	  return _handlers.get(target);
+	}
+
+	/**
+	 * setBinding
+	 *
+	 * @access public
+	 * @param {object} args All arguments necessary to set the binding
+	 * @param {array} args.keys Key codes that should trigger the fn
+	 * @param {function} args.fn The callback to be triggered when given keys are pressed
+	 * @param {object} args.target The decorated class
+	 */
+	function setBinding(_ref5) {
+	  var keys = _ref5.keys;
+	  var fn = _ref5.fn;
+	  var target = _ref5.target;
+
+	  var handler = getBinding(target);
+	  if (!handler) {
+	    handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
+	  }
+	  handler.bindings.set(keys, fn);
+	}
+
+	/**
+	 * onMount
+	 *
+	 * @access public
+	 */
+	function onMount() {
+	  var _this = this;
+
+	  _bindClicks();
+	  _addInstance(this);
+	  // have to bump this to next event loop because component mounting routinely
+	  // preceeds the dom click event that triggered the mount (wtf?)
+	  setTimeout(function () {
+	    return _focus(_this);
+	  }, 0);
+	}
+
+	/**
+	 * onUnmount
+	 *
+	 * @access public
+	 */
 	function onUnmount() {
-	  var handler = handlers.get(this);
-	  if (handler) {
-	    document.removeEventListener('click', handler.onClick);
-	    handlers['delete'](this);
-	  }
-	  if (!handlers.size) unbindListeners();
-	  this._keyDownHasFocus = false;
+	  _deleteInstance(this);
+	  _unbindClicks();
 	}
 
+	exports.setBinding = setBinding;
+	exports.getBinding = getBinding;
 	exports.onMount = onMount;
 	exports.onUnmount = onUnmount;
 
@@ -20978,6 +21166,10 @@
 /* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * @module methodWrapper
+	 *
+	 */
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -20986,24 +21178,42 @@
 
 	var _listeners = __webpack_require__(161);
 
+	/**
+	 * methodWrapper
+	 *
+	 * @access public
+	 * @param {object} args All arguments necessary for wrapping method
+	 * @param {object} args.target The decorated class
+	 * @param {object} args.descriptor Method descriptor
+	 * @param {array} args.keys The array of keys bound to the given method
+	 * @return {object} The method descriptor
+	 */
 	function methodWrapper(_ref) {
 	  var target = _ref.target;
 	  var descriptor = _ref.descriptor;
 	  var keys = _ref.keys;
-	  var componentDidMount = target.componentDidMount;
-	  var componentWillUnmount = target.componentWillUnmount;
 
-	  var fn = descriptor.value;
+	  // if we haven't already created a binding for this class (via another
+	  // decorated method), wrap these lifecycle methods.
+	  if (!(0, _listeners.getBinding)(target)) {
+	    (function () {
+	      var componentDidMount = target.componentDidMount;
+	      var componentWillUnmount = target.componentWillUnmount;
 
-	  target.componentDidMount = function () {
-	    _listeners.onMount.call(this, { keys: keys, fn: fn });
-	    if (componentDidMount) return componentDidMount.call(this);
-	  };
+	      target.componentDidMount = function () {
+	        _listeners.onMount.call(this);
+	        if (componentDidMount) return componentDidMount.call(this);
+	      };
 
-	  target.componentWillUnmount = function () {
-	    _listeners.onUnmount.call(this);
-	    if (componentWillUnmount) return componentWillUnmount.call(this);
-	  };
+	      target.componentWillUnmount = function () {
+	        _listeners.onUnmount.call(this);
+	        if (componentWillUnmount) return componentWillUnmount.call(this);
+	      };
+	    })();
+	  }
+
+	  // add this binding of keys and method to the target's bindings
+	  (0, _listeners.setBinding)({ keys: keys, target: target, fn: descriptor.value });
 
 	  return descriptor;
 	}
@@ -21015,18 +21225,46 @@
 /* 163 */
 /***/ function(module, exports) {
 
+	/**
+	 * @module methodWrapperScoped
+	 *
+	 */
+
+	/**
+	 * _shouldTrigger
+	 *
+	 * @access private
+	 * @param {object} thisProps Exsting props from the wrapped component
+	 * @param {object} thisProps.keydown The namespaced state from the higher-order
+	 * component (class_decorator)
+	 * @param {object} nextProps The incoming props from the wrapped component
+	 * @param {object} nextProps.keydown The namescaped state from the higher-order
+	 * component (class_decorator)
+	 * @param {array} keys The keys bound to the decorated method
+	 * @return {boolean} Whether all tests have passed
+	 */
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	function shouldTrigger(_ref, _ref2, keys) {
+	function _shouldTrigger(_ref, _ref2, keys) {
 	  var keydownThis = _ref.keydown;
 	  var keydownNext = _ref2.keydown;
 
 	  return keydownNext && keydownNext.event && !keydownThis.event && ~keys.indexOf(keydownNext.event.which);
 	}
 
+	/**
+	 * methodWrapperScoped
+	 *
+	 * @access public
+	 * @param {object} args All args necessary for decorating the method
+	 * @param {object} args.target The decorated method's class object
+	 * @param {object} args.descriptor The method's descriptor object
+	 * @param {array} args.keys The key codes bound to the decorated method
+	 * @return {object} The method's descriptor object
+	 */
 	function methodWrapperScoped(_ref3) {
 	  var target = _ref3.target;
 	  var descriptor = _ref3.descriptor;
@@ -21035,8 +21273,12 @@
 
 	  var fn = descriptor.value;
 
+	  // wrap the component's lifecycle method to intercept key codes coming down
+	  // from the wrapped/scoped component up the view hierarchy. if new keydown
+	  // event has arrived and the key codes match what was specified in the
+	  // decorator, call the wrapped method.
 	  target.componentWillReceiveProps = function (nextProps) {
-	    if (shouldTrigger(this.props, nextProps, keys)) {
+	    if (_shouldTrigger(this.props, nextProps, keys)) {
 	      fn.call(this, nextProps.keydown.event);
 	    }
 
@@ -21180,10 +21422,10 @@
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'div',
-	        { style: { width: '250px', padding: '20px', backgroundColor: 'rgba(0, 132, 255, 0.32)' } },
+	        { style: { verticalAlign: 'top', margin: '1em 3em 0em 0em', textAlign: 'left', display: 'inline-block', padding: '2em', backgroundColor: 'rgba(0, 132, 255, 0.32)' } },
 	        _react2['default'].createElement(
-	          'h3',
-	          null,
+	          'div',
+	          { style: { margin: '0em', paddingBottom: '0.4em', fontSize: '1.4em' } },
 	          'Method Decorator Example'
 	        ),
 	        _react2['default'].createElement(

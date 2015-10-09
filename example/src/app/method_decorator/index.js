@@ -18,8 +18,8 @@ class MethodDecorator extends React.Component {
 
   render() {
     return (
-      <div style={{width: '250px', padding: '20px', backgroundColor: 'rgba(0, 132, 255, 0.32)'}}>
-        <h3>Method Decorator Example</h3>
+      <div style={{verticalAlign: 'top', margin: '1em 3em 0em 0em', textAlign: 'left', display: 'inline-block',  padding: '2em', backgroundColor: 'rgba(0, 132, 255, 0.32)'}}>
+        <div style={{margin: '0em', paddingBottom: '0.4em', fontSize: '1.4em'}}>Method Decorator Example</div>
         <div>Press the <strong>enter</strong> key to toggle hello.</div>
         { this.state.hello &&
           <h1>Hello!</h1>
