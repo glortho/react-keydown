@@ -137,9 +137,11 @@ function _bindInputs( instance ) {
       };
     };
     const node = React.findDOMNode( instance );
-    const focusables = node.querySelectorAll( 'a[href], button, input, object, select, textarea, [tabindex]' );
-    for ( let element of [ ...focusables ] ) {
-      element.onfocus = onFocus( element );
+    if ( node ) {
+      const focusables = node.querySelectorAll( 'a[href], button, input, object, select, textarea, [tabindex]' );
+      for ( let element of [ ...focusables ] ) {
+        element.onfocus = onFocus( element );
+      }
     }
   }
 }
