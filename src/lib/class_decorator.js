@@ -26,11 +26,11 @@ function componentWrapper( WrappedComponent, keys = null ) {
     }
 
     componentDidMount() {
-      onMount.call( this );
+      onMount( this );
     }
 
     componentWillUnmount() {
-      onUnmount.call( this );
+      onUnmount( this );
     }
 
     handleKeyDown( event ) {

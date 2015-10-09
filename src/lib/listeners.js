@@ -187,12 +187,12 @@ function setBinding( { keys, fn, target } ) {
  *
  * @access public
  */
-function onMount() {
+function onMount( instance ) {
   _bindClicks();
-  _addInstance( this );
+  _addInstance( instance );
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
-  setTimeout(() => _focus( this ), 0);
+  setTimeout(() => _focus( instance ), 0);
 }
 
 /**
@@ -200,10 +200,10 @@ function onMount() {
  *
  * @access public
  */
-function onUnmount() {
-  _deleteInstance( this );
+function onUnmount( instance ) {
+  _deleteInstance( instance );
   _unbindClicks();
-  if ( _focusedInstance === this ) _focus( null );
+  if ( _focusedInstance === instance ) _focus( null );
 }
 
 export { setBinding, getBinding, onMount, onUnmount };

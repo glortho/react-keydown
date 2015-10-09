@@ -23,12 +23,12 @@ function methodWrapper( { target, descriptor, keys } ) {
     const { componentDidMount, componentWillUnmount } = target;
     
     target.componentDidMount = function() {
-      onMount.call( this );
+      onMount( this );
       if ( componentDidMount ) return componentDidMount.call( this );
     };
 
     target.componentWillUnmount = function() {
-      onUnmount.call( this );
+      onUnmount( this );
       if ( componentWillUnmount ) return componentWillUnmount.call( this );
     };
   }

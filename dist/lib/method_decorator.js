@@ -40,12 +40,12 @@
         var componentWillUnmount = target.componentWillUnmount;
 
         target.componentDidMount = function () {
-          _listeners.onMount.call(this);
+          (0, _listeners.onMount)(this);
           if (componentDidMount) return componentDidMount.call(this);
         };
 
         target.componentWillUnmount = function () {
-          _listeners.onUnmount.call(this);
+          (0, _listeners.onUnmount)(this);
           if (componentWillUnmount) return componentWillUnmount.call(this);
         };
       })();

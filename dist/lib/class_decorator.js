@@ -57,12 +57,12 @@
       _createClass(KeyBoardHelper, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-          _listeners.onMount.call(this);
+          (0, _listeners.onMount)(this);
         }
       }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-          _listeners.onUnmount.call(this);
+          (0, _listeners.onUnmount)(this);
         }
       }, {
         key: 'handleKeyDown',
