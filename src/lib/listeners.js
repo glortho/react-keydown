@@ -10,16 +10,16 @@ import React from 'react';
  */
 
 // dict for class prototypes => { bindings, instances }
-const _handlers      = new Map();
+const _handlers = new Map();
 
 // the currently focused instance that should receive key presses
 let _focusedInstance = null;
 
 // flag for whether click listener has been bound to document
-let _clicksBound     = false;
+let _clicksBound = false;
 
 // flag for whether keydown listener has been bound to document
-let _keysBound       = false;
+let _keysBound = false;
 
 /**
  * _addInstance
