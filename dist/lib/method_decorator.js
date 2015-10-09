@@ -22,15 +22,18 @@
 
     var fn = descriptor.value;
 
-    target.componentDidMount = function () {
-      _listeners.onMount.call(this, { keys: keys, fn: fn });
-      if (componentDidMount) return componentDidMount.call(this);
-    };
+    if (!(0, _listeners.getBinding)(target)) {
+      target.componentDidMount = function () {
+        _listeners.onMount.call(this);
+        if (componentDidMount) return componentDidMount.call(this);
+      };
+      target.componentWillUnmount = function () {
+        _listeners.onUnmount.call(this);
+        if (componentWillUnmount) return componentWillUnmount.call(this);
+      };
+    }
 
-    target.componentWillUnmount = function () {
-      _listeners.onUnmount.call(this);
-      if (componentWillUnmount) return componentWillUnmount.call(this);
-    };
+    (0, _listeners.setBinding)({ keys: keys, fn: fn, target: target });
 
     return descriptor;
   }

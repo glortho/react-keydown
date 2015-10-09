@@ -30,7 +30,7 @@
   function componentWrapper(WrappedComponent) {
     var keys = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-    return (function (_React$Component) {
+    var KeyBoardHelper = (function (_React$Component) {
       _inherits(KeyBoardHelper, _React$Component);
 
       function KeyBoardHelper(props) {
@@ -40,13 +40,12 @@
         this.state = {
           event: null
         };
-        this.handleKeyDown = this.handleKeyDown.bind(this);
       }
 
       _createClass(KeyBoardHelper, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-          _listeners.onMount.call(this, { keys: keys, fn: this.handleKeyDown });
+          _listeners.onMount.call(this);
         }
       }, {
         key: 'componentWillUnmount',
@@ -71,6 +70,10 @@
 
       return KeyBoardHelper;
     })(_React['default'].Component);
+
+    (0, _listeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+
+    return KeyBoardHelper;
   }
 
   module.exports = componentWrapper;

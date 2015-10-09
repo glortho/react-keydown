@@ -25,75 +25,160 @@
 
   var _React = _interopRequireDefault(_react);
 
-  var handlers = new Map();
+  /**
+   * private
+   * 
+   */
 
-  function handleClick(node, event) {
-    this._keyDownHasFocus = event.target === node || node.contains(event.target);
+  var _handlers = new Map();
+  var _focusedInstance = null;
+  var _clicksBound = false;
+  var _keysBound = false;
+
+  function _addInstance(target) {
+    return getBinding(target.constructor.prototype).instances.add(target);
   }
 
-  function handleKeyDown(_ref) {
-    var which = _ref.which;
+  function _deleteInstance(target) {
+    return getBinding(target.constructor.prototype).instances['delete'](target);
+  }
 
-    var handler = [].concat(_toConsumableArray(handlers)).find(function (_ref2) {
-      var _ref22 = _slicedToArray(_ref2, 1);
+  function _findFocused(_ref) {
+    var target = _ref.target;
+    var instance = _ref.instance;
 
-      var componentInstance = _ref22[0];
-      return componentInstance._keyDownHasFocus;
+    var node = _React['default'].findDOMNode(instance);
+    return target === node || node.contains(target);
+  }
+
+  function _focus(instance) {
+    _focusedInstance = instance;
+    return instance ? _bindKeys() : _unbindKeys();
+  }
+
+  function _handleClick(_ref2) {
+    var target = _ref2.target;
+
+    var findFocused = function findFocused(instance) {
+      return _findFocused({ target: target, instance: instance });
+    };
+    var focusedInstance = null;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = _handlers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var _step$value = _slicedToArray(_step.value, 2);
+
+        var instances = _step$value[1].instances;
+
+        focusedInstance = [].concat(_toConsumableArray(instances)).find(findFocused);
+        if (focusedInstance) break;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+          _iterator['return']();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    _focus(focusedInstance);
+  }
+
+  function _handleKeyDown(_ref3) {
+    var which = _ref3.which;
+
+    var _getBinding = getBinding(_focusedInstance.constructor.prototype);
+
+    var bindings = _getBinding.bindings;
+
+    bindings.forEach(function (fn, keys) {
+      return (!keys || ~keys.indexOf(which)) && fn.call(_focusedInstance, event);
     });
-    if (handler) {
-      (function () {
-        var _handler = _slicedToArray(handler, 2);
+  }
 
-        var componentInstance = _handler[0];
-        var bindings = _handler[1].bindings;
-
-        bindings.forEach(function (fn, keys) {
-          return (!keys || ~keys.indexOf(which)) && fn.call(componentInstance, event);
-        });
-      })();
+  function _bindKeys() {
+    if (!_keysBound) {
+      document.addEventListener('keydown', _handleKeyDown);
+      _keysBound = true;
     }
   }
 
-  function bindListeners() {
-    document.addEventListener('keydown', handleKeyDown);
-  }
-
-  function unbindListeners() {
-    document.removeEventListener('keydown', handleKeyDown);
-  }
-
-  function onMount(_ref3) {
-    var keys = _ref3.keys;
-    var fn = _ref3.fn;
-
-    var handlerDict = handlers.get(this);
-    if (!handlerDict) {
-      if (!handlers.size) bindListeners();
-      var node = _React['default'].findDOMNode(this);
-      var onClickBound = handleClick.bind(this, node);
-
-      handlers.set(this, {
-        bindings: new Map([[keys, fn]]),
-        onClick: onClickBound
-      });
-
-      document.addEventListener('click', onClickBound);
-      this._keyDownHasFocus = true;
-    } else {
-      handlerDict.bindings.set(keys, fn);
+  function _unbindKeys() {
+    if (_keysBound) {
+      document.removeEventListener('keydown', _handleKeyDown);
+      _keysBound = false;
     }
+  }
+
+  function _bindClicks() {
+    if (!_clicksBound) {
+      document.addEventListener('click', _handleClick);
+      _clicksBound = true;
+    }
+  }
+
+  function _unbindClicks() {
+    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref4) {
+      var _ref42 = _slicedToArray(_ref4, 2);
+
+      var instances = _ref42[1].instances;
+      return instances.size;
+    })) {
+      document.removeEventListener('click', _handleClick);
+      _clicksBound = false;
+    }
+  }
+
+  /**
+   * public
+   *
+   */
+
+  function getBinding(target) {
+    return _handlers.get(target);
+  }
+
+  function setBinding(_ref5) {
+    var keys = _ref5.keys;
+    var fn = _ref5.fn;
+    var target = _ref5.target;
+
+    var handler = getBinding(target);
+    if (!handler) {
+      handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
+    }
+    handler.bindings.set(keys, fn);
+  }
+
+  function onMount() {
+    var _this = this;
+
+    _bindClicks();
+    _addInstance(this);
+    // have to bump this to next event loop because component mounting routinely
+    // preceeds the dom click event that triggered the mount (wtf?)
+    setTimeout(function () {
+      return _focus(_this);
+    }, 0);
   }
 
   function onUnmount() {
-    var handler = handlers.get(this);
-    if (handler) {
-      document.removeEventListener('click', handler.onClick);
-      handlers['delete'](this);
-    }
-    if (!handlers.size) unbindListeners();
-    this._keyDownHasFocus = false;
+    _deleteInstance(this);
+    _unbindClicks();
   }
 
+  exports.setBinding = setBinding;
+  exports.getBinding = getBinding;
   exports.onMount = onMount;
   exports.onUnmount = onUnmount;
 });
