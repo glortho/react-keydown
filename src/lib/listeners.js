@@ -59,12 +59,12 @@ function _findFocused( { target, instance } ) {
 }
 
 /**
- * _focus
+ * _activate
  *
  * @access private
  * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
  */
-function _focus( instance ) {
+function _activate( instance ) {
   _focusedInstance = instance;
   return instance ? _bindKeys() : _unbindKeys();
 }
@@ -83,7 +83,7 @@ function _handleClick( { target } ) {
     focusedInstance = [ ...instances ].find( findFocused );
     if ( focusedInstance ) break;
   }
-  _focus( focusedInstance );
+  _activate( focusedInstance );
 }
 
 
@@ -132,7 +132,7 @@ function _bindInputs( instance ) {
     const onFocus = element => {
       const onFocusPrev = element.onfocus;
       return function( event ) {
-        _focus( instance );
+        _activate( instance );
         if ( onFocusPrev ) onFocusPrev.call( element, event );
       };
     };
@@ -237,7 +237,7 @@ function onMount( instance ) {
   _addInstance( instance );
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
-  setTimeout(() => _focus( instance ), 0);
+  setTimeout(() => _activate( instance ), 0);
 }
 
 /**
@@ -248,7 +248,7 @@ function onMount( instance ) {
 function onUnmount( instance ) {
   _deleteInstance( instance );
   _unbindClicks();
-  if ( _focusedInstance === instance ) _focus( null );
+  if ( _focusedInstance === instance ) _activate( null );
 }
 
 export { setBinding, getBinding, onMount, onUnmount };
