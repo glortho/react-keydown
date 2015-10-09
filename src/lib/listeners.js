@@ -203,6 +203,7 @@ function onMount() {
 function onUnmount() {
   _deleteInstance( this );
   _unbindClicks();
+  if ( _focusedInstance === this ) _focus( null );
 }
 
 export { setBinding, getBinding, onMount, onUnmount };
