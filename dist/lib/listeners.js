@@ -143,22 +143,36 @@
   }
 
   /**
+   * _shouldConsider
+   *
+   * @access private
+   * @param {object} event The keydown event object
+   * @param {object} event.target The node origin of the event
+   * @param {string} event.target.tagName The name of the element tag
+   */
+  function _shouldConsider(_ref3) {
+    var tagName = _ref3.target.tagName;
+
+    return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
+  }
+
+  /**
    * _handleKeyDown
    *
    * @access private
    * @param {object} event The keydown event object
    * @param {number} event.which The key code (which) received from the keydown event
    */
-  function _handleKeyDown(_ref3) {
-    var which = _ref3.which;
+  function _handleKeyDown(event) {
+    if (_shouldConsider(event)) {
+      var _getBinding = getBinding(_focusedInstance.constructor.prototype);
 
-    var _getBinding = getBinding(_focusedInstance.constructor.prototype);
+      var bindings = _getBinding.bindings;
 
-    var bindings = _getBinding.bindings;
-
-    bindings.forEach(function (fn, keys) {
-      return (!keys || ~keys.indexOf(which)) && fn.call(_focusedInstance, event);
-    });
+      bindings.forEach(function (fn, keys) {
+        return (!keys || ~keys.indexOf(event.which)) && fn.call(_focusedInstance, event);
+      });
+    }
   }
 
   /**
