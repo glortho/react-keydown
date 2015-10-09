@@ -1,15 +1,10 @@
-import { addBinding, onMount, onUnmount } from './listeners';
-
-const classes = new Map();
+import { getBinding, setBinding, onMount, onUnmount } from './listeners';
 
 function methodWrapper( { target, descriptor, keys } ) {
   const { componentDidMount, componentWillUnmount } = target;
   const fn = descriptor.value;
   
-  addBinding( { keys, fn, target } );
-
-  if ( !classes.get( target ) ) {
-    classes.set( target, true );
+  if ( !getBinding( target ) ) {
     target.componentDidMount = function() {
       onMount.call( this );
       if ( componentDidMount ) return componentDidMount.call( this );
@@ -19,6 +14,8 @@ function methodWrapper( { target, descriptor, keys } ) {
       if ( componentWillUnmount ) return componentWillUnmount.call( this );
     };
   }
+
+  setBinding( { keys, fn, target } );
 
   return descriptor;
 }

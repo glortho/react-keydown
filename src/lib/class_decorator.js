@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { addBinding, onMount, onUnmount } from './listeners';
+import { setBinding, onMount, onUnmount } from './listeners';
 
 function componentWrapper( WrappedComponent, keys = null ) {
 
@@ -30,7 +30,7 @@ function componentWrapper( WrappedComponent, keys = null ) {
     }
   }
 
-  addBinding( { keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
+  setBinding( { keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
 
   return KeyBoardHelper;
 }

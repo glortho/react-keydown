@@ -1,75 +1,109 @@
 import React from 'react';
 
-const handlers = new Map();
-let isBound    = false;
+/**
+ * private
+ * 
+ */
 
-function addBinding( { keys, fn, target } ) {
-  let handler = handlers.get( target );
+const _handlers      = new Map();
+let _focusedInstance = null;
+let _clicksBound     = false;
+let _keysBound       = false;
+
+function _addInstance( target ) {
+  return getBinding( target.constructor.prototype ).instances.add( target );
+}
+
+function _deleteInstance( target ) {
+  return getBinding( target.constructor.prototype ).instances.delete( target );
+}
+
+function _findFocused( { target, instance } ) {
+  const node = React.findDOMNode( instance );
+  return target === node || node.contains( target );
+}
+
+function _focus( instance ) {
+  _focusedInstance = instance;
+  return instance ? _bindKeys() : _unbindKeys();
+}
+
+function _handleClick( { target } ) {
+  console.log(target);
+  const findFocused = instance => _findFocused( { target, instance } );
+  let focusedInstance = null;
+  for ( let [, { instances } ] of _handlers ) {
+    focusedInstance = [ ...instances ].find( findFocused );
+    if ( focusedInstance ) break;
+  }
+  _focus( focusedInstance );
+}
+
+function _handleKeyDown( { which } ) {
+  console.log(which);
+  const { bindings } = getBinding( _focusedInstance.constructor.prototype );
+  bindings.forEach( ( fn, keys ) => (
+    ( !keys || ~keys.indexOf( which ) ) && fn.call( _focusedInstance, event )
+  ));
+}
+
+function _bindKeys() {
+  if ( !_keysBound ) {
+    document.addEventListener( 'keydown', _handleKeyDown );
+    _keysBound = true;
+  }
+}
+
+function _unbindKeys() {
+  if ( _keysBound ) {
+    document.removeEventListener( 'keydown', _handleKeyDown );
+    _keysBound = false;
+  }
+}
+
+function _bindClicks() {
+  if ( !_clicksBound ) {
+    document.addEventListener( 'click', _handleClick );
+    _clicksBound = true;
+  }
+}
+
+function _unbindClicks() {
+  if ( _clicksBound && ![ ..._handlers ].some( ( [, { instances } ] ) => instances.size ) ) {
+    document.removeEventListener( 'click', _handleClick );
+    _clicksBound = false;
+  }
+}
+
+
+/**
+ * public
+ *
+ */
+
+function getBinding( target ) {
+  return _handlers.get( target );
+}
+
+function setBinding( { keys, fn, target } ) {
+  let handler = getBinding( target );
   if ( !handler ) {
-    handler = handlers.set( target, { bindings: new Map(), instances: new Map() } ).get( target );
+    handler = _handlers.set( target, { bindings: new Map(), instances: new Set() } ).get( target );
   }
   handler.bindings.set( keys, fn );
 }
 
-function getFocusedInstance() {
-  let instanceMap = null;
-  const classMap = [ ...handlers ].find( ( [, { instances } ] ) => {
-    instanceMap = [ ...instances ].find( ( [, data ] ) => data.hasFocus );
-    return instanceMap;
-  });
-  return { classMap, instanceMap };
-}
-
-function handleClick( node, { target } ) {
-  handlers.get( this.constructor.prototype ).instances.get( this ).hasFocus = target === node || node.contains( target );
-}
-
-function handleKeyDown( { which } ) {
-  const { classMap, instanceMap } = getFocusedInstance();
-  if ( classMap && instanceMap ) {
-    const [, { bindings } ] = classMap;
-    const [ instance ] = instanceMap;
-    bindings.forEach( ( fn, keys ) => (
-      ( !keys || ~keys.indexOf( which ) ) && fn.call( instance, event )
-    ));
-  }
-}
-
-function bindListeners() {
-  document.addEventListener( 'keydown', handleKeyDown );
-  isBound = true;
-}
-
-function unbindListeners() {
-  document.removeEventListener( 'keydown', handleKeyDown );
-  isBound = false;
-}
-
 function onMount() {
-  if ( !isBound ) bindListeners();
-
-  const handler      = handlers.get( this.constructor.prototype );
-  const node         = React.findDOMNode( this );
-  const onClickBound = handleClick.bind( this, node );
-
-  handler.instances.set( this, {
-    hasFocus: true,
-    onClick: onClickBound
-  });
-
-  document.addEventListener( 'click', onClickBound );
+  _bindClicks();
+  _addInstance( this );
+  // have to bump this to next event loop because component mounting routinely
+  // preceeds the dom click event that triggered the mount (wtf?)
+  setTimeout(() => _focus( this ), 0);
 }
 
 function onUnmount() {
-  const allInstances = handlers.get( this.constructor.prototype ).instances;
-  const instance = allInstances.get( this );
-  if ( instance ) {
-    document.removeEventListener( 'click', instance.onClick );
-    allInstances.delete( this );
-  }
-  if ( ![ ...handlers ].some( ( [, { instances } ] ) => instances.size ) ) {
-    unbindListeners();
-  }
+  _deleteInstance( this );
+  _unbindClicks();
 }
 
-export { addBinding, onMount, onUnmount };
+export { setBinding, getBinding, onMount, onUnmount };
