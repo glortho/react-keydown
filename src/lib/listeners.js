@@ -29,7 +29,6 @@ function _focus( instance ) {
 }
 
 function _handleClick( { target } ) {
-  console.log(target);
   const findFocused = instance => _findFocused( { target, instance } );
   let focusedInstance = null;
   for ( let [, { instances } ] of _handlers ) {
@@ -40,7 +39,6 @@ function _handleClick( { target } ) {
 }
 
 function _handleKeyDown( { which } ) {
-  console.log(which);
   const { bindings } = getBinding( _focusedInstance.constructor.prototype );
   bindings.forEach( ( fn, keys ) => (
     ( !keys || ~keys.indexOf( which ) ) && fn.call( _focusedInstance, event )
