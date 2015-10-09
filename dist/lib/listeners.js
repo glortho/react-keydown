@@ -176,6 +176,39 @@
   }
 
   /**
+   * _bindInputs: Find any focusable child elements of the component instance and
+   * add an onFocus handler to focus our keydown handlers on the parent component
+   * when user keys applies focus to the element.
+   *
+   * NOTE: One limitation of this right now is that if you tab out of the
+   * component, _focusedInstance will still be set until next click or mount or
+   * controlled focus.
+   *
+   * @access private
+   * @param {object} instance The key-bound component instance
+   */
+  function _bindInputs(instance) {
+    if (document.querySelectorAll) {
+      var onFocus = function onFocus(element) {
+        var onFocusPrev = element.onfocus;
+        return function (event) {
+          _focus(instance);
+          if (onFocusPrev) onFocusPrev.call(element, event);
+        };
+      };
+      var node = _React['default'].findDOMNode(instance);
+      var focusables = node.querySelectorAll('a[href], button, input, object, select, textarea, [tabindex]');
+
+      var _arr = [].concat(_toConsumableArray(focusables));
+
+      for (var _i = 0; _i < _arr.length; _i++) {
+        var element = _arr[_i];
+        element.onfocus = onFocus(element);
+      }
+    }
+  }
+
+  /**
    * _bindKeys
    *
    * @access private
@@ -272,6 +305,7 @@
    */
   function onMount(instance) {
     _bindClicks();
+    _bindInputs(instance);
     _addInstance(instance);
     // have to bump this to next event loop because component mounting routinely
     // preceeds the dom click event that triggered the mount (wtf?)
