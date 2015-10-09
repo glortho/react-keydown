@@ -86,6 +86,19 @@ function _handleClick( { target } ) {
   _focus( focusedInstance );
 }
 
+
+/**
+ * _shouldConsider
+ *
+ * @access private
+ * @param {object} event The keydown event object
+ * @param {object} event.target The node origin of the event
+ * @param {string} event.target.tagName The name of the element tag
+ */
+function _shouldConsider( { target: { tagName } } ) {
+  return !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName );
+}
+
 /**
  * _handleKeyDown
  *
@@ -93,11 +106,13 @@ function _handleClick( { target } ) {
  * @param {object} event The keydown event object
  * @param {number} event.which The key code (which) received from the keydown event
  */
-function _handleKeyDown( { which } ) {
-  const { bindings } = getBinding( _focusedInstance.constructor.prototype );
-  bindings.forEach( ( fn, keys ) => (
-    ( !keys || ~keys.indexOf( which ) ) && fn.call( _focusedInstance, event )
-  ));
+function _handleKeyDown( event ) {
+  if ( _shouldConsider( event ) ) {
+    const { bindings } = getBinding( _focusedInstance.constructor.prototype );
+    bindings.forEach( ( fn, keys ) => (
+      ( !keys || ~keys.indexOf( event.which ) ) && fn.call( _focusedInstance, event )
+    ));
+  }
 }
 
 /**
