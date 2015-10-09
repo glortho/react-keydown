@@ -136,6 +136,13 @@ Note that this is very much a work in progress!
 * The method decorators wrap React lifecycle methods in order to work
   as seamlessly and efficiently as possible. The class decorator does not do
   this, functioning instead as a higher-order component.
+* In order to avoid unintended side effects, only one component can receive
+  keydown events at a time. This will be the most recently mounted or clicked
+  component with key bindings. If you want multiple components to receive
+  keydown events simultaneously, decorate a common ancestor component class with
+  `@keydown` and then decorate your methods in the child components with 
+  `@keydownScoped( myKeyCode )` (or manually work with the keydown.event props
+  flowing into your components).
 
 ## Questions
 
