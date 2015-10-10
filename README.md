@@ -8,10 +8,11 @@ for implementing keyboard navigation or other shortcuts.
 Key advantages:
 
 * **Declarative syntax**: Components say what keys they will respond to.
-* **Intuitive DX**: Decorate a class or method to bind it to specified keys
+* **Intuitive DX**: Decorate a class or method to bind it to specified keys.
 * **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
+* **Modifier keys**: Support for standard modifier key combinations.
 * **Tiny**: 2kb compressed and gzipped (with UMD module wrapping -- smaller
-  without it)
+  without it).
 
 ## Install
 
@@ -25,15 +26,13 @@ npm install --save react-keydown
 
 ```javascript
 import React from 'react';
-import keydown, { Keys } from 'react-keydown';
-
-const { ENTER } = Keys;
+import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
 
   ...
 
-  @keydown( ENTER ) // or specify `which` code directly, in this case 13
+  @keydown( 'enter' ) // or specify `which` code directly, in this case 13
   submit() {
     MyApi.post( this.state );
   }
@@ -46,7 +45,7 @@ processing, if desired. For example, you may went to `event.preventDefault()`.
 #### Specify multiple keys that should trigger the method
 
 ```javascript
-@keydown( ENTER, TAB )
+@keydown( 'enter', 'tab', 'ctrl+z' )
 autocomplete() {
   MyApi.get( this.state );
 }
@@ -81,7 +80,7 @@ class MyComponent extends React.Component {
 export default keydown( MyComponent );
 ```
 
-#### Use ES7/2016 decorator pattern via Babel (stage 1):
+#### Use decorator pattern:
 
 ```javascript
 @keydown
@@ -95,20 +94,12 @@ export default MyComponent;
 #### Monitor only key codes `which` you care about:
 
 ```javascript
-const KEYS = [
-  38, // up
-  40, // down
-  13  // enter
-];
+const KEYS = [ 'shift+up', 'shift+down', 'enter', 'j', 'k', 'h', 'l' ];
 
 @keydown( KEYS )
 class MyComponent extends React.Component {
   ...
 }
-```
-Or no need for an array:
-```javascript
-@keydown( 13 ) // just the enter key
 ```
 
 #### Use the `@keydownScoped` shortcut
@@ -116,11 +107,9 @@ Or no need for an array:
 When using the class decorator/higher-order component, decorate methods with `@keydownScoped` to identify the `keydown.event` prop as it comes in and bind certain values to methods:
 
 ```javascript
-import keydown, { keydownScoped, Keys } from 'react-keydown';
+import keydown, { keydownScoped } from 'react-keydown';
 
-const { ENTER } = Keys;
-
-@keydown( ENTER ) // optional to specify ENTER here. if not, any key event will get passed down
+@keydown( 'enter' ) // optional to specify a key here. if called with just @keydown, all key events will get passed down
 class MyComponent extends React.Component {
   render() {
     return <MyOtherComponent {...this.props} />;
@@ -129,7 +118,7 @@ class MyComponent extends React.Component {
 
 class MyOtherComponent extends React.Component {
   ...
-  @keydownScoped( ENTER ) // inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes
+  @keydownScoped( 'enter' ) // inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes
   submit() {
     // submit
   }
