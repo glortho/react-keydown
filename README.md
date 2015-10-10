@@ -1,4 +1,4 @@
-# react-keydown
+# React Keydown
 > Lightweight keydown wrapper for React components.
 
 Use react-keydown as a higher-order component or decorator to pass keydown
