@@ -138,6 +138,8 @@ class MyOtherComponent extends React.Component {
 
 This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own.
 
+This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
+
 ## Demo
 
 Go to the [live
