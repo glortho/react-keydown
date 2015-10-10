@@ -66,7 +66,7 @@ class MyComponent extends React.Component {
 
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
-      // do something with the keydown event
+      // inspect the keydown event and decide what to do
       console.log( keydown.event.which );
     }
   }
@@ -110,6 +110,33 @@ Or no need for an array:
 ```javascript
 @keydown( 13 ) // just the enter key
 ```
+
+#### Use the `@keydownScoped` shortcut
+
+When using the class decorator/higher-order component, decorate methods with `@keydownScoped` to identify the `keydown.event` prop as it comes in and bind certain values to methods:
+
+```javascript
+import keydown, { keydownScoped, Keys } from 'react-keydown';
+
+const { ENTER } = Keys;
+
+@keydown( ENTER ) // optional to specify ENTER here. if not, any key event will get passed down
+class MyComponent extends React.Component {
+  render() {
+    return <MyOtherComponent {...this.props} />;
+  }
+}
+
+class MyOtherComponent extends React.Component {
+  ...
+  @keydownScoped( ENTER ) // inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes
+  submit() {
+    // submit
+  }
+}
+```
+
+This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own, not receiving focus appropriately.
 
 ## Demo
 
