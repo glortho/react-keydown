@@ -20462,15 +20462,15 @@
 
 	var _class_decorator2 = _interopRequireDefault(_class_decorator);
 
-	var _class_decoratorCode = __webpack_require__(165);
+	var _class_decoratorCode = __webpack_require__(167);
 
 	var _class_decoratorCode2 = _interopRequireDefault(_class_decoratorCode);
 
-	var _method_decorator = __webpack_require__(166);
+	var _method_decorator = __webpack_require__(168);
 
 	var _method_decorator2 = _interopRequireDefault(_method_decorator);
 
-	var _method_decoratorCode = __webpack_require__(167);
+	var _method_decoratorCode = __webpack_require__(169);
 
 	var _method_decoratorCode2 = _interopRequireDefault(_method_decoratorCode);
 
@@ -20684,19 +20684,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _libClass_decorator = __webpack_require__(160);
+	var _decoratorsClass_decorator = __webpack_require__(160);
 
-	var _libClass_decorator2 = _interopRequireDefault(_libClass_decorator);
+	var _decoratorsClass_decorator2 = _interopRequireDefault(_decoratorsClass_decorator);
 
-	var _libMethod_decorator = __webpack_require__(162);
+	var _decoratorsMethod_decorator = __webpack_require__(165);
 
-	var _libMethod_decorator2 = _interopRequireDefault(_libMethod_decorator);
+	var _decoratorsMethod_decorator2 = _interopRequireDefault(_decoratorsMethod_decorator);
 
-	var _libMethod_decorator_scoped = __webpack_require__(163);
+	var _decoratorsMethod_decorator_scoped = __webpack_require__(166);
 
-	var _libMethod_decorator_scoped2 = _interopRequireDefault(_libMethod_decorator_scoped);
+	var _decoratorsMethod_decorator_scoped2 = _interopRequireDefault(_decoratorsMethod_decorator_scoped);
 
-	var _libKeys = __webpack_require__(164);
+	var _libKeys = __webpack_require__(163);
 
 	var _libKeys2 = _interopRequireDefault(_libKeys);
 
@@ -20718,10 +20718,10 @@
 	  var testArg = args[0];
 	  var isArray = Array.isArray(testArg);
 
-	  // if the test argument is an array or an integer, it is user-supplied
+	  // if the test argument is not an object or function, it is user-supplied
 	  // keycodes. else there are no arguments and it's just the wrapped class
 	  // (method decorators must have keycode arguments).
-	  if (isArray || parseInt(testArg, 10)) {
+	  if (isArray || ~['string', 'number'].indexOf(typeof testArg)) {
 	    var _ret = (function () {
 	      var keys = isArray ? testArg : args;
 
@@ -20730,7 +20730,7 @@
 	      // or component
 	      return {
 	        v: function (target, methodName, descriptor) {
-	          return methodName ? methodFn({ target: target, descriptor: descriptor, keys: keys }) : (0, _libClass_decorator2['default'])(target, keys);
+	          return methodName ? methodFn({ target: target, descriptor: descriptor, keys: keys }) : (0, _decoratorsClass_decorator2['default'])(target, keys);
 	        }
 	      };
 	    })();
@@ -20741,7 +20741,7 @@
 
 	    // method decorators without keycode (which) arguments are not allowed.
 	    if (!methodName) {
-	      return _libClass_decorator2['default'].apply(undefined, args);
+	      return _decoratorsClass_decorator2['default'].apply(undefined, args);
 	    } else {
 	      console.warn(methodName + ': Method decorators must have keycode arguments, so the decorator for this method will not do anything');
 	    }
@@ -20767,7 +20767,7 @@
 	    args[_key2] = arguments[_key2];
 	  }
 
-	  return _decorator.apply(undefined, [_libMethod_decorator_scoped2['default']].concat(args));
+	  return _decorator.apply(undefined, [_decoratorsMethod_decorator_scoped2['default']].concat(args));
 	}
 
 	/**
@@ -20784,7 +20784,7 @@
 	    args[_key3] = arguments[_key3];
 	  }
 
-	  return _decorator.apply(undefined, [_libMethod_decorator2['default']].concat(args));
+	  return _decorator.apply(undefined, [_decoratorsMethod_decorator2['default']].concat(args));
 	}
 
 	exports['default'] = keydown;
@@ -20821,7 +20821,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _listeners = __webpack_require__(161);
+	var _libListeners = __webpack_require__(161);
 
 	/**
 	 * componentWrapper
@@ -20849,12 +20849,12 @@
 	    _createClass(KeyBoardHelper, [{
 	      key: 'componentDidMount',
 	      value: function componentDidMount() {
-	        _listeners.onMount.call(this);
+	        (0, _libListeners.onMount)(this);
 	      }
 	    }, {
 	      key: 'componentWillUnmount',
 	      value: function componentWillUnmount() {
-	        _listeners.onUnmount.call(this);
+	        (0, _libListeners.onUnmount)(this);
 	      }
 	    }, {
 	      key: 'handleKeyDown',
@@ -20876,7 +20876,7 @@
 	    return KeyBoardHelper;
 	  })(_react2['default'].Component);
 
-	  (0, _listeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+	  (0, _libListeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
 
 	  return KeyBoardHelper;
 	}
@@ -20907,6 +20907,14 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _match_keys = __webpack_require__(162);
+
+	var _match_keys2 = _interopRequireDefault(_match_keys);
+
+	var _parse_keys = __webpack_require__(164);
+
+	var _parse_keys2 = _interopRequireDefault(_parse_keys);
 
 	/**
 	 * private
@@ -20966,12 +20974,12 @@
 	}
 
 	/**
-	 * _focus
+	 * _activate
 	 *
 	 * @access private
 	 * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
 	 */
-	function _focus(instance) {
+	function _activate(instance) {
 	  _focusedInstance = instance;
 	  return instance ? _bindKeys() : _unbindKeys();
 	}
@@ -21018,7 +21026,23 @@
 	    }
 	  }
 
-	  _focus(focusedInstance);
+	  _activate(focusedInstance);
+	}
+
+	/**
+	 * _shouldConsider
+	 *
+	 * @access private
+	 * @param {object} event The keydown event object
+	 * @param {object} event.target The node origin of the event
+	 * @param {string} event.target.tagName The name of the element tag
+	 * @param {number} event.target.which The key pressed
+	 */
+	function _shouldConsider(_ref3) {
+	  var tagName = _ref3.target.tagName;
+
+	  var notEnterable = ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
+	  return notEnterable;
 	}
 
 	/**
@@ -21028,16 +21052,57 @@
 	 * @param {object} event The keydown event object
 	 * @param {number} event.which The key code (which) received from the keydown event
 	 */
-	function _handleKeyDown(_ref3) {
-	  var which = _ref3.which;
+	function _handleKeyDown(event) {
+	  if (_shouldConsider(event)) {
+	    var _getBinding = getBinding(_focusedInstance.constructor.prototype);
 
-	  var _getBinding = getBinding(_focusedInstance.constructor.prototype);
+	    var bindings = _getBinding.bindings;
 
-	  var bindings = _getBinding.bindings;
+	    bindings.forEach(function (fn, keySets) {
+	      if (!keySets || !keySets[0] || keySets.some(function (keySet) {
+	        return (0, _match_keys2['default'])({ keySet: keySet, event: event });
+	      })) {
+	        fn.call(_focusedInstance, event);
+	      }
+	    });
+	  }
+	}
 
-	  bindings.forEach(function (fn, keys) {
-	    return (!keys || ~keys.indexOf(which)) && fn.call(_focusedInstance, event);
-	  });
+	/**
+	 * _bindInputs: Find any focusable child elements of the component instance and
+	 * add an onFocus handler to focus our keydown handlers on the parent component
+	 * when user keys applies focus to the element.
+	 *
+	 * NOTE: One limitation of this right now is that if you tab out of the
+	 * component, _focusedInstance will still be set until next click or mount or
+	 * controlled focus.
+	 *
+	 * @access private
+	 * @param {object} instance The key-bound component instance
+	 */
+	function _bindInputs(instance) {
+	  if (document.querySelectorAll) {
+	    var node = _react2['default'].findDOMNode(instance);
+	    if (node) {
+	      var focusables = node.querySelectorAll('a[href], button, input, object, select, textarea, [tabindex]');
+	      if (focusables.length) {
+	        var onFocus = function onFocus(element) {
+	          var onFocusPrev = element.onfocus;
+	          return function (event) {
+	            _activate(instance);
+	            if (onFocusPrev) onFocusPrev.call(element, event);
+	          };
+	        };
+
+	        var _arr = [].concat(_toConsumableArray(focusables));
+
+	        for (var _i = 0; _i < _arr.length; _i++) {
+	          var element = _arr[_i];
+	          element.onfocus = onFocus(element);
+	        }
+	      }
+	    }
+	  }
 	}
 
 	/**
@@ -21123,11 +21188,12 @@
 	  var fn = _ref5.fn;
 	  var target = _ref5.target;
 
+	  var keySets = !keys ? [null] : (0, _parse_keys2['default'])(keys);
 	  var handler = getBinding(target);
 	  if (!handler) {
 	    handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
 	  }
-	  handler.bindings.set(keys, fn);
+	  handler.bindings.set(keySets, fn);
 	}
 
 	/**
@@ -21135,15 +21201,14 @@
 	 *
 	 * @access public
 	 */
-	function onMount() {
-	  var _this = this;
-
+	function onMount(instance) {
 	  _bindClicks();
-	  _addInstance(this);
+	  _bindInputs(instance);
+	  _addInstance(instance);
 	  // have to bump this to next event loop because component mounting routinely
 	  // preceeds the dom click event that triggered the mount (wtf?)
 	  setTimeout(function () {
-	    return _focus(_this);
+	    return _activate(instance);
 	  }, 0);
 	}
 
@@ -21152,9 +21217,10 @@
 	 *
 	 * @access public
 	 */
-	function onUnmount() {
-	  _deleteInstance(this);
+	function onUnmount(instance) {
+	  _deleteInstance(instance);
 	  _unbindClicks();
+	  if (_focusedInstance === instance) _activate(null);
 	}
 
 	exports.setBinding = setBinding;
@@ -21164,6 +21230,125 @@
 
 /***/ },
 /* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _keys = __webpack_require__(163);
+
+	var modKeys = Object.keys(_keys.modifiers);
+
+	function matchKeys(_ref) {
+	  var keySet = _ref.keySet;
+	  var event = _ref.event;
+
+	  if (keySet) {
+	    var _ret = (function () {
+	      var key = keySet.key;
+	      var modifiers = keySet.modifiers;
+
+	      var keysMatch = false;
+	      if (key === event.which) {
+	        var eventModifiers = modKeys.filter(function (modKey) {
+	          return event[modKey + 'Key'];
+	        });
+	        keysMatch = !eventModifiers.length && !modifiers || modifiers && eventModifiers.length && eventModifiers.every(function (modKey) {
+	          return ~modifiers.indexOf(modKey);
+	        });
+	      }
+	      return {
+	        v: keysMatch
+	      };
+	    })();
+
+	    if (typeof _ret === 'object') return _ret.v;
+	  }
+	  return true;
+	}
+
+	exports['default'] = matchKeys;
+	module.exports = exports['default'];
+
+/***/ },
+/* 163 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	var Keys = {
+	  tab: 9,
+	  enter: 13,
+	  left: 37,
+	  up: 38,
+	  right: 39,
+	  down: 40,
+	  slash: 191
+	};
+
+	var modifiers = {
+	  control: 'ctrl',
+	  ctrl: 'ctrl',
+	  shift: 'shift',
+	  meta: 'meta',
+	  cmd: 'meta',
+	  command: 'meta',
+	  option: 'alt',
+	  alt: 'alt'
+	};
+
+	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
+	  Keys[letter] = index + 65;
+	  Keys[letter.toLowerCase()] = index + 65;
+	});
+
+	exports['default'] = Keys;
+	exports.modifiers = modifiers;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _keys = __webpack_require__(163);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
+	function parseKeys(keysArray) {
+	  return keysArray.map(function (key) {
+	    var keySet = { key: key };
+	    if (typeof key === 'string') {
+	      var keyString = String(key).toLowerCase().trim();
+	      var matches = keyString.split(/\s?\+\s?/);
+	      keySet = matches.length === 1 ? { key: _keys2['default'][keyString] } : {
+	        key: _keys2['default'][matches.pop()],
+	        modifiers: matches.map(function (modKey) {
+	          return _keys.modifiers[modKey];
+	        })
+	      };
+	    }
+	    return keySet;
+	  });
+	}
+
+	exports['default'] = parseKeys;
+	module.exports = exports['default'];
+
+/***/ },
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -21176,7 +21361,7 @@
 	  value: true
 	});
 
-	var _listeners = __webpack_require__(161);
+	var _libListeners = __webpack_require__(161);
 
 	/**
 	 * methodWrapper
@@ -21195,25 +21380,25 @@
 
 	  // if we haven't already created a binding for this class (via another
 	  // decorated method), wrap these lifecycle methods.
-	  if (!(0, _listeners.getBinding)(target)) {
+	  if (!(0, _libListeners.getBinding)(target)) {
 	    (function () {
 	      var componentDidMount = target.componentDidMount;
 	      var componentWillUnmount = target.componentWillUnmount;
 
 	      target.componentDidMount = function () {
-	        _listeners.onMount.call(this);
+	        (0, _libListeners.onMount)(this);
 	        if (componentDidMount) return componentDidMount.call(this);
 	      };
 
 	      target.componentWillUnmount = function () {
-	        _listeners.onUnmount.call(this);
+	        (0, _libListeners.onUnmount)(this);
 	        if (componentWillUnmount) return componentWillUnmount.call(this);
 	      };
 	    })();
 	  }
 
 	  // add this binding of keys and method to the target's bindings
-	  (0, _listeners.setBinding)({ keys: keys, target: target, fn: descriptor.value });
+	  (0, _libListeners.setBinding)({ keys: keys, target: target, fn: descriptor.value });
 
 	  return descriptor;
 	}
@@ -21222,13 +21407,28 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 163 */
-/***/ function(module, exports) {
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * @module methodWrapperScoped
 	 *
 	 */
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _libMatch_keys = __webpack_require__(162);
+
+	var _libMatch_keys2 = _interopRequireDefault(_libMatch_keys);
+
+	var _libParse_keys = __webpack_require__(164);
+
+	var _libParse_keys2 = _interopRequireDefault(_libParse_keys);
 
 	/**
 	 * _shouldTrigger
@@ -21243,16 +21443,10 @@
 	 * @param {array} keys The keys bound to the decorated method
 	 * @return {boolean} Whether all tests have passed
 	 */
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	function _shouldTrigger(_ref, _ref2, keys) {
+	function _shouldTrigger(_ref, keydownNext) {
 	  var keydownThis = _ref.keydown;
-	  var keydownNext = _ref2.keydown;
 
-	  return keydownNext && keydownNext.event && !keydownThis.event && ~keys.indexOf(keydownNext.event.which);
+	  return keydownNext && keydownNext.event && !keydownThis.event;
 	}
 
 	/**
@@ -21265,21 +21459,28 @@
 	 * @param {array} args.keys The key codes bound to the decorated method
 	 * @return {object} The method's descriptor object
 	 */
-	function methodWrapperScoped(_ref3) {
-	  var target = _ref3.target;
-	  var descriptor = _ref3.descriptor;
-	  var keys = _ref3.keys;
+	function methodWrapperScoped(_ref2) {
+	  var target = _ref2.target;
+	  var descriptor = _ref2.descriptor;
+	  var keys = _ref2.keys;
 	  var componentWillReceiveProps = target.componentWillReceiveProps;
 
 	  var fn = descriptor.value;
+	  var keySets = (0, _libParse_keys2['default'])(keys);
 
 	  // wrap the component's lifecycle method to intercept key codes coming down
 	  // from the wrapped/scoped component up the view hierarchy. if new keydown
 	  // event has arrived and the key codes match what was specified in the
 	  // decorator, call the wrapped method.
 	  target.componentWillReceiveProps = function (nextProps) {
-	    if (_shouldTrigger(this.props, nextProps, keys)) {
-	      fn.call(this, nextProps.keydown.event);
+	    var keydown = nextProps.keydown;
+
+	    if (_shouldTrigger(this.props, keydown)) {
+	      if (keySets.some(function (keySet) {
+	        return (0, _libMatch_keys2['default'])({ keySet: keySet, event: keydown.event });
+	      })) {
+	        fn.call(this, keydown.event);
+	      }
 	    }
 
 	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -21292,30 +21493,11 @@
 	  return descriptor;
 	}
 
-	exports["default"] = methodWrapperScoped;
-	module.exports = exports["default"];
+	exports['default'] = methodWrapperScoped;
+	module.exports = exports['default'];
 
 /***/ },
-/* 164 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports["default"] = {
-	  TAB: 9,
-	  ENTER: 13,
-	  LEFT: 37,
-	  UP: 38,
-	  RIGHT: 39,
-	  DOWN: 40
-	};
-	module.exports = exports["default"];
-
-/***/ },
-/* 165 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21370,7 +21552,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 166 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21397,8 +21579,6 @@
 
 	var _src2 = _interopRequireDefault(_src);
 
-	var ENTER = _src.Keys.ENTER;
-
 	var MethodDecorator = (function (_React$Component) {
 	  _inherits(MethodDecorator, _React$Component);
 
@@ -21413,7 +21593,7 @@
 
 	  _createDecoratedClass(MethodDecorator, [{
 	    key: 'toggleHello',
-	    decorators: [(0, _src2['default'])(ENTER)],
+	    decorators: [(0, _src2['default'])('enter')],
 	    value: function toggleHello() {
 	      this.setState({ hello: !this.state.hello });
 	    }
@@ -21437,12 +21617,14 @@
 	            null,
 	            'enter'
 	          ),
-	          ' key to toggle hello.'
+	          ' key to toggle the message.'
 	        ),
 	        this.state.hello && _react2['default'].createElement(
 	          'h1',
 	          null,
-	          'Hello!'
+	          'Enter is key code ',
+	          _src.Keys.enter,
+	          '!'
 	        ),
 	        _react2['default'].createElement(
 	          'div',
@@ -21460,7 +21642,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 167 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21483,7 +21665,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var code = '<code>import React from &#x27;react&#x27;;\nimport keydown, { Keys } from &#x27;keydown&#x27;;\n\nconst { ENTER } = Keys;\n\nclass MethodDecoratorExample extends React.Component {\n  constructor( props ) {\n    super( props );\n    this.state = {\n      hello: false\n    };\n  }\n\n  @keydown( ENTER )\n  toggleHello() {\n    this.setState( { hello: !this.state.hello } );\n  }\n\n  render() {\n    return (\n      &#x3C;div&#x3E;\n        &#x3C;h3&#x3E;Method Decorator Example&#x3C;/h3&#x3E;\n        &#x3C;div&#x3E;Press the &#x3C;strong&#x3E;enter&#x3C;/strong&#x3E; key to toggle hello.&#x3C;/div&#x3E;\n        { this.state.hello &#x26;&#x26;\n          &#x3C;h1&#x3E;Hello!&#x3C;/h1&#x3E;\n        }\n        &#x3C;div&#x3E;And click again outside box to see scoping.&#x3C;/div&#x3E;\n      &#x3C;/div&#x3E;\n    );\n  }\n}</code>';
+	var code = '<code>import React from &#x27;react&#x27;;\nimport keydown, { Keys } from &#x27;keydown&#x27;;\n\nclass MethodDecoratorExample extends React.Component {\n  constructor( props ) {\n    super( props );\n    this.state = {\n      hello: false\n    };\n  }\n\n  @keydown( \'enter\' )\n  toggleHello() {\n    this.setState( { hello: !this.state.hello } );\n  }\n\n  render() {\n    return (\n      &#x3C;div&#x3E;\n        &#x3C;h3&#x3E;Method Decorator Example&#x3C;/h3&#x3E;\n        &#x3C;div&#x3E;Press the &#x3C;strong&#x3E;enter&#x3C;/strong&#x3E; key to toggle hello.&#x3C;/div&#x3E;\n        { this.state.hello &#x26;&#x26;\n          &#x3C;h1&#x3E;Enter is key code {Keys.enter}!&#x3C;/h1&#x3E;\n        }\n        &#x3C;div&#x3E;And click again outside box to see scoping.&#x3C;/div&#x3E;\n      &#x3C;/div&#x3E;\n    );\n  }\n}</code>';
 
 	var Code = (function (_React$Component) {
 	  _inherits(Code, _React$Component);
