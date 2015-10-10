@@ -1,4 +1,4 @@
-# react-keydown
+# React Keydown
 > Lightweight keydown wrapper for React components.
 
 Use react-keydown as a higher-order component or decorator to pass keydown
@@ -9,8 +9,7 @@ Key advantages:
 
 * **Declarative syntax**: Components say what keys they will respond to.
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys
-* **Component scoping**: Key bindings respond only when component mounts and/or
-  the user appears to be active there
+* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
 * **Tiny**: 2kb compressed and gzipped (with UMD module wrapping -- smaller
   without it)
 
@@ -67,7 +66,7 @@ class MyComponent extends React.Component {
 
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
-      // do something with the keydown event
+      // inspect the keydown event and decide what to do
       console.log( keydown.event.which );
     }
   }
@@ -112,6 +111,35 @@ Or no need for an array:
 @keydown( 13 ) // just the enter key
 ```
 
+#### Use the `@keydownScoped` shortcut
+
+When using the class decorator/higher-order component, decorate methods with `@keydownScoped` to identify the `keydown.event` prop as it comes in and bind certain values to methods:
+
+```javascript
+import keydown, { keydownScoped, Keys } from 'react-keydown';
+
+const { ENTER } = Keys;
+
+@keydown( ENTER ) // optional to specify ENTER here. if not, any key event will get passed down
+class MyComponent extends React.Component {
+  render() {
+    return <MyOtherComponent {...this.props} />;
+  }
+}
+
+class MyOtherComponent extends React.Component {
+  ...
+  @keydownScoped( ENTER ) // inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes
+  submit() {
+    // submit
+  }
+}
+```
+
+This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own.
+
+This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
+
 ## Demo
 
 Go to the [live
@@ -128,21 +156,17 @@ Note that this is very much a work in progress!
 * The decorator pattern `@keydown` currently requires transpilation by
   [Babel](babeljs.io/) (set to
   stage 1) or the equivalent
+* This lib has only been tested using ES2015 classes. Some method decoration
+  functionality may work on other types of object methods.
+* In order to avoid unintended side effects, only one component (and its children) can receive
+  keydown events at a time (the most recently mounted, clicked, or focused component). If you want multiple     
+  components to receive keydown events simultaneously, decorate a common ancestor component class with `@keydown`     and then decorate your methods in the child components with `@keydownScoped( myKeyCode )` (or manually work with    the keydown.event props flowing into your components). For example, if you want app-wide shortcuts, decorate (or    wrap) the root component with `@keydown` and then all descendent components will receive the `keydown.event` prop   when a key is pressed.
 * Since the only context we have for keydown events is the component, decorated
   methods receive the event as their sole argument and the component instance as
   context.
-* This lib has only been tested using ES2015 classes. Some method decoration
-  functionality may work on other types of object methods.
 * The method decorators wrap React lifecycle methods in order to work
   as seamlessly and efficiently as possible. The class decorator does not do
   this, functioning instead as a higher-order component.
-* In order to avoid unintended side effects, only one component can receive
-  keydown events at a time. This will be the most recently mounted or clicked
-  component with key bindings. If you want multiple components to receive
-  keydown events simultaneously, decorate a common ancestor component class with
-  `@keydown` and then decorate your methods in the child components with 
-  `@keydownScoped( myKeyCode )` (or manually work with the keydown.event props
-  flowing into your components).
 
 ## Questions
 
