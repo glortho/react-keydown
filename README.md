@@ -136,7 +136,7 @@ class MyOtherComponent extends React.Component {
 }
 ```
 
-This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own, not receiving focus appropriately.
+This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own.
 
 ## Demo
 
