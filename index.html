@@ -20,7 +20,7 @@
 
     <section class="main-content">
       <h1>
-<a id="react-keydown" class="anchor" href="#react-keydown" aria-hidden="true"><span class="octicon octicon-link"></span></a>react-keydown</h1>
+<a id="react-keydown" class="anchor" href="#react-keydown" aria-hidden="true"><span class="octicon octicon-link"></span></a>React Keydown</h1>
 
 <blockquote>
 <p>Lightweight keydown wrapper for React components.</p>
@@ -36,13 +36,14 @@ for implementing keyboard navigation or other shortcuts.</p>
 <li>
 <strong>Declarative syntax</strong>: Components say what keys they will respond to.</li>
 <li>
-<strong>Intuitive DX</strong>: Decorate a class or method to bind it to specified keys</li>
+<strong>Intuitive DX</strong>: Decorate a class or method to bind it to specified keys.</li>
 <li>
-<strong>Component scoping</strong>: Key bindings respond only when component mounts and/or
-the user appears to be active there</li>
+<strong>Scoping</strong>: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.</li>
+<li>
+<strong>Modifier keys</strong>: Support for standard modifier key combinations.</li>
 <li>
 <strong>Tiny</strong>: 2kb compressed and gzipped (with UMD module wrapping -- smaller
-without it)</li>
+without it).</li>
 </ul>
 
 <h2>
@@ -58,15 +59,13 @@ without it)</li>
 <a id="for-methods-decorate-with-keys-that-should-trigger-method" class="anchor" href="#for-methods-decorate-with-keys-that-should-trigger-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>For methods: Decorate with keys that should trigger method</h3>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> React <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> keydown, { Keys } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-keydown<span class="pl-pds">'</span></span>;
-
-<span class="pl-k">const</span> { <span class="pl-c1">ENTER</span> } <span class="pl-k">=</span> Keys;
+<span class="pl-k">import</span> keydown <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-keydown<span class="pl-pds">'</span></span>;
 
 <span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
 
   ...
 
-  @keydown( <span class="pl-c1">ENTER</span> ) <span class="pl-c">// or specify `which` code directly, in this case 13</span>
+  @keydown( <span class="pl-s"><span class="pl-pds">'</span>enter<span class="pl-pds">'</span></span> ) <span class="pl-c">// or specify `which` code directly, in this case 13</span>
   <span class="pl-en">submit</span>() {
     MyApi.post( <span class="pl-v">this</span>.state );
   }
@@ -78,7 +77,7 @@ processing, if desired. For example, you may went to <code>event.preventDefault(
 <h4>
 <a id="specify-multiple-keys-that-should-trigger-the-method" class="anchor" href="#specify-multiple-keys-that-should-trigger-the-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Specify multiple keys that should trigger the method</h4>
 
-<div class="highlight highlight-source-js"><pre>@keydown( <span class="pl-c1">ENTER</span>, <span class="pl-c1">TAB</span> )
+<div class="highlight highlight-source-js"><pre>@keydown( <span class="pl-s"><span class="pl-pds">'</span>enter<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>tab<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>ctrl+z<span class="pl-pds">'</span></span> )
 <span class="pl-en">autocomplete</span>() {
   MyApi.get( <span class="pl-v">this</span>.state );
 }</pre></div>
@@ -97,7 +96,7 @@ processing, if desired. For example, you may went to <code>event.preventDefault(
 
   <span class="pl-en">componentWillReceiveProps</span>( {<span class="pl-smi"> keydown</span> } ) {
 <span class="pl-k">    if</span> (<span class="pl-smi"> keydown</span><span class="pl-k">.</span><span class="pl-smi">event</span> ) {
-<span class="pl-c">      // do something with the keydown event</span>
+<span class="pl-c">      // inspect the keydown event and decide what to do</span>
       <span class="pl-c1">console</span><span class="pl-k">.</span><span class="pl-c1">log</span>(<span class="pl-smi"> keydown</span><span class="pl-k">.</span><span class="pl-smi">event</span><span class="pl-k">.</span><span class="pl-smi">which</span> );
     }
   }
@@ -112,7 +111,7 @@ processing, if desired. For example, you may went to <code>event.preventDefault(
 <span class="pl-k">export default</span> <span class="pl-en">keydown</span>(<span class="pl-smi"> MyComponent</span> );</pre></div>
 
 <h4>
-<a id="use-es72016-decorator-pattern-via-babel-stage-1" class="anchor" href="#use-es72016-decorator-pattern-via-babel-stage-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use ES7/2016 decorator pattern via Babel (stage 1):</h4>
+<a id="use-decorator-pattern" class="anchor" href="#use-decorator-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use decorator pattern:</h4>
 
 <div class="highlight highlight-source-js"><pre>@keydown
 <span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
@@ -124,20 +123,38 @@ processing, if desired. For example, you may went to <code>event.preventDefault(
 <h4>
 <a id="monitor-only-key-codes-which-you-care-about" class="anchor" href="#monitor-only-key-codes-which-you-care-about" aria-hidden="true"><span class="octicon octicon-link"></span></a>Monitor only key codes <code>which</code> you care about:</h4>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">const</span> <span class="pl-c1">KEYS</span> <span class="pl-k">=</span> [
-  <span class="pl-c1">38</span>, <span class="pl-c">// up</span>
-  <span class="pl-c1">40</span>, <span class="pl-c">// down</span>
-  <span class="pl-c1">13</span>  <span class="pl-c">// enter</span>
-];
+<div class="highlight highlight-source-js"><pre><span class="pl-k">const</span> <span class="pl-c1">KEYS</span> <span class="pl-k">=</span> [ <span class="pl-s"><span class="pl-pds">'</span>shift+up<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>shift+down<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>enter<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>j<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>k<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>h<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>l<span class="pl-pds">'</span></span> ];
 
 @keydown( <span class="pl-c1">KEYS</span> )
 <span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
   ...
 }</pre></div>
 
-<p>Or no need for an array:</p>
+<h4>
+<a id="use-the-keydownscoped-shortcut" class="anchor" href="#use-the-keydownscoped-shortcut" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use the <code>@keydownScoped</code> shortcut</h4>
 
-<div class="highlight highlight-source-js"><pre>@keydown( <span class="pl-c1">13</span> ) <span class="pl-c">// just the enter key</span></pre></div>
+<p>When using the class decorator/higher-order component, decorate methods with <code>@keydownScoped</code> to identify the <code>keydown.event</code> prop as it comes in and bind certain values to methods:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> keydown, { keydownScoped } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-keydown<span class="pl-pds">'</span></span>;
+
+@keydown( <span class="pl-s"><span class="pl-pds">'</span>enter<span class="pl-pds">'</span></span> ) <span class="pl-c">// optional to specify a key here. if called with just @keydown, all key events will get passed down</span>
+<span class="pl-k">class</span> <span class="pl-en">MyComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
+  <span class="pl-en">render</span>() {
+    <span class="pl-k">return</span> <span class="pl-k">&lt;</span>MyOtherComponent {...this.props} <span class="pl-k">/&gt;</span>;
+  }
+}
+
+<span class="pl-k">class</span> <span class="pl-en">MyOtherComponent</span> <span class="pl-k">extends</span> <span class="pl-en">React.Component</span> {
+  ...
+  @keydownScoped( <span class="pl-s"><span class="pl-pds">'</span>enter<span class="pl-pds">'</span></span> ) <span class="pl-c">// inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes</span>
+  <span class="pl-en">submit</span>() {
+    <span class="pl-c">// submit</span>
+  }
+}</pre></div>
+
+<p>This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own.</p>
+
+<p>This can also be a good way to set up app-wide shortcuts. Wrap your root component with <code>@keydown</code> and then use  <code>@keydownScoped</code> or manually inspect the <code>keydown.event</code> props in the child components where those bindings are relevant.</p>
 
 <h2>
 <a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h2>
@@ -157,11 +174,14 @@ demo</a> or:</p>
 <li>The decorator pattern <code>@keydown</code> currently requires transpilation by
 <a href="babeljs.io/">Babel</a> (set to
 stage 1) or the equivalent</li>
+<li>This lib has only been tested using ES2015 classes. Some method decoration
+functionality may work on other types of object methods.</li>
+<li>In order to avoid unintended side effects, only one component (and its children) can receive
+keydown events at a time (the most recently mounted, clicked, or focused component). If you want multiple<br>
+components to receive keydown events simultaneously, decorate a common ancestor component class with <code>@keydown</code>     and then decorate your methods in the child components with <code>@keydownScoped( myKeyCode )</code> (or manually work with    the keydown.event props flowing into your components). For example, if you want app-wide shortcuts, decorate (or    wrap) the root component with <code>@keydown</code> and then all descendent components will receive the <code>keydown.event</code> prop   when a key is pressed.</li>
 <li>Since the only context we have for keydown events is the component, decorated
 methods receive the event as their sole argument and the component instance as
 context.</li>
-<li>This lib has only been tested using ES2015 classes. Some method decoration
-functionality may work on other types of object methods.</li>
 <li>The method decorators wrap React lifecycle methods in order to work
 as seamlessly and efficiently as possible. The class decorator does not do
 this, functioning instead as a higher-order component.</li>
