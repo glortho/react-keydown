@@ -115,7 +115,7 @@ function _handleKeyDown( event ) {
   if ( _shouldConsider( event ) ) {
     const { bindings } = getBinding( _focusedInstance.constructor.prototype );
     bindings.forEach( ( fn, keySets ) => {
-      if ( !keySets || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) {
+      if ( !keySets || !keySets[0] || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) {
         fn.call( _focusedInstance, event );
       }
     });

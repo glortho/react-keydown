@@ -21059,7 +21059,7 @@
 	    var bindings = _getBinding.bindings;
 
 	    bindings.forEach(function (fn, keySets) {
-	      if (!keySets || keySets.some(function (keySet) {
+	      if (!keySets || !keySets[0] || keySets.some(function (keySet) {
 	        return (0, _match_keys2['default'])({ keySet: keySet, event: event });
 	      })) {
 	        fn.call(_focusedInstance, event);
@@ -21243,21 +21243,31 @@
 	var modKeys = Object.keys(_keys.modifiers);
 
 	function matchKeys(_ref) {
-	  var _ref$keySet = _ref.keySet;
-	  var key = _ref$keySet.key;
-	  var modifiers = _ref$keySet.modifiers;
+	  var keySet = _ref.keySet;
 	  var event = _ref.event;
 
-	  var keysMatch = false;
-	  if (key === event.which) {
-	    var eventModifiers = modKeys.filter(function (modKey) {
-	      return event[modKey + 'Key'];
-	    });
-	    keysMatch = !eventModifiers.length && !modifiers || modifiers && eventModifiers.length && eventModifiers.every(function (modKey) {
-	      return ~modifiers.indexOf(modKey);
-	    });
+	  if (keySet) {
+	    var _ret = (function () {
+	      var key = keySet.key;
+	      var modifiers = keySet.modifiers;
+
+	      var keysMatch = false;
+	      if (key === event.which) {
+	        var eventModifiers = modKeys.filter(function (modKey) {
+	          return event[modKey + 'Key'];
+	        });
+	        keysMatch = !eventModifiers.length && !modifiers || modifiers && eventModifiers.length && eventModifiers.every(function (modKey) {
+	          return ~modifiers.indexOf(modKey);
+	        });
+	      }
+	      return {
+	        v: keysMatch
+	      };
+	    })();
+
+	    if (typeof _ret === 'object') return _ret.v;
 	  }
-	  return keysMatch;
+	  return true;
 	}
 
 	exports['default'] = matchKeys;

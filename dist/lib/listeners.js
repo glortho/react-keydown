@@ -176,7 +176,7 @@
       var bindings = _getBinding.bindings;
 
       bindings.forEach(function (fn, keySets) {
-        if (!keySets || keySets.some(function (keySet) {
+        if (!keySets || !keySets[0] || keySets.some(function (keySet) {
           return (0, _matchKeys['default'])({ keySet: keySet, event: event });
         })) {
           fn.call(_focusedInstance, event);
