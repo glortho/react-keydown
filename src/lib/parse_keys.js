@@ -10,7 +10,7 @@ function parseKeys( keysArray ) {
         { key: Keys[ keyString ] } :
         { 
           key: Keys[ matches.pop() ],
-          modifiers: matches.map( modKey => modifiers[modKey] )
+          modifiers: matches.map( modKey => modifiers[modKey] ).sort()
         };
     }
     return keySet;

@@ -37,21 +37,25 @@ function _shouldTrigger( { keydown: keydownThis }, keydownNext ) {
 function methodWrapperScoped( { target, descriptor, keys } ) {
   const { componentWillReceiveProps } = target;
   const fn = descriptor.value;
-  const keySets = parseKeys( keys );
+  if ( !keys ) {
+    console.warn( `${fn}: keydownScoped requires one or more keys` );
+  } else {
+    const keySets = parseKeys( keys );
 
-  // wrap the component's lifecycle method to intercept key codes coming down
-  // from the wrapped/scoped component up the view hierarchy. if new keydown
-  // event has arrived and the key codes match what was specified in the
-  // decorator, call the wrapped method.
-  target.componentWillReceiveProps = function( nextProps, ...args ) {
-    const { keydown } = nextProps;
-    if ( _shouldTrigger( this.props, keydown ) ) {
-      if ( keySets.some( keySet => matchKeys( { keySet, event: keydown.event } ) ) ) {
-        fn.call( this, keydown.event );
+    // wrap the component's lifecycle method to intercept key codes coming down
+    // from the wrapped/scoped component up the view hierarchy. if new keydown
+    // event has arrived and the key codes match what was specified in the
+    // decorator, call the wrapped method.
+    target.componentWillReceiveProps = function( nextProps, ...args ) {
+      const { keydown } = nextProps;
+      if ( _shouldTrigger( this.props, keydown ) ) {
+        if ( keySets.some( keySet => matchKeys( { keySet, event: keydown.event } ) ) ) {
+          fn.call( this, keydown.event );
+        }
       }
-    }
-    if ( componentWillReceiveProps ) return componentWillReceiveProps.call( this, nextProps, ...args );
-  };
+      if ( componentWillReceiveProps ) return componentWillReceiveProps.call( this, nextProps, ...args );
+    };
+  }
 
   return descriptor;
 }

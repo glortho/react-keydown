@@ -20916,6 +20916,8 @@
 
 	var _parse_keys2 = _interopRequireDefault(_parse_keys);
 
+	var _keys = __webpack_require__(163);
+
 	/**
 	 * private
 	 * 
@@ -21059,7 +21061,7 @@
 	    var bindings = _getBinding.bindings;
 
 	    bindings.forEach(function (fn, keySets) {
-	      if (!keySets || !keySets[0] || keySets.some(function (keySet) {
+	      if ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
 	        return (0, _match_keys2['default'])({ keySet: keySet, event: event });
 	      })) {
 	        fn.call(_focusedInstance, event);
@@ -21188,7 +21190,7 @@
 	  var fn = _ref5.fn;
 	  var target = _ref5.target;
 
-	  var keySets = !keys ? [null] : (0, _parse_keys2['default'])(keys);
+	  var keySets = keys ? (0, _parse_keys2['default'])(keys) : (0, _keys.allKeys)();
 	  var handler = getBinding(target);
 	  if (!handler) {
 	    handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
@@ -21243,31 +21245,24 @@
 	var modKeys = Object.keys(_keys.modifiers);
 
 	function matchKeys(_ref) {
-	  var keySet = _ref.keySet;
+	  var _ref$keySet = _ref.keySet;
+	  var key = _ref$keySet.key;
+	  var _ref$keySet$modifiers = _ref$keySet.modifiers;
+	  var modifiers = _ref$keySet$modifiers === undefined ? [] : _ref$keySet$modifiers;
 	  var event = _ref.event;
 
-	  if (keySet) {
-	    var _ret = (function () {
-	      var key = keySet.key;
-	      var modifiers = keySet.modifiers;
-
-	      var keysMatch = false;
-	      if (key === event.which) {
-	        var eventModifiers = modKeys.filter(function (modKey) {
-	          return event[modKey + 'Key'];
-	        });
-	        keysMatch = !eventModifiers.length && !modifiers || modifiers && eventModifiers.length && eventModifiers.every(function (modKey) {
-	          return ~modifiers.indexOf(modKey);
-	        });
-	      }
-	      return {
-	        v: keysMatch
-	      };
+	  var keysMatch = false;
+	  if (key === event.which) {
+	    (function () {
+	      var eventModifiers = modKeys.filter(function (modKey) {
+	        return event[modKey + 'Key'];
+	      }).sort();
+	      keysMatch = modifiers.length === eventModifiers.length && modifiers.sort().every(function (modKey, index) {
+	        return eventModifiers[index];
+	      });
 	    })();
-
-	    if (typeof _ret === 'object') return _ret.v;
 	  }
-	  return true;
+	  return keysMatch;
 	}
 
 	exports['default'] = matchKeys;
@@ -21282,6 +21277,7 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+	exports.allKeys = allKeys;
 	var Keys = {
 	  tab: 9,
 	  enter: 13,
@@ -21291,6 +21287,11 @@
 	  down: 40,
 	  slash: 191
 	};
+
+	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
+	  Keys[letter] = index + 65;
+	  Keys[letter.toLowerCase()] = index + 65;
+	});
 
 	var modifiers = {
 	  control: 'ctrl',
@@ -21303,13 +21304,13 @@
 	  alt: 'alt'
 	};
 
-	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
-	  Keys[letter] = index + 65;
-	  Keys[letter.toLowerCase()] = index + 65;
-	});
+	exports.modifiers = modifiers;
+
+	function allKeys(arg) {
+	  return arg ? typeof arg === 'symbol' : Symbol('allKeys');
+	}
 
 	exports['default'] = Keys;
-	exports.modifiers = modifiers;
 
 /***/ },
 /* 164 */
@@ -21466,29 +21467,35 @@
 	  var componentWillReceiveProps = target.componentWillReceiveProps;
 
 	  var fn = descriptor.value;
-	  var keySets = (0, _libParse_keys2['default'])(keys);
+	  if (!keys) {
+	    console.warn(fn + ': keydownScoped requires one or more keys');
+	  } else {
+	    (function () {
+	      var keySets = (0, _libParse_keys2['default'])(keys);
 
-	  // wrap the component's lifecycle method to intercept key codes coming down
-	  // from the wrapped/scoped component up the view hierarchy. if new keydown
-	  // event has arrived and the key codes match what was specified in the
-	  // decorator, call the wrapped method.
-	  target.componentWillReceiveProps = function (nextProps) {
-	    var keydown = nextProps.keydown;
+	      // wrap the component's lifecycle method to intercept key codes coming down
+	      // from the wrapped/scoped component up the view hierarchy. if new keydown
+	      // event has arrived and the key codes match what was specified in the
+	      // decorator, call the wrapped method.
+	      target.componentWillReceiveProps = function (nextProps) {
+	        var keydown = nextProps.keydown;
 
-	    if (_shouldTrigger(this.props, keydown)) {
-	      if (keySets.some(function (keySet) {
-	        return (0, _libMatch_keys2['default'])({ keySet: keySet, event: keydown.event });
-	      })) {
-	        fn.call(this, keydown.event);
-	      }
-	    }
+	        if (_shouldTrigger(this.props, keydown)) {
+	          if (keySets.some(function (keySet) {
+	            return (0, _libMatch_keys2['default'])({ keySet: keySet, event: keydown.event });
+	          })) {
+	            fn.call(this, keydown.event);
+	          }
+	        }
 
-	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	      args[_key - 1] = arguments[_key];
-	    }
+	        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	          args[_key - 1] = arguments[_key];
+	        }
 
-	    if (componentWillReceiveProps) return componentWillReceiveProps.call.apply(componentWillReceiveProps, [this, nextProps].concat(args));
-	  };
+	        if (componentWillReceiveProps) return componentWillReceiveProps.call.apply(componentWillReceiveProps, [this, nextProps].concat(args));
+	      };
+	    })();
+	  }
 
 	  return descriptor;
 	}

@@ -27,7 +27,7 @@
           key: _Keys['default'][matches.pop()],
           modifiers: matches.map(function (modKey) {
             return _keys.modifiers[modKey];
-          })
+          }).sort()
         };
       }
       return keySet;

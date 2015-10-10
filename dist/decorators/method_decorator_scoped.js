@@ -59,29 +59,35 @@
     var componentWillReceiveProps = target.componentWillReceiveProps;
 
     var fn = descriptor.value;
-    var keySets = (0, _parseKeys['default'])(keys);
+    if (!keys) {
+      console.warn(fn + ': keydownScoped requires one or more keys');
+    } else {
+      (function () {
+        var keySets = (0, _parseKeys['default'])(keys);
 
-    // wrap the component's lifecycle method to intercept key codes coming down
-    // from the wrapped/scoped component up the view hierarchy. if new keydown
-    // event has arrived and the key codes match what was specified in the
-    // decorator, call the wrapped method.
-    target.componentWillReceiveProps = function (nextProps) {
-      var keydown = nextProps.keydown;
+        // wrap the component's lifecycle method to intercept key codes coming down
+        // from the wrapped/scoped component up the view hierarchy. if new keydown
+        // event has arrived and the key codes match what was specified in the
+        // decorator, call the wrapped method.
+        target.componentWillReceiveProps = function (nextProps) {
+          var keydown = nextProps.keydown;
 
-      if (_shouldTrigger(this.props, keydown)) {
-        if (keySets.some(function (keySet) {
-          return (0, _matchKeys['default'])({ keySet: keySet, event: keydown.event });
-        })) {
-          fn.call(this, keydown.event);
-        }
-      }
+          if (_shouldTrigger(this.props, keydown)) {
+            if (keySets.some(function (keySet) {
+              return (0, _matchKeys['default'])({ keySet: keySet, event: keydown.event });
+            })) {
+              fn.call(this, keydown.event);
+            }
+          }
 
-      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
+          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+          }
 
-      if (componentWillReceiveProps) return componentWillReceiveProps.call.apply(componentWillReceiveProps, [this, nextProps].concat(args));
-    };
+          if (componentWillReceiveProps) return componentWillReceiveProps.call.apply(componentWillReceiveProps, [this, nextProps].concat(args));
+        };
+      })();
+    }
 
     return descriptor;
   }

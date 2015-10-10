@@ -8,7 +8,12 @@ const Keys = {
   slash: 191
 };
 
-const modifiers = {
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split( '' ).forEach( ( letter, index ) => {
+  Keys[letter] = index + 65;
+  Keys[letter.toLowerCase()] = index + 65;
+});
+
+export const modifiers = {
   control: 'ctrl',
   ctrl:    'ctrl',
   shift:   'shift',
@@ -19,11 +24,8 @@ const modifiers = {
   alt:     'alt'
 };
 
-'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split( '' ).forEach( ( letter, index ) => {
-  Keys[letter] = index + 65;
-  Keys[letter.toLowerCase()] = index + 65;
-});
+export function allKeys( arg ) {
+  return arg ? typeof arg === 'symbol' : Symbol( 'allKeys' );
+}
 
 export default Keys;
-
-export { modifiers };

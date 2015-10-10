@@ -1,11 +1,13 @@
+/* eslint-disable no-use-before-define */
 /**
  * @module listeners
  *
  */
 import React from 'react';
 
-import matchKeys from './match_keys';
-import parseKeys from './parse_keys';
+import matchKeys   from './match_keys';
+import parseKeys   from './parse_keys';
+import { allKeys } from './keys';
 
 /**
  * private
@@ -91,21 +93,21 @@ function _handleClick( { target } ) {
 
 
 /**
- * _shouldConsider
+ * _shouldConsider: Conditions for proceeding with key event handling
  *
  * @access private
  * @param {object} event The keydown event object
  * @param {object} event.target The node origin of the event
  * @param {string} event.target.tagName The name of the element tag
  * @param {number} event.target.which The key pressed
+ * @return {boolean} Whether to continue procesing the keydown event
  */
 function _shouldConsider( { target: { tagName } } ) {
-  const notEnterable = !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName );
-  return notEnterable;
+  return !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName );
 }
 
 /**
- * _handleKeyDown
+ * _handleKeyDown: The keydown event callback
  *
  * @access private
  * @param {object} event The keydown event object
@@ -115,7 +117,7 @@ function _handleKeyDown( event ) {
   if ( _shouldConsider( event ) ) {
     const { bindings } = getBinding( _focusedInstance.constructor.prototype );
     bindings.forEach( ( fn, keySets ) => {
-      if ( !keySets || !keySets[0] || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) {
+      if ( allKeys( keySets ) || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) {
         fn.call( _focusedInstance, event );
       }
     });
@@ -230,7 +232,7 @@ function getBinding( target ) {
  * @param {object} args.target The decorated class
  */
 function setBinding( { keys, fn, target } ) {
-  const keySets = !keys ? [ null ] : parseKeys( keys );
+  const keySets = keys ? parseKeys( keys ) : allKeys() ;
   let handler = getBinding( target );
   if ( !handler ) {
     handler = _handlers.set( target, { bindings: new Map(), instances: new Set() } ).get( target );

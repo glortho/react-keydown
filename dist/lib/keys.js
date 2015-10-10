@@ -16,6 +16,7 @@
   Object.defineProperty(exports, '__esModule', {
     value: true
   });
+  exports.allKeys = allKeys;
   var Keys = {
     tab: 9,
     enter: 13,
@@ -25,6 +26,11 @@
     down: 40,
     slash: 191
   };
+
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
+    Keys[letter] = index + 65;
+    Keys[letter.toLowerCase()] = index + 65;
+  });
 
   var modifiers = {
     control: 'ctrl',
@@ -37,11 +43,11 @@
     alt: 'alt'
   };
 
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
-    Keys[letter] = index + 65;
-    Keys[letter.toLowerCase()] = index + 65;
-  });
+  exports.modifiers = modifiers;
+
+  function allKeys(arg) {
+    return arg ? typeof arg === 'symbol' : Symbol('allKeys');
+  }
 
   exports['default'] = Keys;
-  exports.modifiers = modifiers;
 });

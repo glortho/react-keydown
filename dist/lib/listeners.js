@@ -1,16 +1,17 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'react', './match_keys', './parse_keys'], factory);
+    define(['exports', 'react', './match_keys', './parse_keys', './keys'], factory);
   } else if (typeof exports !== 'undefined') {
-    factory(exports, require('react'), require('./match_keys'), require('./parse_keys'));
+    factory(exports, require('react'), require('./match_keys'), require('./parse_keys'), require('./keys'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.React, global.matchKeys, global.parseKeys);
+    factory(mod.exports, global.React, global.matchKeys, global.parseKeys, global.keys);
     global.listeners = mod.exports;
   }
-})(this, function (exports, _react, _match_keys, _parse_keys) {
+})(this, function (exports, _react, _match_keys, _parse_keys, _keys) {
+  /* eslint-disable no-use-before-define */
   /**
    * @module listeners
    *
@@ -147,23 +148,23 @@
   }
 
   /**
-   * _shouldConsider
+   * _shouldConsider: Conditions for proceeding with key event handling
    *
    * @access private
    * @param {object} event The keydown event object
    * @param {object} event.target The node origin of the event
    * @param {string} event.target.tagName The name of the element tag
    * @param {number} event.target.which The key pressed
+   * @return {boolean} Whether to continue procesing the keydown event
    */
   function _shouldConsider(_ref3) {
     var tagName = _ref3.target.tagName;
 
-    var notEnterable = ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
-    return notEnterable;
+    return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
   }
 
   /**
-   * _handleKeyDown
+   * _handleKeyDown: The keydown event callback
    *
    * @access private
    * @param {object} event The keydown event object
@@ -176,7 +177,7 @@
       var bindings = _getBinding.bindings;
 
       bindings.forEach(function (fn, keySets) {
-        if (!keySets || !keySets[0] || keySets.some(function (keySet) {
+        if ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
           return (0, _matchKeys['default'])({ keySet: keySet, event: event });
         })) {
           fn.call(_focusedInstance, event);
@@ -305,7 +306,7 @@
     var fn = _ref5.fn;
     var target = _ref5.target;
 
-    var keySets = !keys ? [null] : (0, _parseKeys['default'])(keys);
+    var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _keys.allKeys)();
     var handler = getBinding(target);
     if (!handler) {
       handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
