@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'react'], factory);
+    define(['exports', 'react', './match_keys', './parse_keys'], factory);
   } else if (typeof exports !== 'undefined') {
-    factory(exports, require('react'));
+    factory(exports, require('react'), require('./match_keys'), require('./parse_keys'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.React);
+    factory(mod.exports, global.React, global.matchKeys, global.parseKeys);
     global.listeners = mod.exports;
   }
-})(this, function (exports, _react) {
+})(this, function (exports, _react, _match_keys, _parse_keys) {
   /**
    * @module listeners
    *
@@ -28,6 +28,10 @@
   function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
   var _React = _interopRequireDefault(_react);
+
+  var _matchKeys = _interopRequireDefault(_match_keys);
+
+  var _parseKeys = _interopRequireDefault(_parse_keys);
 
   /**
    * private
@@ -149,11 +153,13 @@
    * @param {object} event The keydown event object
    * @param {object} event.target The node origin of the event
    * @param {string} event.target.tagName The name of the element tag
+   * @param {number} event.target.which The key pressed
    */
   function _shouldConsider(_ref3) {
     var tagName = _ref3.target.tagName;
 
-    return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
+    var notEnterable = ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
+    return notEnterable;
   }
 
   /**
@@ -169,8 +175,12 @@
 
       var bindings = _getBinding.bindings;
 
-      bindings.forEach(function (fn, keys) {
-        return (!keys || ~keys.indexOf(event.which)) && fn.call(_focusedInstance, event);
+      bindings.forEach(function (fn, keySets) {
+        if (!keySets || keySets.some(function (keySet) {
+          return (0, _matchKeys['default'])({ keySet: keySet, event: event });
+        })) {
+          fn.call(_focusedInstance, event);
+        }
       });
     }
   }
@@ -295,11 +305,12 @@
     var fn = _ref5.fn;
     var target = _ref5.target;
 
+    var keySets = !keys ? [null] : (0, _parseKeys['default'])(keys);
     var handler = getBinding(target);
     if (!handler) {
       handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
     }
-    handler.bindings.set(keys, fn);
+    handler.bindings.set(keySets, fn);
   }
 
   /**

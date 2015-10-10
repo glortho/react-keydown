@@ -4,6 +4,9 @@
  */
 import React from 'react';
 
+import matchKeys from './match_keys';
+import parseKeys from './parse_keys';
+
 /**
  * private
  * 
@@ -94,9 +97,11 @@ function _handleClick( { target } ) {
  * @param {object} event The keydown event object
  * @param {object} event.target The node origin of the event
  * @param {string} event.target.tagName The name of the element tag
+ * @param {number} event.target.which The key pressed
  */
 function _shouldConsider( { target: { tagName } } ) {
-  return !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName );
+  const notEnterable = !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName );
+  return notEnterable;
 }
 
 /**
@@ -109,9 +114,11 @@ function _shouldConsider( { target: { tagName } } ) {
 function _handleKeyDown( event ) {
   if ( _shouldConsider( event ) ) {
     const { bindings } = getBinding( _focusedInstance.constructor.prototype );
-    bindings.forEach( ( fn, keys ) => (
-      ( !keys || ~keys.indexOf( event.which ) ) && fn.call( _focusedInstance, event )
-    ));
+    bindings.forEach( ( fn, keySets ) => {
+      if ( !keySets || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) {
+        fn.call( _focusedInstance, event );
+      }
+    });
   }
 }
 
@@ -223,11 +230,12 @@ function getBinding( target ) {
  * @param {object} args.target The decorated class
  */
 function setBinding( { keys, fn, target } ) {
+  const keySets = !keys ? [ null ] : parseKeys( keys );
   let handler = getBinding( target );
   if ( !handler ) {
     handler = _handlers.set( target, { bindings: new Map(), instances: new Set() } ).get( target );
   }
-  handler.bindings.set( keys, fn );
+  handler.bindings.set( keySets, fn );
 }
 
 /**

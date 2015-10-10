@@ -49,10 +49,10 @@
     var testArg = args[0];
     var isArray = Array.isArray(testArg);
 
-    // if the test argument is an array or an integer, it is user-supplied
+    // if the test argument is not an object or function, it is user-supplied
     // keycodes. else there are no arguments and it's just the wrapped class
     // (method decorators must have keycode arguments).
-    if (isArray || parseInt(testArg, 10)) {
+    if (isArray || ~['string', 'number'].indexOf(typeof testArg)) {
       var _ret = (function () {
         var keys = isArray ? testArg : args;
 
