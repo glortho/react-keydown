@@ -2,7 +2,7 @@
  * @module methodWrapper
  *
  */
-import { getBinding, setBinding, onMount, onUnmount } from './listeners';
+import { getBinding, setBinding, onMount, onUnmount } from '../lib/listeners';
 
 /**
  * methodWrapper

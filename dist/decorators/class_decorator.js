@@ -1,8 +1,8 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', 'react', './listeners'], factory);
+    define(['exports', 'module', 'react', '../lib/listeners'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('react'), require('./listeners'));
+    factory(exports, module, require('react'), require('../lib/listeners'));
   } else {
     var mod = {
       exports: {}
@@ -10,7 +10,7 @@
     factory(mod.exports, mod, global.React, global.listeners);
     global.class_decorator = mod.exports;
   }
-})(this, function (exports, module, _react, _listeners) {
+})(this, function (exports, module, _react, _libListeners) {
   /**
    * @module componentWrapper
    *
@@ -57,12 +57,12 @@
       _createClass(KeyBoardHelper, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-          (0, _listeners.onMount)(this);
+          (0, _libListeners.onMount)(this);
         }
       }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-          (0, _listeners.onUnmount)(this);
+          (0, _libListeners.onUnmount)(this);
         }
       }, {
         key: 'handleKeyDown',
@@ -84,7 +84,7 @@
       return KeyBoardHelper;
     })(_React['default'].Component);
 
-    (0, _listeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+    (0, _libListeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
 
     return KeyBoardHelper;
   }

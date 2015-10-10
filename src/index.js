@@ -2,9 +2,9 @@
  * @module keydown
  *
  */
-import classWrapper        from './lib/class_decorator';
-import methodWrapper       from './lib/method_decorator';
-import methodWrapperScoped from './lib/method_decorator_scoped';
+import classWrapper        from './decorators/class_decorator';
+import methodWrapper       from './decorators/method_decorator';
+import methodWrapperScoped from './decorators/method_decorator_scoped';
 import Keys                from './lib/keys';
 
 /**
