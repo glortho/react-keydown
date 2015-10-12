@@ -4,7 +4,7 @@ function parseKeys( keysArray ) {
   return keysArray.map( key => {
     let keySet = { key };
     if ( typeof key === 'string' ) {
-      const keyString = String( key ).toLowerCase().trim();
+      const keyString = key.toLowerCase().trim();
       const matches = keyString.split( /\s?\+\s?/ );
       keySet = matches.length === 1 ? 
         { key: Keys[ keyString ] } :
