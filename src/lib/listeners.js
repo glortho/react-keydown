@@ -67,19 +67,18 @@ function _activate( instances ) {
   _bindKeys(); 
 }
 
-/**
- * _findFocused
- *
- * @access private
- * @param {object} data Criteria to use for finding the focused node
- * @param {object} data.instance The instantiated React.Component that is
- * a candidate for being focuse
- * @param {object} data.target The DOM node from the click event
- * @return {boolean} Success or failure in matching the node to the event target
- */
-function _findFocused( { target, instance } ) {
-  const node = React.findDOMNode( instance );
-  return target === node || node.contains( target );
+function _nodeReducer( target ) {
+  return ( memo, candidate ) => {
+    const node = React.findDOMNode( candidate );
+    if ( node === target || node.contains( target ) ) {
+      memo.push( { instance: candidate, node } );
+    }
+    return memo;
+  };
+}
+
+function _sortByDOMPosition( a, b ) {
+ return a.node.compareDocumentPosition( b.node ) === 10 ? 1 : -1;
 }
 
 /**
@@ -90,12 +89,16 @@ function _findFocused( { target, instance } ) {
  * @param {object} event.target The DOM node from the click event
  */
 function _handleClick( { target } ) {
-  const findFocused = instance => _findFocused( { target, instance } );
-  const toActivate = [ ..._handlers ].reduce( ( memo, [, { instances } ] ) => {
-    const instance = [ ...instances ].find( findFocused );
-    if ( instance ) memo.push( instance );
-    return memo;
-  }, [] );
+  const toActivate = 
+    [ ..._handlers ]
+      .reduce( ( memo, [, { instances } ] ) => {
+        const instanceSet = [ ...instances ].reduce( _nodeReducer( target ), [] );
+        if ( instanceSet.length ) memo.push( ...instanceSet );
+        return memo;
+      }, [] )
+      .sort( _sortByDOMPosition )
+      .map( item => item.instance );
+
   _activate( toActivate );
 }
 

@@ -92,22 +92,18 @@
     _bindKeys();
   }
 
-  /**
-   * _findFocused
-   *
-   * @access private
-   * @param {object} data Criteria to use for finding the focused node
-   * @param {object} data.instance The instantiated React.Component that is
-   * a candidate for being focuse
-   * @param {object} data.target The DOM node from the click event
-   * @return {boolean} Success or failure in matching the node to the event target
-   */
-  function _findFocused(_ref) {
-    var target = _ref.target;
-    var instance = _ref.instance;
+  function _nodeReducer(target) {
+    return function (memo, candidate) {
+      var node = _React['default'].findDOMNode(candidate);
+      if (node === target || node.contains(target)) {
+        memo.push({ instance: candidate, node: node });
+      }
+      return memo;
+    };
+  }
 
-    var node = _React['default'].findDOMNode(instance);
-    return target === node || node.contains(target);
+  function _sortByDOMPosition(a, b) {
+    return a.node.compareDocumentPosition(b.node) === 10 ? 1 : -1;
   }
 
   /**
@@ -117,21 +113,21 @@
    * @param {object} event The click event object
    * @param {object} event.target The DOM node from the click event
    */
-  function _handleClick(_ref2) {
-    var target = _ref2.target;
+  function _handleClick(_ref) {
+    var target = _ref.target;
 
-    var findFocused = function findFocused(instance) {
-      return _findFocused({ target: target, instance: instance });
-    };
-    var toActivate = [].concat(_toConsumableArray(_handlers)).reduce(function (memo, _ref3) {
-      var _ref32 = _slicedToArray(_ref3, 2);
+    var toActivate = [].concat(_toConsumableArray(_handlers)).reduce(function (memo, _ref2) {
+      var _ref22 = _slicedToArray(_ref2, 2);
 
-      var instances = _ref32[1].instances;
+      var instances = _ref22[1].instances;
 
-      var instance = [].concat(_toConsumableArray(instances)).find(findFocused);
-      if (instance) memo.push(instance);
+      var instanceSet = [].concat(_toConsumableArray(instances)).reduce(_nodeReducer(target), []);
+      if (instanceSet.length) memo.push.apply(memo, _toConsumableArray(instanceSet));
       return memo;
-    }, []);
+    }, []).sort(_sortByDOMPosition).map(function (item) {
+      return item.instance;
+    });
+
     _activate(toActivate);
   }
 
@@ -145,8 +141,8 @@
    * @param {number} event.target.which The key pressed
    * @return {boolean} Whether to continue procesing the keydown event
    */
-  function _shouldConsider(_ref4) {
-    var tagName = _ref4.target.tagName;
+  function _shouldConsider(_ref3) {
+    var tagName = _ref3.target.tagName;
 
     return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
   }
@@ -164,9 +160,9 @@
         var keysUsed = [];
         [].concat(_toConsumableArray(_focusedInstances)).map(function (instance) {
           return { instance: instance, bindings: getBinding(instance.constructor.prototype).bindings };
-        }).reverse().forEach(function (_ref5) {
-          var instance = _ref5.instance;
-          var bindings = _ref5.bindings;
+        }).reverse().forEach(function (_ref4) {
+          var instance = _ref4.instance;
+          var bindings = _ref4.bindings;
           return bindings.forEach(function (fn, keySets) {
             if (! ~keysUsed.indexOf(event.which) && ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
               return (0, _matchKeys['default'])({ keySet: keySet, event: event });
@@ -259,10 +255,10 @@
    * @access private
    */
   function _unbindClicks() {
-    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref6) {
-      var _ref62 = _slicedToArray(_ref6, 2);
+    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref5) {
+      var _ref52 = _slicedToArray(_ref5, 2);
 
-      var instances = _ref62[1].instances;
+      var instances = _ref52[1].instances;
       return instances.size;
     })) {
       document.removeEventListener('click', _handleClick);
@@ -295,10 +291,10 @@
    * @param {function} args.fn The callback to be triggered when given keys are pressed
    * @param {object} args.target The decorated class
    */
-  function setBinding(_ref7) {
-    var keys = _ref7.keys;
-    var fn = _ref7.fn;
-    var target = _ref7.target;
+  function setBinding(_ref6) {
+    var keys = _ref6.keys;
+    var fn = _ref6.fn;
+    var target = _ref6.target;
 
     var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _keys.allKeys)();
     var handler = getBinding(target);
