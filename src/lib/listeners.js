@@ -69,10 +69,10 @@ function _activate( instances ) {
 }
 
 function _findContainerNodes( target ) {
-  return ( memo, candidate ) => {
-    const node = React.findDOMNode( candidate );
+  return ( memo, instance ) => {
+    const node = React.findDOMNode( instance );
     if ( node === target || node.contains( target ) ) {
-      memo.push( { instance: candidate, node } );
+      memo.push( { instance, node } );
     }
     return memo;
   };
