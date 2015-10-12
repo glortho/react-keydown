@@ -126,17 +126,27 @@ function _shouldConsider( { target: { tagName } } ) {
  */
 function _handleKeyDown( event ) {
   if ( _shouldConsider( event ) ) {
-    const keysUsed = [];
-    [ ..._focusedInstances ]
-      .map( instance => ( { instance, bindings: getBinding( instance.constructor.prototype ).bindings } ) )
-      .reverse()
-      .forEach( ( { instance, bindings } ) => bindings.forEach( ( fn, keySets ) => {
-        if ( !~keysUsed.indexOf( event.which ) && ( allKeys( keySets ) || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) ) {
+    const keyMatchesEvent = keySet => matchKeys( { keySet, event } );
+
+    // loop through instances in reverse activation order so that most
+    // recently activated instance gets first dibs on event
+    for ( const instance of [ ..._focusedInstances ].reverse() ) {
+      const { bindings } = getBinding( instance.constructor.prototype );
+      for ( const [ keySets, fn ] of bindings ) {
+        if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
           fn.call( instance, event );
-          keysUsed.push( event.which );
+
+          // return when matching keybinding is found and fired - i.e. only one
+          // keybound component can respond to a given key code. to get around this,
+          // scope a common ancestor component class with @keydown and use
+          // @keydownScoped to bind the duplicate keys in your child components
+          // (or just inspect nextProps.keydown.event).
+          return true;
         }
-      }));
+      }
+    }
   }
+  return false;
 }
 
 /**

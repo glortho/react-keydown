@@ -156,24 +156,76 @@
    */
   function _handleKeyDown(event) {
     if (_shouldConsider(event)) {
-      (function () {
-        var keysUsed = [];
-        [].concat(_toConsumableArray(_focusedInstances)).map(function (instance) {
-          return { instance: instance, bindings: getBinding(instance.constructor.prototype).bindings };
-        }).reverse().forEach(function (_ref4) {
-          var instance = _ref4.instance;
-          var bindings = _ref4.bindings;
-          return bindings.forEach(function (fn, keySets) {
-            if (! ~keysUsed.indexOf(event.which) && ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
-              return (0, _matchKeys['default'])({ keySet: keySet, event: event });
-            }))) {
-              fn.call(instance, event);
-              keysUsed.push(event.which);
+      var keyMatchesEvent = function keyMatchesEvent(keySet) {
+        return (0, _matchKeys['default'])({ keySet: keySet, event: event });
+      };
+
+      // loop through instances in reverse activation order so that most
+      // recently activated instance gets first dibs on event
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = [].concat(_toConsumableArray(_focusedInstances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var instance = _step.value;
+
+          var _getBinding = getBinding(instance.constructor.prototype);
+
+          var bindings = _getBinding.bindings;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = bindings[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var _step2$value = _slicedToArray(_step2.value, 2);
+
+              var keySets = _step2$value[0];
+              var fn = _step2$value[1];
+
+              if ((0, _keys.allKeys)(keySets) || keySets.some(keyMatchesEvent)) {
+                fn.call(instance, event);
+
+                // return when matching keybinding is found and fired - i.e. only one
+                // keybound component can respond to a given key code. to get around this,
+                // scope a common ancestor component class with @keydown and use
+                // @keydownScoped to bind the duplicate keys in your child components
+                // (or just inspect nextProps.keydown.event).
+                return true;
+              }
             }
-          });
-        });
-      })();
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+                _iterator2['return']();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
     }
+    return false;
   }
 
   /**
@@ -255,10 +307,10 @@
    * @access private
    */
   function _unbindClicks() {
-    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref5) {
-      var _ref52 = _slicedToArray(_ref5, 2);
+    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref4) {
+      var _ref42 = _slicedToArray(_ref4, 2);
 
-      var instances = _ref52[1].instances;
+      var instances = _ref42[1].instances;
       return instances.size;
     })) {
       document.removeEventListener('click', _handleClick);
@@ -291,10 +343,10 @@
    * @param {function} args.fn The callback to be triggered when given keys are pressed
    * @param {object} args.target The decorated class
    */
-  function setBinding(_ref6) {
-    var keys = _ref6.keys;
-    var fn = _ref6.fn;
-    var target = _ref6.target;
+  function setBinding(_ref5) {
+    var keys = _ref5.keys;
+    var fn = _ref5.fn;
+    var target = _ref5.target;
 
     var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _keys.allKeys)();
     var handler = getBinding(target);
