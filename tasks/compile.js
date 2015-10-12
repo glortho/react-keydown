@@ -7,6 +7,6 @@ const root = path.join( __dirname, '..' );
 
 const log = data => console.log( String( data ).replace( /\n/, '' ) );
 
-const cmd = exec( `babel -d ./dist ./src`, { cwd: root } );
+const cmd = exec( `babel --modules umd -d ./dist ./src`, { cwd: root } );
 cmd.stdout.on( 'data', log );
 cmd.stderr.on( 'data', log );
