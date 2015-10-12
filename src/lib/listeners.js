@@ -18,7 +18,7 @@ import { allKeys } from './keys';
 const _handlers = new Map();
 
 // all mounted instances that have keybindings
-let _instances = new Set();
+const _instances = new Set();
 
 // flag for whether click listener has been bound to document
 let _clicksBound = false;
