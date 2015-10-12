@@ -17,8 +17,8 @@ import { allKeys } from './keys';
 // dict for class prototypes => bindings
 const _handlers = new Map();
 
-// the currently focused instances that should receive key presses
-let _focusedInstances = new Set();
+// all mounted instances that have keybindings
+let _instances = new Set();
 
 // flag for whether click listener has been bound to document
 let _clicksBound = false;
@@ -34,7 +34,6 @@ let _keysBound = false;
  * @return {set} The set of instances for the passed in class
  */
 function _addInstance( instance ) {
-  //return getBinding( target.constructor.prototype ).instances.add( target );
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
   setTimeout(() => _activate( instance ), 0);
@@ -48,8 +47,7 @@ function _addInstance( instance ) {
  * @return {boolean} The value set.has( target ) would have returned prior to deletion
  */
 function _deleteInstance( target ) {
-  //getBinding( target.constructor.prototype ).instances.delete( target );
-  _focusedInstances.delete( target );
+  _instances.delete( target );
   _unbindKeys();
 }
 
@@ -64,8 +62,8 @@ function _activate( instances ) {
   // deleting and then adding the instance(s) has the effect of sorting the set
   // according to instance activation (ascending)
   [].concat( instances ).forEach( instance => {
-    _focusedInstances.delete( instance );
-    _focusedInstances.add( instance );
+    _instances.delete( instance );
+    _instances.add( instance );
   });
   _bindKeys(); 
 }
@@ -93,7 +91,7 @@ function _sortByDOMPosition( a, b ) {
  */
 function _handleClick( { target } ) {
   const toActivate = 
-    [ ..._focusedInstances ]
+    [ ..._instances ]
       .reduce( _findContainerNodes( target ), [] )
       .sort( _sortByDOMPosition )
       .map( item => item.instance );
@@ -129,7 +127,7 @@ function _handleKeyDown( event ) {
 
     // loop through instances in reverse activation order so that most
     // recently activated instance gets first dibs on event
-    for ( const instance of [ ..._focusedInstances ].reverse() ) {
+    for ( const instance of [ ..._instances ].reverse() ) {
       const bindings = getBinding( instance.constructor.prototype );
       for ( const [ keySets, fn ] of bindings ) {
         if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
@@ -199,7 +197,7 @@ function _bindKeys() {
  * @access private
  */
 function _unbindKeys() {
-  if ( _keysBound && !_focusedInstances.size ) {
+  if ( _keysBound && !_instances.size ) {
     document.removeEventListener( 'keydown', _handleKeyDown );
     _keysBound = false;
   }
@@ -223,7 +221,7 @@ function _bindClicks() {
  * @access private
  */
 function _unbindClicks() {
-  if ( _clicksBound && !_focusedInstances.size ) {
+  if ( _clicksBound && !_instances.size ) {
     document.removeEventListener( 'click', _handleClick );
     _clicksBound = false;
   }

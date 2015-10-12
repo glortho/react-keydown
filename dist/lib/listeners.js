@@ -42,8 +42,8 @@
   // dict for class prototypes => bindings
   var _handlers = new Map();
 
-  // the currently focused instances that should receive key presses
-  var _focusedInstances = new Set();
+  // all mounted instances that have keybindings
+  var _instances = new Set();
 
   // flag for whether click listener has been bound to document
   var _clicksBound = false;
@@ -59,7 +59,6 @@
    * @return {set} The set of instances for the passed in class
    */
   function _addInstance(instance) {
-    //return getBinding( target.constructor.prototype ).instances.add( target );
     // have to bump this to next event loop because component mounting routinely
     // preceeds the dom click event that triggered the mount (wtf?)
     setTimeout(function () {
@@ -75,8 +74,7 @@
    * @return {boolean} The value set.has( target ) would have returned prior to deletion
    */
   function _deleteInstance(target) {
-    //getBinding( target.constructor.prototype ).instances.delete( target );
-    _focusedInstances['delete'](target);
+    _instances['delete'](target);
     _unbindKeys();
   }
 
@@ -91,8 +89,8 @@
     // deleting and then adding the instance(s) has the effect of sorting the set
     // according to instance activation (ascending)
     [].concat(instances).forEach(function (instance) {
-      _focusedInstances['delete'](instance);
-      _focusedInstances.add(instance);
+      _instances['delete'](instance);
+      _instances.add(instance);
     });
     _bindKeys();
   }
@@ -121,7 +119,7 @@
   function _handleClick(_ref) {
     var target = _ref.target;
 
-    var toActivate = [].concat(_toConsumableArray(_focusedInstances)).reduce(_findContainerNodes(target), []).sort(_sortByDOMPosition).map(function (item) {
+    var toActivate = [].concat(_toConsumableArray(_instances)).reduce(_findContainerNodes(target), []).sort(_sortByDOMPosition).map(function (item) {
       return item.instance;
     });
 
@@ -164,7 +162,7 @@
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = [].concat(_toConsumableArray(_focusedInstances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var instance = _step.value;
 
           var bindings = getBinding(instance.constructor.prototype);
@@ -278,7 +276,7 @@
    * @access private
    */
   function _unbindKeys() {
-    if (_keysBound && !_focusedInstances.size) {
+    if (_keysBound && !_instances.size) {
       document.removeEventListener('keydown', _handleKeyDown);
       _keysBound = false;
     }
@@ -302,7 +300,7 @@
    * @access private
    */
   function _unbindClicks() {
-    if (_clicksBound && !_focusedInstances.size) {
+    if (_clicksBound && !_instances.size) {
       document.removeEventListener('click', _handleClick);
       _clicksBound = false;
     }
