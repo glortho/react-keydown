@@ -11,8 +11,7 @@ Key advantages:
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys.
 * **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
 * **Modifier keys**: Support for standard modifier key combinations.
-* **Tiny**: 2kb compressed and gzipped (with UMD module wrapping -- smaller
-  without it).
+* **Tiny**: 2kb compressed and gzipped
 
 ## Install
 
@@ -21,6 +20,10 @@ npm install --save react-keydown
 ```
 
 ## Use
+
+**Note**: The default build of react-keydown uses the CommonJS module system. For
+AMD or other support, use the [umd-specific
+branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
 
 ### For methods: Decorate with keys that should trigger method
 
@@ -140,16 +143,21 @@ $ open example/public/index.html
 
 Note that this is very much a work in progress!
 
-## Notes and disclaimers
+## Notes, disclaimers, and tips
 
 * The decorator pattern `@keydown` currently requires transpilation by
-  [Babel](babeljs.io/) (set to
-  stage 1) or the equivalent
+  [Babel](babeljs.io/) (set to stage 1) or the equivalent.
+* The default build uses CommonJS modules. For AMD or other support, use the
+  [umd-specific
+  branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
 * This lib has only been tested using ES2015 classes. Some method decoration
   functionality may work on other types of object methods.
-* In order to avoid unintended side effects, only one component (and its children) can receive
-  keydown events at a time (the most recently mounted, clicked, or focused component). If you want multiple     
-  components to receive keydown events simultaneously, decorate a common ancestor component class with `@keydown`     and then decorate your methods in the child components with `@keydownScoped( myKeyCode )` (or manually work with    the keydown.event props flowing into your components). For example, if you want app-wide shortcuts, decorate (or    wrap) the root component with `@keydown` and then all descendent components will receive the `keydown.event` prop   when a key is pressed.
+* Duplicate keybindings for components that are mounted at the same time will
+  not both fire. The more recently mounted component, or the one that has been
+  focused or clicked most recently, will win. If you do want both to fire,
+  decorate a common ancestor class with `@keydown( ... )` and then use
+  `@keydownScoped( ... )` in the child components (or just inspect
+  `nextProps.keydown.event` in both).
 * Since the only context we have for keydown events is the component, decorated
   methods receive the event as their sole argument and the component instance as
   context.
