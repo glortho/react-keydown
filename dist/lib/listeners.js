@@ -42,7 +42,7 @@
   // dict for class prototypes => { bindings, instances }
   var _handlers = new Map();
 
-  // the currently focused instance that should receive key presses
+  // the currently focused instances that should receive key presses
   var _focusedInstances = new Set();
 
   // flag for whether click listener has been bound to document
@@ -82,6 +82,9 @@
    * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
    */
   function _activate(instances) {
+
+    // deleting and then adding the instance(s) has the effect of sorting the set
+    // according to instance activation (ascending)
     [].concat(instances).forEach(function (instance) {
       _focusedInstances['delete'](instance);
       _focusedInstances.add(instance);
@@ -120,37 +123,16 @@
     var findFocused = function findFocused(instance) {
       return _findFocused({ target: target, instance: instance });
     };
-    var allFocusedInstances = [];
-    var focusedInstance = null;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    var toActivate = [].concat(_toConsumableArray(_handlers)).reduce(function (memo, _ref3) {
+      var _ref32 = _slicedToArray(_ref3, 2);
 
-    try {
-      for (var _iterator = _handlers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var _step$value = _slicedToArray(_step.value, 2);
+      var instances = _ref32[1].instances;
 
-        var instances = _step$value[1].instances;
-
-        focusedInstance = [].concat(_toConsumableArray(instances)).find(findFocused);
-        if (focusedInstance) allFocusedInstances.push(focusedInstance);
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator['return']) {
-          _iterator['return']();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-
-    _activate(allFocusedInstances);
+      var instance = [].concat(_toConsumableArray(instances)).find(findFocused);
+      if (instance) memo.push(instance);
+      return memo;
+    }, []);
+    _activate(toActivate);
   }
 
   /**
@@ -163,8 +145,8 @@
    * @param {number} event.target.which The key pressed
    * @return {boolean} Whether to continue procesing the keydown event
    */
-  function _shouldConsider(_ref3) {
-    var tagName = _ref3.target.tagName;
+  function _shouldConsider(_ref4) {
+    var tagName = _ref4.target.tagName;
 
     return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
   }
@@ -179,20 +161,18 @@
   function _handleKeyDown(event) {
     if (_shouldConsider(event)) {
       (function () {
-        var fireLog = [];
-        var instanceBindings = [].concat(_toConsumableArray(_focusedInstances)).map(function (instance) {
+        var keysUsed = [];
+        [].concat(_toConsumableArray(_focusedInstances)).map(function (instance) {
           return { instance: instance, bindings: getBinding(instance.constructor.prototype).bindings };
-        }).reverse();
-        instanceBindings.forEach(function (_ref4) {
-          var instance = _ref4.instance;
-          var bindings = _ref4.bindings;
-
-          bindings.forEach(function (fn, keySets) {
-            if (! ~fireLog.indexOf(event.which) && ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
+        }).reverse().forEach(function (_ref5) {
+          var instance = _ref5.instance;
+          var bindings = _ref5.bindings;
+          return bindings.forEach(function (fn, keySets) {
+            if (! ~keysUsed.indexOf(event.which) && ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
               return (0, _matchKeys['default'])({ keySet: keySet, event: event });
             }))) {
               fn.call(instance, event);
-              fireLog.push(event.which);
+              keysUsed.push(event.which);
             }
           });
         });
@@ -279,10 +259,10 @@
    * @access private
    */
   function _unbindClicks() {
-    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref5) {
-      var _ref52 = _slicedToArray(_ref5, 2);
+    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref6) {
+      var _ref62 = _slicedToArray(_ref6, 2);
 
-      var instances = _ref52[1].instances;
+      var instances = _ref62[1].instances;
       return instances.size;
     })) {
       document.removeEventListener('click', _handleClick);
@@ -315,15 +295,18 @@
    * @param {function} args.fn The callback to be triggered when given keys are pressed
    * @param {object} args.target The decorated class
    */
-  function setBinding(_ref6) {
-    var keys = _ref6.keys;
-    var fn = _ref6.fn;
-    var target = _ref6.target;
+  function setBinding(_ref7) {
+    var keys = _ref7.keys;
+    var fn = _ref7.fn;
+    var target = _ref7.target;
 
     var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _keys.allKeys)();
     var handler = getBinding(target);
     if (!handler) {
-      handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
+      handler = _handlers.set(target, {
+        bindings: new Map(),
+        instances: new Set()
+      }).get(target);
     }
     handler.bindings.set(keySets, fn);
   }

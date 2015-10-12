@@ -17,7 +17,7 @@ import { allKeys } from './keys';
 // dict for class prototypes => { bindings, instances }
 const _handlers = new Map();
 
-// the currently focused instance that should receive key presses
+// the currently focused instances that should receive key presses
 let _focusedInstances = new Set();
 
 // flag for whether click listener has been bound to document
@@ -57,6 +57,9 @@ function _deleteInstance( target ) {
  * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
  */
 function _activate( instances ) {
+
+  // deleting and then adding the instance(s) has the effect of sorting the set
+  // according to instance activation (ascending)
   [].concat( instances ).forEach( instance => {
     _focusedInstances.delete( instance );
     _focusedInstances.add( instance );
@@ -88,13 +91,12 @@ function _findFocused( { target, instance } ) {
  */
 function _handleClick( { target } ) {
   const findFocused = instance => _findFocused( { target, instance } );
-  const allFocusedInstances = [];
-  let focusedInstance = null;
-  for ( let [, { instances } ] of _handlers ) {
-    focusedInstance = [ ...instances ].find( findFocused );
-    if ( focusedInstance ) allFocusedInstances.push( focusedInstance );
-  }
-  _activate( allFocusedInstances );
+  const toActivate = [ ..._handlers ].reduce( ( memo, [, { instances } ] ) => {
+    const instance = [ ...instances ].find( findFocused );
+    if ( instance ) memo.push( instance );
+    return memo;
+  }, [] );
+  _activate( toActivate );
 }
 
 
@@ -121,16 +123,16 @@ function _shouldConsider( { target: { tagName } } ) {
  */
 function _handleKeyDown( event ) {
   if ( _shouldConsider( event ) ) {
-    const fireLog = [];
-    const instanceBindings = [ ..._focusedInstances ].map( instance => ( { instance, bindings: getBinding( instance.constructor.prototype ).bindings } ) ).reverse();
-    instanceBindings.forEach( ( { instance, bindings } ) => {
-      bindings.forEach( ( fn, keySets ) => {
-        if ( !~fireLog.indexOf( event.which ) && ( allKeys( keySets ) || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) ) {
+    const keysUsed = [];
+    [ ..._focusedInstances ]
+      .map( instance => ( { instance, bindings: getBinding( instance.constructor.prototype ).bindings } ) )
+      .reverse()
+      .forEach( ( { instance, bindings } ) => bindings.forEach( ( fn, keySets ) => {
+        if ( !~keysUsed.indexOf( event.which ) && ( allKeys( keySets ) || keySets.some( keySet => matchKeys( { keySet, event } ) ) ) ) {
           fn.call( instance, event );
-          fireLog.push( event.which );
+          keysUsed.push( event.which );
         }
-      });
-    });
+      }));
   }
 }
 
@@ -245,7 +247,10 @@ function setBinding( { keys, fn, target } ) {
   const keySets = keys ? parseKeys( keys ) : allKeys() ;
   let handler = getBinding( target );
   if ( !handler ) {
-    handler = _handlers.set( target, { bindings: new Map(), instances: new Set() } ).get( target );
+    handler = _handlers.set( target, {
+      bindings:  new Map(),
+      instances: new Set()
+    }).get( target );
   }
   handler.bindings.set( keySets, fn );
 }
