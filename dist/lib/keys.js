@@ -1,24 +1,63 @@
 (function (global, factory) {
-  if (typeof define === "function" && define.amd) {
-    define(["exports", "module"], factory);
-  } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module);
+  if (typeof define === 'function' && define.amd) {
+    define(['exports'], factory);
+  } else if (typeof exports !== 'undefined') {
+    factory(exports);
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, mod);
+    factory(mod.exports);
     global.keys = mod.exports;
   }
-})(this, function (exports, module) {
-  "use strict";
+})(this, function (exports) {
+  'use strict';
 
-  module.exports = {
-    TAB: 9,
-    ENTER: 13,
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+  exports.allKeys = allKeys;
+  var Keys = {
+    backspace: 8,
+    tab: 9,
+    enter: 13,
+    'return': 13,
+    space: 32,
+    left: 37,
+    up: 38,
+    right: 39,
+    down: 40,
+    slash: 191,
+    '/': 191,
+    backslash: 220,
+    '\\': 220
   };
+
+  '0123456789'.split('').forEach(function (num, index) {
+    return Keys[num] = index + 48;
+  });
+
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter, index) {
+    Keys[letter] = index + 65;
+    Keys[letter.toLowerCase()] = index + 65;
+  });
+
+  var modifiers = {
+    control: 'ctrl',
+    ctrl: 'ctrl',
+    shift: 'shift',
+    meta: 'meta',
+    cmd: 'meta',
+    command: 'meta',
+    option: 'alt',
+    alt: 'alt'
+  };
+
+  exports.modifiers = modifiers;
+
+  function allKeys(arg) {
+    return arg ? typeof arg === 'symbol' : Symbol('allKeys');
+  }
+
+  exports['default'] = Keys;
 });

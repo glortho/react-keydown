@@ -2,9 +2,9 @@
  * @module keydown
  *
  */
-import classWrapper        from './lib/class_decorator';
-import methodWrapper       from './lib/method_decorator';
-import methodWrapperScoped from './lib/method_decorator_scoped';
+import classWrapper        from './decorators/class_decorator';
+import methodWrapper       from './decorators/method_decorator';
+import methodWrapperScoped from './decorators/method_decorator_scoped';
 import Keys                from './lib/keys';
 
 /**
@@ -22,10 +22,10 @@ function _decorator( methodFn, ...args ) {
   const testArg = args[0];
   const isArray = Array.isArray( testArg );
 
-  // if the test argument is an array or an integer, it is user-supplied
+  // if the test argument is not an object or function, it is user-supplied
   // keycodes. else there are no arguments and it's just the wrapped class
   // (method decorators must have keycode arguments).
-  if ( isArray || parseInt( testArg, 10 ) ) {
+  if ( isArray || ~[ 'string', 'number' ].indexOf( typeof testArg ) ) {
     const keys = isArray ? testArg : args;
 
     // return the decorator function, which on the next call will look for

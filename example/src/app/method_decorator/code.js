@@ -4,8 +4,6 @@ const code =
 `<code>import React from &#x27;react&#x27;;
 import keydown, { Keys } from &#x27;keydown&#x27;;
 
-const { ENTER } = Keys;
-
 class MethodDecoratorExample extends React.Component {
   constructor( props ) {
     super( props );
@@ -14,7 +12,7 @@ class MethodDecoratorExample extends React.Component {
     };
   }
 
-  @keydown( ENTER )
+  @keydown( 'enter' )
   toggleHello() {
     this.setState( { hello: !this.state.hello } );
   }
@@ -25,7 +23,7 @@ class MethodDecoratorExample extends React.Component {
         &#x3C;h3&#x3E;Method Decorator Example&#x3C;/h3&#x3E;
         &#x3C;div&#x3E;Press the &#x3C;strong&#x3E;enter&#x3C;/strong&#x3E; key to toggle hello.&#x3C;/div&#x3E;
         { this.state.hello &#x26;&#x26;
-          &#x3C;h1&#x3E;Hello!&#x3C;/h1&#x3E;
+          &#x3C;h1&#x3E;Enter is key code {Keys.enter}!&#x3C;/h1&#x3E;
         }
         &#x3C;div&#x3E;And click again outside box to see scoping.&#x3C;/div&#x3E;
       &#x3C;/div&#x3E;

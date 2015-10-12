@@ -19,8 +19,8 @@ class MyComponent extends React.Component {
 
   render() {
     return (
-      <div style={{width: '250px', padding: '20px', backgroundColor: 'rgba(0, 132, 255, 0.42)'}}>
-        <h3>Class Decorator Example</h3>
+      <div style={{verticalAlign: 'top', margin: '1em 3em 0em 0em', textAlign: 'left', display: 'inline-block',  padding: '2em', backgroundColor: 'rgba(0, 132, 255, 0.32)'}}>
+        <div style={{margin: '0em', paddingBottom: '0.4em', fontSize: '1.4em'}}>Class Decorator Example</div>
         <div style={{padding: '8px 5px', border: 'rgba(0, 146, 255, 0.54) solid', borderLeftStyle: 'none', borderRightStyle: 'none'}}>Last key code pressed: <strong>{this.state.key}</strong></div>
         <ol>
           <li>Push one or more keys on the keyboard.</li>

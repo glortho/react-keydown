@@ -1,8 +1,8 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', 'react', './listeners'], factory);
+    define(['exports', 'module', 'react', '../lib/listeners'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('react'), require('./listeners'));
+    factory(exports, module, require('react'), require('../lib/listeners'));
   } else {
     var mod = {
       exports: {}
@@ -10,7 +10,11 @@
     factory(mod.exports, mod, global.React, global.listeners);
     global.class_decorator = mod.exports;
   }
-})(this, function (exports, module, _react, _listeners) {
+})(this, function (exports, module, _react, _libListeners) {
+  /**
+   * @module componentWrapper
+   *
+   */
   'use strict';
 
   var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -27,6 +31,14 @@
 
   var _React = _interopRequireDefault(_react);
 
+  /**
+   * componentWrapper
+   *
+   * @access public
+   * @param {object} WrappedComponent React component class to be wrapped
+   * @param {array} [keys] The key(s) bound to the class
+   * @return {object} The higher-order function that wraps the decorated class
+   */
   function componentWrapper(WrappedComponent) {
     var keys = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
@@ -45,18 +57,19 @@
       _createClass(KeyBoardHelper, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-          _listeners.onMount.call(this);
+          (0, _libListeners.onMount)(this);
         }
       }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-          _listeners.onUnmount.call(this);
+          (0, _libListeners.onUnmount)(this);
         }
       }, {
         key: 'handleKeyDown',
         value: function handleKeyDown(event) {
           var _this = this;
 
+          // to simulate a keypress, set the event and then clear it in the callback
           this.setState({ event: event }, function () {
             return _this.setState({ event: null });
           });
@@ -71,7 +84,7 @@
       return KeyBoardHelper;
     })(_React['default'].Component);
 
-    (0, _listeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+    (0, _libListeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
 
     return KeyBoardHelper;
   }

@@ -1,8 +1,6 @@
 import React from 'react';
 import keydown, { Keys } from '../../../../src/';
 
-const { ENTER } = Keys;
-
 class MethodDecorator extends React.Component {
   constructor( props ) {
     super( props );
@@ -11,18 +9,18 @@ class MethodDecorator extends React.Component {
     };
   }
 
-  @keydown( ENTER )
+  @keydown( 'enter' )
   toggleHello() {
     this.setState( { hello: !this.state.hello } );
   }
 
   render() {
     return (
-      <div style={{width: '250px', padding: '20px', backgroundColor: 'rgba(0, 132, 255, 0.32)'}}>
-        <h3>Method Decorator Example</h3>
-        <div>Press the <strong>enter</strong> key to toggle hello.</div>
+      <div style={{verticalAlign: 'top', margin: '1em 3em 0em 0em', textAlign: 'left', display: 'inline-block',  padding: '2em', backgroundColor: 'rgba(0, 132, 255, 0.32)'}}>
+        <div style={{margin: '0em', paddingBottom: '0.4em', fontSize: '1.4em'}}>Method Decorator Example</div>
+        <div>Press the <strong>enter</strong> key to toggle the message.</div>
         { this.state.hello &&
-          <h1>Hello!</h1>
+          <h1>Enter is key code {Keys.enter}!</h1>
         }
         <div>And click again inside/outside box to see scoping.</div>
       </div>

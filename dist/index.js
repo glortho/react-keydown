@@ -1,8 +1,8 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', './lib/class_decorator', './lib/method_decorator', './lib/method_decorator_scoped', './lib/keys'], factory);
+    define(['exports', './decorators/class_decorator', './decorators/method_decorator', './decorators/method_decorator_scoped', './lib/keys'], factory);
   } else if (typeof exports !== 'undefined') {
-    factory(exports, require('./lib/class_decorator'), require('./lib/method_decorator'), require('./lib/method_decorator_scoped'), require('./lib/keys'));
+    factory(exports, require('./decorators/class_decorator'), require('./decorators/method_decorator'), require('./decorators/method_decorator_scoped'), require('./lib/keys'));
   } else {
     var mod = {
       exports: {}
@@ -10,7 +10,7 @@
     factory(mod.exports, global.classWrapper, global.methodWrapper, global.methodWrapperScoped, global.Keys);
     global.index = mod.exports;
   }
-})(this, function (exports, _libClass_decorator, _libMethod_decorator, _libMethod_decorator_scoped, _libKeys) {
+})(this, function (exports, _decoratorsClass_decorator, _decoratorsMethod_decorator, _decoratorsMethod_decorator_scoped, _libKeys) {
   /**
    * @module keydown
    *
@@ -23,11 +23,11 @@
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  var _classWrapper = _interopRequireDefault(_libClass_decorator);
+  var _classWrapper = _interopRequireDefault(_decoratorsClass_decorator);
 
-  var _methodWrapper = _interopRequireDefault(_libMethod_decorator);
+  var _methodWrapper = _interopRequireDefault(_decoratorsMethod_decorator);
 
-  var _methodWrapperScoped = _interopRequireDefault(_libMethod_decorator_scoped);
+  var _methodWrapperScoped = _interopRequireDefault(_decoratorsMethod_decorator_scoped);
 
   var _Keys = _interopRequireDefault(_libKeys);
 
@@ -49,10 +49,10 @@
     var testArg = args[0];
     var isArray = Array.isArray(testArg);
 
-    // if the test argument is an array or an integer, it is user-supplied
+    // if the test argument is not an object or function, it is user-supplied
     // keycodes. else there are no arguments and it's just the wrapped class
     // (method decorators must have keycode arguments).
-    if (isArray || parseInt(testArg, 10)) {
+    if (isArray || ~['string', 'number'].indexOf(typeof testArg)) {
       var _ret = (function () {
         var keys = isArray ? testArg : args;
 
