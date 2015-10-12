@@ -4,7 +4,7 @@
   "description": "Lightweight keydown wrapper for React components",
   "main": "dist/index.js",
   "scripts": {
-    "compile": "babel --modules umd -d dist/ src/",
+    "compile": "babel -d dist/ src/",
     "prepublish": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
