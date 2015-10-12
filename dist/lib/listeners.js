@@ -305,6 +305,9 @@ function _unbindClicks() {
  * public
  *
  */
+function getAll() {
+  return _handlers;
+}
 
 /**
  * getBinding
@@ -360,7 +363,8 @@ function onUnmount(instance) {
   _unbindClicks();
 }
 
-exports.setBinding = setBinding;
+exports.getAll = getAll;
 exports.getBinding = getBinding;
 exports.onMount = onMount;
 exports.onUnmount = onUnmount;
+exports.setBinding = setBinding;

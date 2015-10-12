@@ -26,6 +26,10 @@ var _libKeys = require('./lib/keys');
 
 var _libKeys2 = _interopRequireDefault(_libKeys);
 
+var _libList_bindings = require('./lib/list_bindings');
+
+var _libList_bindings2 = _interopRequireDefault(_libList_bindings);
+
 /**
  * _decorator
  *
@@ -114,5 +118,6 @@ function keydown() {
 }
 
 exports['default'] = keydown;
+exports.listBindings = _libList_bindings2['default'];
 exports.Keys = _libKeys2['default'];
 exports.keydownScoped = keydownScoped;

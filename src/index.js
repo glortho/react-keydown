@@ -6,6 +6,7 @@ import classWrapper        from './decorators/class_decorator';
 import methodWrapper       from './decorators/method_decorator';
 import methodWrapperScoped from './decorators/method_decorator_scoped';
 import Keys                from './lib/keys';
+import listBindings        from './lib/list_bindings';
 
 /**
  * _decorator
@@ -81,4 +82,4 @@ function keydown( ...args ) {
 
 export default keydown;
 
-export { Keys, keydownScoped };
+export { listBindings, Keys, keydownScoped };
