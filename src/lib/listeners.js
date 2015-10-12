@@ -14,7 +14,7 @@ import { allKeys } from './keys';
  * 
  */
 
-// dict for class prototypes => { bindings, instances }
+// dict for class prototypes => bindings
 const _handlers = new Map();
 
 // the currently focused instances that should receive key presses
@@ -33,8 +33,11 @@ let _keysBound = false;
  * @param {object} target Instantiated class that extended React.Component
  * @return {set} The set of instances for the passed in class
  */
-function _addInstance( target ) {
-  return getBinding( target.constructor.prototype ).instances.add( target );
+function _addInstance( instance ) {
+  //return getBinding( target.constructor.prototype ).instances.add( target );
+  // have to bump this to next event loop because component mounting routinely
+  // preceeds the dom click event that triggered the mount (wtf?)
+  setTimeout(() => _activate( instance ), 0);
 }
 
 /**
@@ -45,9 +48,9 @@ function _addInstance( target ) {
  * @return {boolean} The value set.has( target ) would have returned prior to deletion
  */
 function _deleteInstance( target ) {
-  getBinding( target.constructor.prototype ).instances.delete( target );
+  //getBinding( target.constructor.prototype ).instances.delete( target );
   _focusedInstances.delete( target );
-  if ( !_focusedInstances.size ) _unbindKeys();
+  _unbindKeys();
 }
 
 /**
@@ -67,7 +70,7 @@ function _activate( instances ) {
   _bindKeys(); 
 }
 
-function _nodeReducer( target ) {
+function _findContainerNodes( target ) {
   return ( memo, candidate ) => {
     const node = React.findDOMNode( candidate );
     if ( node === target || node.contains( target ) ) {
@@ -90,12 +93,8 @@ function _sortByDOMPosition( a, b ) {
  */
 function _handleClick( { target } ) {
   const toActivate = 
-    [ ..._handlers ]
-      .reduce( ( memo, [, { instances } ] ) => {
-        const instanceSet = [ ...instances ].reduce( _nodeReducer( target ), [] );
-        if ( instanceSet.length ) memo.push( ...instanceSet );
-        return memo;
-      }, [] )
+    [ ..._focusedInstances ]
+      .reduce( _findContainerNodes( target ), [] )
       .sort( _sortByDOMPosition )
       .map( item => item.instance );
 
@@ -131,7 +130,7 @@ function _handleKeyDown( event ) {
     // loop through instances in reverse activation order so that most
     // recently activated instance gets first dibs on event
     for ( const instance of [ ..._focusedInstances ].reverse() ) {
-      const { bindings } = getBinding( instance.constructor.prototype );
+      const bindings = getBinding( instance.constructor.prototype );
       for ( const [ keySets, fn ] of bindings ) {
         if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
           fn.call( instance, event );
@@ -200,7 +199,7 @@ function _bindKeys() {
  * @access private
  */
 function _unbindKeys() {
-  if ( _keysBound ) {
+  if ( _keysBound && !_focusedInstances.size ) {
     document.removeEventListener( 'keydown', _handleKeyDown );
     _keysBound = false;
   }
@@ -224,7 +223,7 @@ function _bindClicks() {
  * @access private
  */
 function _unbindClicks() {
-  if ( _clicksBound && ![ ..._handlers ].some( ( [, { instances } ] ) => instances.size ) ) {
+  if ( _clicksBound && !_focusedInstances.size ) {
     document.removeEventListener( 'click', _handleClick );
     _clicksBound = false;
   }
@@ -240,8 +239,8 @@ function _unbindClicks() {
  * getBinding
  *
  * @access public
- * @param {object} target Class used as key in dict of bindings and instances
- * @return {object} The object containing bindings and instances for the given class
+ * @param {object} target Class used as key in dict of key bindings
+ * @return {object} The object containing bindings for the given class
  */
 function getBinding( target ) {
   return _handlers.get( target );
@@ -260,12 +259,9 @@ function setBinding( { keys, fn, target } ) {
   const keySets = keys ? parseKeys( keys ) : allKeys() ;
   let handler = getBinding( target );
   if ( !handler ) {
-    handler = _handlers.set( target, {
-      bindings:  new Map(),
-      instances: new Set()
-    }).get( target );
+    handler = _handlers.set( target, new Map() ).get( target );
   }
-  handler.bindings.set( keySets, fn );
+  handler.set( keySets, fn );
 }
 
 /**
@@ -277,9 +273,6 @@ function onMount( instance ) {
   _bindClicks();
   _bindInputs( instance );
   _addInstance( instance );
-  // have to bump this to next event loop because component mounting routinely
-  // preceeds the dom click event that triggered the mount (wtf?)
-  setTimeout(() => _activate( instance ), 0);
 }
 
 /**

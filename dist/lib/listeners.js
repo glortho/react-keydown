@@ -39,7 +39,7 @@
    * 
    */
 
-  // dict for class prototypes => { bindings, instances }
+  // dict for class prototypes => bindings
   var _handlers = new Map();
 
   // the currently focused instances that should receive key presses
@@ -58,8 +58,13 @@
    * @param {object} target Instantiated class that extended React.Component
    * @return {set} The set of instances for the passed in class
    */
-  function _addInstance(target) {
-    return getBinding(target.constructor.prototype).instances.add(target);
+  function _addInstance(instance) {
+    //return getBinding( target.constructor.prototype ).instances.add( target );
+    // have to bump this to next event loop because component mounting routinely
+    // preceeds the dom click event that triggered the mount (wtf?)
+    setTimeout(function () {
+      return _activate(instance);
+    }, 0);
   }
 
   /**
@@ -70,9 +75,9 @@
    * @return {boolean} The value set.has( target ) would have returned prior to deletion
    */
   function _deleteInstance(target) {
-    getBinding(target.constructor.prototype).instances['delete'](target);
+    //getBinding( target.constructor.prototype ).instances.delete( target );
     _focusedInstances['delete'](target);
-    if (!_focusedInstances.size) _unbindKeys();
+    _unbindKeys();
   }
 
   /**
@@ -92,7 +97,7 @@
     _bindKeys();
   }
 
-  function _nodeReducer(target) {
+  function _findContainerNodes(target) {
     return function (memo, candidate) {
       var node = _React['default'].findDOMNode(candidate);
       if (node === target || node.contains(target)) {
@@ -116,15 +121,7 @@
   function _handleClick(_ref) {
     var target = _ref.target;
 
-    var toActivate = [].concat(_toConsumableArray(_handlers)).reduce(function (memo, _ref2) {
-      var _ref22 = _slicedToArray(_ref2, 2);
-
-      var instances = _ref22[1].instances;
-
-      var instanceSet = [].concat(_toConsumableArray(instances)).reduce(_nodeReducer(target), []);
-      if (instanceSet.length) memo.push.apply(memo, _toConsumableArray(instanceSet));
-      return memo;
-    }, []).sort(_sortByDOMPosition).map(function (item) {
+    var toActivate = [].concat(_toConsumableArray(_focusedInstances)).reduce(_findContainerNodes(target), []).sort(_sortByDOMPosition).map(function (item) {
       return item.instance;
     });
 
@@ -141,8 +138,8 @@
    * @param {number} event.target.which The key pressed
    * @return {boolean} Whether to continue procesing the keydown event
    */
-  function _shouldConsider(_ref3) {
-    var tagName = _ref3.target.tagName;
+  function _shouldConsider(_ref2) {
+    var tagName = _ref2.target.tagName;
 
     return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
   }
@@ -170,9 +167,7 @@
         for (var _iterator = [].concat(_toConsumableArray(_focusedInstances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var instance = _step.value;
 
-          var _getBinding = getBinding(instance.constructor.prototype);
-
-          var bindings = _getBinding.bindings;
+          var bindings = getBinding(instance.constructor.prototype);
           var _iteratorNormalCompletion2 = true;
           var _didIteratorError2 = false;
           var _iteratorError2 = undefined;
@@ -283,7 +278,7 @@
    * @access private
    */
   function _unbindKeys() {
-    if (_keysBound) {
+    if (_keysBound && !_focusedInstances.size) {
       document.removeEventListener('keydown', _handleKeyDown);
       _keysBound = false;
     }
@@ -307,12 +302,7 @@
    * @access private
    */
   function _unbindClicks() {
-    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref4) {
-      var _ref42 = _slicedToArray(_ref4, 2);
-
-      var instances = _ref42[1].instances;
-      return instances.size;
-    })) {
+    if (_clicksBound && !_focusedInstances.size) {
       document.removeEventListener('click', _handleClick);
       _clicksBound = false;
     }
@@ -327,8 +317,8 @@
    * getBinding
    *
    * @access public
-   * @param {object} target Class used as key in dict of bindings and instances
-   * @return {object} The object containing bindings and instances for the given class
+   * @param {object} target Class used as key in dict of key bindings
+   * @return {object} The object containing bindings for the given class
    */
   function getBinding(target) {
     return _handlers.get(target);
@@ -343,20 +333,17 @@
    * @param {function} args.fn The callback to be triggered when given keys are pressed
    * @param {object} args.target The decorated class
    */
-  function setBinding(_ref5) {
-    var keys = _ref5.keys;
-    var fn = _ref5.fn;
-    var target = _ref5.target;
+  function setBinding(_ref3) {
+    var keys = _ref3.keys;
+    var fn = _ref3.fn;
+    var target = _ref3.target;
 
     var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _keys.allKeys)();
     var handler = getBinding(target);
     if (!handler) {
-      handler = _handlers.set(target, {
-        bindings: new Map(),
-        instances: new Set()
-      }).get(target);
+      handler = _handlers.set(target, new Map()).get(target);
     }
-    handler.bindings.set(keySets, fn);
+    handler.set(keySets, fn);
   }
 
   /**
@@ -368,11 +355,6 @@
     _bindClicks();
     _bindInputs(instance);
     _addInstance(instance);
-    // have to bump this to next event loop because component mounting routinely
-    // preceeds the dom click event that triggered the mount (wtf?)
-    setTimeout(function () {
-      return _activate(instance);
-    }, 0);
   }
 
   /**
