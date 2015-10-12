@@ -1,16 +1,21 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'react'], factory);
+    define(['exports', 'react', './match_keys', './parse_keys', './keys'], factory);
   } else if (typeof exports !== 'undefined') {
-    factory(exports, require('react'));
+    factory(exports, require('react'), require('./match_keys'), require('./parse_keys'), require('./keys'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.React);
+    factory(mod.exports, global.React, global.matchKeys, global.parseKeys, global.keys);
     global.listeners = mod.exports;
   }
-})(this, function (exports, _react) {
+})(this, function (exports, _react, _match_keys, _parse_keys, _keys) {
+  /* eslint-disable no-use-before-define */
+  /**
+   * @module listeners
+   *
+   */
   'use strict';
 
   Object.defineProperty(exports, '__esModule', {
@@ -25,75 +30,332 @@
 
   var _React = _interopRequireDefault(_react);
 
-  var handlers = new Map();
+  var _matchKeys = _interopRequireDefault(_match_keys);
 
-  function handleClick(node, event) {
-    this._keyDownHasFocus = event.target === node || node.contains(event.target);
+  var _parseKeys = _interopRequireDefault(_parse_keys);
+
+  /**
+   * private
+   * 
+   */
+
+  // dict for class prototypes => { bindings, instances }
+  var _handlers = new Map();
+
+  // the currently focused instance that should receive key presses
+  var _focusedInstances = new Set();
+
+  // flag for whether click listener has been bound to document
+  var _clicksBound = false;
+
+  // flag for whether keydown listener has been bound to document
+  var _keysBound = false;
+
+  /**
+   * _addInstance
+   *
+   * @access private
+   * @param {object} target Instantiated class that extended React.Component
+   * @return {set} The set of instances for the passed in class
+   */
+  function _addInstance(target) {
+    return getBinding(target.constructor.prototype).instances.add(target);
   }
 
-  function handleKeyDown(_ref) {
-    var which = _ref.which;
+  /**
+   * _deleteInstance
+   *
+   * @access private
+   * @param {object} target Instantiated class that extended React.Component
+   * @return {boolean} The value set.has( target ) would have returned prior to deletion
+   */
+  function _deleteInstance(target) {
+    getBinding(target.constructor.prototype).instances['delete'](target);
+    _focusedInstances['delete'](target);
+    if (!_focusedInstances.size) _unbindKeys();
+  }
 
-    var handler = [].concat(_toConsumableArray(handlers)).find(function (_ref2) {
-      var _ref22 = _slicedToArray(_ref2, 1);
-
-      var componentInstance = _ref22[0];
-      return componentInstance._keyDownHasFocus;
+  /**
+   * _activate
+   *
+   * @access private
+   * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
+   */
+  function _activate(instances) {
+    [].concat(instances).forEach(function (instance) {
+      _focusedInstances['delete'](instance);
+      _focusedInstances.add(instance);
     });
-    if (handler) {
+    _bindKeys();
+  }
+
+  /**
+   * _findFocused
+   *
+   * @access private
+   * @param {object} data Criteria to use for finding the focused node
+   * @param {object} data.instance The instantiated React.Component that is
+   * a candidate for being focuse
+   * @param {object} data.target The DOM node from the click event
+   * @return {boolean} Success or failure in matching the node to the event target
+   */
+  function _findFocused(_ref) {
+    var target = _ref.target;
+    var instance = _ref.instance;
+
+    var node = _React['default'].findDOMNode(instance);
+    return target === node || node.contains(target);
+  }
+
+  /**
+   * _handleClick
+   *
+   * @access private
+   * @param {object} event The click event object
+   * @param {object} event.target The DOM node from the click event
+   */
+  function _handleClick(_ref2) {
+    var target = _ref2.target;
+
+    var findFocused = function findFocused(instance) {
+      return _findFocused({ target: target, instance: instance });
+    };
+    var allFocusedInstances = [];
+    var focusedInstance = null;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = _handlers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var _step$value = _slicedToArray(_step.value, 2);
+
+        var instances = _step$value[1].instances;
+
+        focusedInstance = [].concat(_toConsumableArray(instances)).find(findFocused);
+        if (focusedInstance) allFocusedInstances.push(focusedInstance);
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+          _iterator['return']();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    _activate(allFocusedInstances);
+  }
+
+  /**
+   * _shouldConsider: Conditions for proceeding with key event handling
+   *
+   * @access private
+   * @param {object} event The keydown event object
+   * @param {object} event.target The node origin of the event
+   * @param {string} event.target.tagName The name of the element tag
+   * @param {number} event.target.which The key pressed
+   * @return {boolean} Whether to continue procesing the keydown event
+   */
+  function _shouldConsider(_ref3) {
+    var tagName = _ref3.target.tagName;
+
+    return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
+  }
+
+  /**
+   * _handleKeyDown: The keydown event callback
+   *
+   * @access private
+   * @param {object} event The keydown event object
+   * @param {number} event.which The key code (which) received from the keydown event
+   */
+  function _handleKeyDown(event) {
+    if (_shouldConsider(event)) {
       (function () {
-        var _handler = _slicedToArray(handler, 2);
+        var fireLog = [];
+        var instanceBindings = [].concat(_toConsumableArray(_focusedInstances)).map(function (instance) {
+          return { instance: instance, bindings: getBinding(instance.constructor.prototype).bindings };
+        }).reverse();
+        instanceBindings.forEach(function (_ref4) {
+          var instance = _ref4.instance;
+          var bindings = _ref4.bindings;
 
-        var componentInstance = _handler[0];
-        var bindings = _handler[1].bindings;
-
-        bindings.forEach(function (fn, keys) {
-          return (!keys || ~keys.indexOf(which)) && fn.call(componentInstance, event);
+          bindings.forEach(function (fn, keySets) {
+            if (! ~fireLog.indexOf(event.which) && ((0, _keys.allKeys)(keySets) || keySets.some(function (keySet) {
+              return (0, _matchKeys['default'])({ keySet: keySet, event: event });
+            }))) {
+              fn.call(instance, event);
+              fireLog.push(event.which);
+            }
+          });
         });
       })();
     }
   }
 
-  function bindListeners() {
-    document.addEventListener('keydown', handleKeyDown);
-  }
+  /**
+   * _bindInputs: Find any focusable child elements of the component instance and
+   * add an onFocus handler to focus our keydown handlers on the parent component
+   * when user keys applies focus to the element.
+   *
+   * NOTE: One limitation of this right now is that if you tab out of the
+   * component, _focusedInstance will still be set until next click or mount or
+   * controlled focus.
+   *
+   * @access private
+   * @param {object} instance The key-bound component instance
+   */
+  function _bindInputs(instance) {
+    if (document.querySelectorAll) {
+      var node = _React['default'].findDOMNode(instance);
+      if (node) {
+        var focusables = node.querySelectorAll('a[href], button, input, object, select, textarea, [tabindex]');
+        if (focusables.length) {
+          var onFocus = function onFocus(element) {
+            var onFocusPrev = element.onfocus;
+            return function (event) {
+              _activate(instance);
+              if (onFocusPrev) onFocusPrev.call(element, event);
+            };
+          };
 
-  function unbindListeners() {
-    document.removeEventListener('keydown', handleKeyDown);
-  }
+          var _arr = [].concat(_toConsumableArray(focusables));
 
-  function onMount(_ref3) {
-    var keys = _ref3.keys;
-    var fn = _ref3.fn;
-
-    var handlerDict = handlers.get(this);
-    if (!handlerDict) {
-      if (!handlers.size) bindListeners();
-      var node = _React['default'].findDOMNode(this);
-      var onClickBound = handleClick.bind(this, node);
-
-      handlers.set(this, {
-        bindings: new Map([[keys, fn]]),
-        onClick: onClickBound
-      });
-
-      document.addEventListener('click', onClickBound);
-      this._keyDownHasFocus = true;
-    } else {
-      handlerDict.bindings.set(keys, fn);
+          for (var _i = 0; _i < _arr.length; _i++) {
+            var element = _arr[_i];
+            element.onfocus = onFocus(element);
+          }
+        }
+      }
     }
   }
 
-  function onUnmount() {
-    var handler = handlers.get(this);
-    if (handler) {
-      document.removeEventListener('click', handler.onClick);
-      handlers['delete'](this);
+  /**
+   * _bindKeys
+   *
+   * @access private
+   */
+  function _bindKeys() {
+    if (!_keysBound) {
+      document.addEventListener('keydown', _handleKeyDown);
+      _keysBound = true;
     }
-    if (!handlers.size) unbindListeners();
-    this._keyDownHasFocus = false;
   }
 
+  /**
+   * _unbindKeys
+   *
+   * @access private
+   */
+  function _unbindKeys() {
+    if (_keysBound) {
+      document.removeEventListener('keydown', _handleKeyDown);
+      _keysBound = false;
+    }
+  }
+
+  /**
+   * _bindClicks
+   *
+   * @access private
+   */
+  function _bindClicks() {
+    if (!_clicksBound) {
+      document.addEventListener('click', _handleClick);
+      _clicksBound = true;
+    }
+  }
+
+  /**
+   * _unbindClicks
+   *
+   * @access private
+   */
+  function _unbindClicks() {
+    if (_clicksBound && ![].concat(_toConsumableArray(_handlers)).some(function (_ref5) {
+      var _ref52 = _slicedToArray(_ref5, 2);
+
+      var instances = _ref52[1].instances;
+      return instances.size;
+    })) {
+      document.removeEventListener('click', _handleClick);
+      _clicksBound = false;
+    }
+  }
+
+  /**
+   * public
+   *
+   */
+
+  /**
+   * getBinding
+   *
+   * @access public
+   * @param {object} target Class used as key in dict of bindings and instances
+   * @return {object} The object containing bindings and instances for the given class
+   */
+  function getBinding(target) {
+    return _handlers.get(target);
+  }
+
+  /**
+   * setBinding
+   *
+   * @access public
+   * @param {object} args All arguments necessary to set the binding
+   * @param {array} args.keys Key codes that should trigger the fn
+   * @param {function} args.fn The callback to be triggered when given keys are pressed
+   * @param {object} args.target The decorated class
+   */
+  function setBinding(_ref6) {
+    var keys = _ref6.keys;
+    var fn = _ref6.fn;
+    var target = _ref6.target;
+
+    var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _keys.allKeys)();
+    var handler = getBinding(target);
+    if (!handler) {
+      handler = _handlers.set(target, { bindings: new Map(), instances: new Set() }).get(target);
+    }
+    handler.bindings.set(keySets, fn);
+  }
+
+  /**
+   * onMount
+   *
+   * @access public
+   */
+  function onMount(instance) {
+    _bindClicks();
+    _bindInputs(instance);
+    _addInstance(instance);
+    // have to bump this to next event loop because component mounting routinely
+    // preceeds the dom click event that triggered the mount (wtf?)
+    setTimeout(function () {
+      return _activate(instance);
+    }, 0);
+  }
+
+  /**
+   * onUnmount
+   *
+   * @access public
+   */
+  function onUnmount(instance) {
+    _deleteInstance(instance);
+    _unbindClicks();
+  }
+
+  exports.setBinding = setBinding;
+  exports.getBinding = getBinding;
   exports.onMount = onMount;
   exports.onUnmount = onUnmount;
 });
