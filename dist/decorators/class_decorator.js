@@ -24,7 +24,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _libListeners = require('../lib/listeners');
+var _store = require('../store');
+
+var _event_handlers = require('../event_handlers');
 
 /**
  * componentWrapper
@@ -52,12 +54,12 @@ function componentWrapper(WrappedComponent) {
     _createClass(KeyBoardHelper, [{
       key: 'componentDidMount',
       value: function componentDidMount() {
-        (0, _libListeners.onMount)(this);
+        (0, _event_handlers.onMount)(this);
       }
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
-        (0, _libListeners.onUnmount)(this);
+        (0, _event_handlers.onUnmount)(this);
       }
     }, {
       key: 'handleKeyDown',
@@ -79,7 +81,7 @@ function componentWrapper(WrappedComponent) {
     return KeyBoardHelper;
   })(_react2['default'].Component);
 
-  (0, _libListeners.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
+  (0, _store.setBinding)({ keys: keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype });
 
   return KeyBoardHelper;
 }

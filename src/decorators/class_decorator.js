@@ -4,7 +4,8 @@
  */
 import React from 'react';
 
-import { setBinding, onMount, onUnmount } from '../lib/listeners';
+import { setBinding } from '../store';
+import { onMount, onUnmount } from '../event_handlers';
 
 /**
  * componentWrapper

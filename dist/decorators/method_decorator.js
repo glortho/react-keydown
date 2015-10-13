@@ -8,7 +8,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _libListeners = require('../lib/listeners');
+var _store = require('../store');
+
+var _event_handlers = require('../event_handlers');
 
 /**
  * methodWrapper
@@ -27,25 +29,25 @@ function methodWrapper(_ref) {
 
   // if we haven't already created a binding for this class (via another
   // decorated method), wrap these lifecycle methods.
-  if (!(0, _libListeners.getBinding)(target)) {
+  if (!(0, _store.getBinding)(target)) {
     (function () {
       var componentDidMount = target.componentDidMount;
       var componentWillUnmount = target.componentWillUnmount;
 
       target.componentDidMount = function () {
-        (0, _libListeners.onMount)(this);
+        (0, _event_handlers.onMount)(this);
         if (componentDidMount) return componentDidMount.call(this);
       };
 
       target.componentWillUnmount = function () {
-        (0, _libListeners.onUnmount)(this);
+        (0, _event_handlers.onUnmount)(this);
         if (componentWillUnmount) return componentWillUnmount.call(this);
       };
     })();
   }
 
   // add this binding of keys and method to the target's bindings
-  (0, _libListeners.setBinding)({ keys: keys, target: target, fn: descriptor.value });
+  (0, _store.setBinding)({ keys: keys, target: target, fn: descriptor.value });
 
   return descriptor;
 }
