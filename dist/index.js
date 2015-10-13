@@ -24,3 +24,7 @@ Object.defineProperty(exports, 'setBinding', {
     return _store.setBinding;
   }
 });
+
+var _libKeys = require('./lib/keys');
+
+exports.Keys = _interopRequire(_libKeys);
