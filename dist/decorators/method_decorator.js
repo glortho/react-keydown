@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', '../lib/listeners'], factory);
+    define(['exports', 'module', '../store', '../event_handlers'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('../lib/listeners'));
+    factory(exports, module, require('../store'), require('../event_handlers'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, mod, global.listeners);
+    factory(mod.exports, mod, global.store, global.event_handlers);
     global.method_decorator = mod.exports;
   }
-})(this, function (exports, module, _libListeners) {
+})(this, function (exports, module, _store, _event_handlers) {
   /**
    * @module methodWrapper
    *
@@ -34,25 +34,25 @@
 
     // if we haven't already created a binding for this class (via another
     // decorated method), wrap these lifecycle methods.
-    if (!(0, _libListeners.getBinding)(target)) {
+    if (!(0, _store.getBinding)(target)) {
       (function () {
         var componentDidMount = target.componentDidMount;
         var componentWillUnmount = target.componentWillUnmount;
 
         target.componentDidMount = function () {
-          (0, _libListeners.onMount)(this);
+          (0, _event_handlers.onMount)(this);
           if (componentDidMount) return componentDidMount.call(this);
         };
 
         target.componentWillUnmount = function () {
-          (0, _libListeners.onUnmount)(this);
+          (0, _event_handlers.onUnmount)(this);
           if (componentWillUnmount) return componentWillUnmount.call(this);
         };
       })();
     }
 
     // add this binding of keys and method to the target's bindings
-    (0, _libListeners.setBinding)({ keys: keys, target: target, fn: descriptor.value });
+    (0, _store.setBinding)({ keys: keys, target: target, fn: descriptor.value });
 
     return descriptor;
   }
