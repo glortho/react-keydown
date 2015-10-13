@@ -38,7 +38,8 @@ class MyComponent extends React.Component {
   ...
 
   @keydown( 'enter' ) // or specify `which` code directly, in this case 13
-  submit() {
+  submit( event ) {
+    // do something, or not, with the keydown event, maybe event.preventDefault()
     MyApi.post( this.state );
   }
 }
