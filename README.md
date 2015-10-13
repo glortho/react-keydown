@@ -13,6 +13,8 @@ Key advantages:
 * **Modifier keys**: Support for standard modifier key combinations.
 * **Tiny**: 2kb compressed and gzipped
 
+Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
+
 ## Install
 
 ```
