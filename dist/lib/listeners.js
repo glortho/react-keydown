@@ -137,9 +137,10 @@
    * @return {boolean} Whether to continue procesing the keydown event
    */
   function _shouldConsider(_ref2) {
+    var ctrlKey = _ref2.ctrlKey;
     var tagName = _ref2.target.tagName;
 
-    return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName);
+    return ! ~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(tagName) || ctrlKey;
   }
 
   /**

@@ -110,8 +110,8 @@ function _handleClick( { target } ) {
  * @param {number} event.target.which The key pressed
  * @return {boolean} Whether to continue procesing the keydown event
  */
-function _shouldConsider( { target: { tagName } } ) {
-  return !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName );
+function _shouldConsider( { ctrlKey, target: { tagName } } ) {
+  return !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName ) || ctrlKey;
 }
 
 /**
