@@ -12,11 +12,6 @@ import store           from './store';
  * 
  */
 
-function _activate( instances ) {
-  store.activate( instances );
-  bindKeys();
-}
-
 /**
  * onClick
  *
@@ -26,7 +21,7 @@ function _activate( instances ) {
  */
 const { bindClicks, unbindClicks } = attachListeners({
   onClick( { target } ) {
-    _activate(
+    store.activate(
       [ ...store.getInstances() ]
         .reduce( domHelpers.findContainerNodes( target ), [] )
         .sort( domHelpers.sortByDOMPosition )
@@ -82,9 +77,10 @@ const { bindKeys, unbindKeys } = attachListeners({
 function onMount( instance ) {
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
-  setTimeout(() => _activate( instance ), 0);
+  bindKeys();
   bindClicks();
-  domHelpers.bindFocusables( instance, _activate );
+  setTimeout(() => store.activate( instance ), 0);
+  domHelpers.bindFocusables( instance, store.activate );
 }
 
 /**

@@ -30,11 +30,6 @@ var _store2 = _interopRequireDefault(_store);
  * 
  */
 
-function _activate(instances) {
-  _store2['default'].activate(instances);
-  bindKeys();
-}
-
 /**
  * onClick
  *
@@ -47,7 +42,7 @@ var _attachListeners = (0, _libAttach_listeners2['default'])({
   onClick: function onClick(_ref2) {
     var target = _ref2.target;
 
-    _activate([].concat(_toConsumableArray(_store2['default'].getInstances())).reduce(_libDom_helpers2['default'].findContainerNodes(target), []).sort(_libDom_helpers2['default'].sortByDOMPosition).map(function (item) {
+    _store2['default'].activate([].concat(_toConsumableArray(_store2['default'].getInstances())).reduce(_libDom_helpers2['default'].findContainerNodes(target), []).sort(_libDom_helpers2['default'].sortByDOMPosition).map(function (item) {
       return item.instance;
     }));
   }
@@ -114,11 +109,12 @@ var unbindKeys = _attachListeners2.unbindKeys;
 function onMount(instance) {
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
-  setTimeout(function () {
-    return _activate(instance);
-  }, 0);
+  bindKeys();
   bindClicks();
-  _libDom_helpers2['default'].bindFocusables(instance, _activate);
+  setTimeout(function () {
+    return _store2['default'].activate(instance);
+  }, 0);
+  _libDom_helpers2['default'].bindFocusables(instance, _store2['default'].activate);
 }
 
 /**
