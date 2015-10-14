@@ -55,11 +55,11 @@ const Store = {
 
   findBindingForEvent( event ) {
     const keyMatchesEvent = keySet => matchKeys( { keySet, event } );
+
+    // loop through instances in reverse activation order so that most
+    // recently activated instance gets first dibs on event
     for ( const instance of [ ..._instances ].reverse() ) {
       const bindings = _handlers.get( instance.constructor.prototype );
-
-      // loop through instances in reverse activation order so that most
-      // recently activated instance gets first dibs on event
       for ( const [ keySets, fn ] of bindings ) {
         if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
           // return when matching keybinding is found - i.e. only one
@@ -85,10 +85,22 @@ const Store = {
     return _handlers.get( target );
   },
 
+  /**
+   * getInstances
+   *
+   * @access public
+   * @return {set} All stored instances (all mounted component instances with keybindings)
+   */
   getInstances() {
     return _instances;
   },
 
+  /**
+   * isEmpty
+   *
+   * @access public
+   * @return {number} Size of the set of all stored instances
+   */
   isEmpty() {
     return !_instances.size;
   },

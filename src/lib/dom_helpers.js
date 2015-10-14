@@ -40,6 +40,15 @@ function bindFocusables( instance, activateOnFocus ) {
   }
 }
 
+/**
+ * findContainerNodes: Called by our click handler to find instances with nodes
+ * that are equal to or that contain the click target. Any that pass this test
+ * will be recipients of the next keydown event.
+ *
+ * @access public
+ * @param {object} target The click event.target DOM element
+ * @return {function} Reducer function
+ */
 function findContainerNodes( target ) {
   return ( memo, instance ) => {
     const node = React.findDOMNode( instance );
@@ -50,7 +59,13 @@ function findContainerNodes( target ) {
   };
 }
 
-
+/**
+ * sortByDOMPosition: Called by our click handler to sort a list of instances
+ * according to least -> most nested. This is so that if multiple keybound
+ * instances have nodes that are ancestors of the click target, they will be
+ * sorted to let the instance closest to the click target get first dibs on the
+ * next key down event.
+ */
 function sortByDOMPosition( a, b ) {
   return a.node.compareDocumentPosition( b.node ) === 10 ? 1 : -1;
 }
