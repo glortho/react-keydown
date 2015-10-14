@@ -89,6 +89,10 @@ const Store = {
     return _instances;
   },
 
+  isEmpty() {
+    return !_instances.size;
+  },
+
   /**
    * setBinding
    *

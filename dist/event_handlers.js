@@ -37,11 +37,6 @@
    * 
    */
 
-  function _activate(instances) {
-    _store2['default'].activate(instances);
-    bindKeys();
-  }
-
   /**
    * onClick
    *
@@ -54,7 +49,7 @@
     onClick: function onClick(_ref2) {
       var target = _ref2.target;
 
-      _activate([].concat(_toConsumableArray(_store2['default'].getInstances())).reduce(_domHelpers['default'].findContainerNodes(target), []).sort(_domHelpers['default'].sortByDOMPosition).map(function (item) {
+      _store2['default'].activate([].concat(_toConsumableArray(_store2['default'].getInstances())).reduce(_domHelpers['default'].findContainerNodes(target), []).sort(_domHelpers['default'].sortByDOMPosition).map(function (item) {
         return item.instance;
       }));
     }
@@ -122,10 +117,11 @@
     // have to bump this to next event loop because component mounting routinely
     // preceeds the dom click event that triggered the mount (wtf?)
     setTimeout(function () {
-      return _activate(instance);
+      return _store2['default'].activate(instance);
     }, 0);
+    bindKeys();
     bindClicks();
-    _domHelpers['default'].bindFocusables(instance, _activate);
+    _domHelpers['default'].bindFocusables(instance, _store2['default'].activate);
   }
 
   /**
@@ -135,7 +131,7 @@
    */
   function onUnmount(instance) {
     _store2['default'].deleteInstance(instance);
-    if (!_store2['default'].getInstances().size) {
+    if (_store2['default'].isEmpty()) {
       unbindClicks();
       unbindKeys();
     }
