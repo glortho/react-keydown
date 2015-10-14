@@ -154,6 +154,10 @@ var Store = {
     return _instances;
   },
 
+  isEmpty: function isEmpty() {
+    return !_instances.size;
+  },
+
   /**
    * setBinding
    *

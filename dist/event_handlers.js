@@ -109,11 +109,11 @@ var unbindKeys = _attachListeners2.unbindKeys;
 function onMount(instance) {
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
-  bindKeys();
-  bindClicks();
   setTimeout(function () {
     return _store2['default'].activate(instance);
   }, 0);
+  bindKeys();
+  bindClicks();
   _libDom_helpers2['default'].bindFocusables(instance, _store2['default'].activate);
 }
 
@@ -124,7 +124,7 @@ function onMount(instance) {
  */
 function onUnmount(instance) {
   _store2['default'].deleteInstance(instance);
-  if (!_store2['default'].getInstances().size) {
+  if (_store2['default'].isEmpty()) {
     unbindClicks();
     unbindKeys();
   }

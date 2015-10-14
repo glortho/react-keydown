@@ -77,9 +77,9 @@ const { bindKeys, unbindKeys } = attachListeners({
 function onMount( instance ) {
   // have to bump this to next event loop because component mounting routinely
   // preceeds the dom click event that triggered the mount (wtf?)
+  setTimeout(() => store.activate( instance ), 0);
   bindKeys();
   bindClicks();
-  setTimeout(() => store.activate( instance ), 0);
   domHelpers.bindFocusables( instance, store.activate );
 }
 
@@ -90,7 +90,7 @@ function onMount( instance ) {
  */
 function onUnmount( instance ) {
   store.deleteInstance( instance );
-  if ( !store.getInstances().size ) {
+  if ( store.isEmpty() ) {
     unbindClicks();
     unbindKeys();
   }
