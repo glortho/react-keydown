@@ -52,7 +52,7 @@ function bindFocusables( instance, activateOnFocus ) {
 function findContainerNodes( target ) {
   return ( memo, instance ) => {
     const node = React.findDOMNode( instance );
-    if ( node === target || node.contains( target ) ) {
+    if ( node && ( node === target || node.contains( target ) ) ) {
       memo.push( { instance, node } );
     }
     return memo;
