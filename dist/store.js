@@ -49,13 +49,23 @@ var Store = {
    * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
    */
   activate: function activate(instances) {
+    var instancesArray = [].concat(instances);
 
-    // deleting and then adding the instance(s) has the effect of sorting the set
-    // according to instance activation (ascending)
-    [].concat(instances).forEach(function (instance) {
-      _instances['delete'](instance);
-      _instances.add(instance);
-    });
+    // if no components were found as ancestors of the event target,
+    // effectively deactivate keydown handling by capping the set of instances
+    // with `null`.
+    if (!instancesArray.length) {
+      _instances.add(null);
+    } else {
+      _instances['delete'](null);
+
+      // deleting and then adding the instance(s) has the effect of sorting the set
+      // according to instance activation (ascending)
+      instancesArray.forEach(function (instance) {
+        _instances['delete'](instance);
+        _instances.add(instance);
+      });
+    }
   },
 
   /**
@@ -67,75 +77,75 @@ var Store = {
    */
   deleteInstance: function deleteInstance(target) {
     _instances['delete'](target);
-    return _instances;
   },
 
   findBindingForEvent: function findBindingForEvent(event) {
-    var keyMatchesEvent = function keyMatchesEvent(keySet) {
-      return (0, _libMatch_keys2['default'])({ keySet: keySet, event: event });
-    };
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    if (!_instances.has(null)) {
+      var keyMatchesEvent = function keyMatchesEvent(keySet) {
+        return (0, _libMatch_keys2['default'])({ keySet: keySet, event: event });
+      };
 
-    try {
-      for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var instance = _step.value;
+      // loop through instances in reverse activation order so that most
+      // recently activated instance gets first dibs on event
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-        var bindings = _handlers.get(instance.constructor.prototype);
-
-        // loop through instances in reverse activation order so that most
-        // recently activated instance gets first dibs on event
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = bindings[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var _step2$value = _slicedToArray(_step2.value, 2);
-
-            var keySets = _step2$value[0];
-            var fn = _step2$value[1];
-
-            if ((0, _libKeys.allKeys)(keySets) || keySets.some(keyMatchesEvent)) {
-              // return when matching keybinding is found - i.e. only one
-              // keybound component can respond to a given key code. to get around this,
-              // scope a common ancestor component class with @keydown and use
-              // @keydownScoped to bind the duplicate keys in your child components
-              // (or just inspect nextProps.keydown.event).
-              return { fn: fn, instance: instance };
-            }
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-              _iterator2['return']();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator['return']) {
-          _iterator['return']();
+        for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var instance = _step.value;
+
+          var bindings = _handlers.get(instance.constructor.prototype);
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = bindings[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var _step2$value = _slicedToArray(_step2.value, 2);
+
+              var keySets = _step2$value[0];
+              var fn = _step2$value[1];
+
+              if ((0, _libKeys.allKeys)(keySets) || keySets.some(keyMatchesEvent)) {
+                // return when matching keybinding is found - i.e. only one
+                // keybound component can respond to a given key code. to get around this,
+                // scope a common ancestor component class with @keydown and use
+                // @keydownScoped to bind the duplicate keys in your child components
+                // (or just inspect nextProps.keydown.event).
+                return { fn: fn, instance: instance };
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+                _iterator2['return']();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
         }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
       } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
+        try {
+          if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
     }
-
     return null;
   },
 
@@ -150,10 +160,22 @@ var Store = {
     return _handlers.get(target);
   },
 
+  /**
+   * getInstances
+   *
+   * @access public
+   * @return {set} All stored instances (all mounted component instances with keybindings)
+   */
   getInstances: function getInstances() {
     return _instances;
   },
 
+  /**
+   * isEmpty
+   *
+   * @access public
+   * @return {number} Size of the set of all stored instances
+   */
   isEmpty: function isEmpty() {
     return !_instances.size;
   },

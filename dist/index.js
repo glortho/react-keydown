@@ -1,3 +1,4 @@
+// @keydown and @keydownScoped
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -16,6 +17,8 @@ Object.defineProperty(exports, 'keydownScoped', {
   }
 });
 
+// setBinding - only useful if you're not going to use decorators
+
 var _store = require('./store');
 
 Object.defineProperty(exports, 'setBinding', {
@@ -24,6 +27,8 @@ Object.defineProperty(exports, 'setBinding', {
     return _store.setBinding;
   }
 });
+
+// Keys - use this to find key codes for strings. for example: Keys.j, Keys.enter
 
 var _libKeys = require('./lib/keys');
 
