@@ -32,13 +32,23 @@ const Store = {
    * @param {object} instance Instantiated class that extended React.Component, to be focused to receive keydown events
    */
   activate( instances ) {
+    const instancesArray = [].concat( instances );
 
-    // deleting and then adding the instance(s) has the effect of sorting the set
-    // according to instance activation (ascending)
-    [].concat( instances ).forEach( instance => {
-      _instances.delete( instance );
-      _instances.add( instance );
-    });
+    // if no components were found as ancestors of the event target,
+    // effectively deactivate keydown handling by capping the set of instances
+    // with `null`.
+    if ( !instancesArray.length ) {
+      _instances.add( null );
+    } else {
+      _instances.delete( null );
+      
+      // deleting and then adding the instance(s) has the effect of sorting the set
+      // according to instance activation (ascending)
+      instancesArray.forEach( instance => {
+        _instances.delete( instance );
+        _instances.add( instance );
+      });
+    }
   },
 
   /**
@@ -50,24 +60,25 @@ const Store = {
    */
   deleteInstance( target ) {
     _instances.delete( target );
-    return _instances;
   },
 
   findBindingForEvent( event ) {
-    const keyMatchesEvent = keySet => matchKeys( { keySet, event } );
+    if ( !_instances.has( null ) ) {
+      const keyMatchesEvent = keySet => matchKeys( { keySet, event } );
 
-    // loop through instances in reverse activation order so that most
-    // recently activated instance gets first dibs on event
-    for ( const instance of [ ..._instances ].reverse() ) {
-      const bindings = _handlers.get( instance.constructor.prototype );
-      for ( const [ keySets, fn ] of bindings ) {
-        if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
-          // return when matching keybinding is found - i.e. only one
-          // keybound component can respond to a given key code. to get around this,
-          // scope a common ancestor component class with @keydown and use
-          // @keydownScoped to bind the duplicate keys in your child components
-          // (or just inspect nextProps.keydown.event).
-          return { fn, instance };
+      // loop through instances in reverse activation order so that most
+      // recently activated instance gets first dibs on event
+      for ( const instance of [ ..._instances ].reverse() ) {
+        const bindings = _handlers.get( instance.constructor.prototype );
+        for ( const [ keySets, fn ] of bindings ) {
+          if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
+            // return when matching keybinding is found - i.e. only one
+            // keybound component can respond to a given key code. to get around this,
+            // scope a common ancestor component class with @keydown and use
+            // @keydownScoped to bind the duplicate keys in your child components
+            // (or just inspect nextProps.keydown.event).
+            return { fn, instance };
+          }
         }
       }
     }
