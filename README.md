@@ -50,8 +50,13 @@ Note: Since the only context we have for keydown events is the component, decora
 #### Specify multiple keys that should trigger the method
 
 ```javascript
-@keydown( 'enter', 'tab', 'ctrl+z' )
-autocomplete() {
+import { Keys } from 'react-keydown';
+
+const { enter, tab } = Keys;
+
+@keydown( enter, tab, 'ctrl+z' ) // could also be an array
+autocomplete( event ) {
+  if ( event.which === enter ) { ... }
   MyApi.get( this.state );
 }
 ```
