@@ -1,3 +1,5 @@
+// TODO: Need better, more complete, and more methodical key definitions
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -25,6 +27,11 @@ var Keys = {
   '\\': 220,
   ']': 221
 };
+
+// Add uppercase versions of keys above for backwards compatibility
+Object.keys(Keys).forEach(function (key) {
+  return Keys[key.toUpperCase()] = Keys[key];
+});
 
 '0123456789'.split('').forEach(function (num, index) {
   return Keys[num] = index + 48;
