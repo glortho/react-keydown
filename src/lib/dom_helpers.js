@@ -2,7 +2,7 @@
  * @module domHelpers
  *
  */
-import React from 'react';
+import ReactDOM from 'react-dom';
 
 const focusableSelector = 'a[href], button, input, object, select, textarea, [tabindex]';
 
@@ -21,7 +21,7 @@ const focusableSelector = 'a[href], button, input, object, select, textarea, [ta
  */
 function bindFocusables( instance, activateOnFocus ) {
   if ( document.querySelectorAll ) {
-    const node = React.findDOMNode( instance );
+    const node = ReactDOM.findDOMNode( instance );
     if ( node ) {
       const focusables = node.querySelectorAll( focusableSelector );
       if ( focusables.length ) {
@@ -51,7 +51,7 @@ function bindFocusables( instance, activateOnFocus ) {
  */
 function findContainerNodes( target ) {
   return ( memo, instance ) => {
-    const node = React.findDOMNode( instance );
+    const node = ReactDOM.findDOMNode( instance );
     if ( node && ( node === target || node.contains( target ) ) ) {
       memo.push( { instance, node } );
     }
