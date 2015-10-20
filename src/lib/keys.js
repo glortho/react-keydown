@@ -1,3 +1,5 @@
+// TODO: Need better, more complete, and more methodical key definitions
+
 const Keys = {
   backspace: 8,
   tab:       9,
@@ -19,6 +21,9 @@ const Keys = {
   '\\':      220,
   ']':       221
 };
+
+// Add uppercase versions of keys above for backwards compatibility
+Object.keys( Keys ).forEach( key => Keys[ key.toUpperCase() ] = Keys[ key ] );
 
 '0123456789'.split( '' ).forEach( ( num, index ) => Keys[ num ] = index + 48 );
 
