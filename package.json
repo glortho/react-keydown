@@ -1,6 +1,6 @@
 {
   "name": "react-keydown",
-  "version": "1.3.6",
+  "version": "1.4.0",
   "description": "Lightweight keydown wrapper for React components",
   "main": "dist/index.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "webpack": "^1.12.2"
   },
   "dependencies": {
-    "react": "^0.13.3"
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0"
   }
 }

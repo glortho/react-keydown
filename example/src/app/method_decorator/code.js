@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 const code = 
 `<code>import React from &#x27;react&#x27;;
@@ -37,7 +38,7 @@ class Code extends React.Component {
   }
 
   componentDidMount() {
-    const node = React.findDOMNode( this );
+    const node = ReactDOM.findDOMNode( this );
     node.innerHTML = code;
     Prism.highlightElement( node );
   }

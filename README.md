@@ -45,8 +45,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-Note: The keydown event will be passed to the decorated method for further
-processing, if desired. For example, you may went to `event.preventDefault()`.
+Note: Since the only context we have for keydown events is the component, decorated methods receive the event as their sole argument and the component instance as context.
 
 #### Specify multiple keys that should trigger the method
 

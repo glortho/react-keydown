@@ -45,12 +45,12 @@ class Index extends React.Component {
           </div>
           <div style={{marginTop: '1.7em', textAlign: 'center'}}>
             { this.state.example === 'class' && [
-              <ClassDecorator />,
-              <div style={{display: 'inline-block'}}><ClassDecoratorCode /></div>
+              <ClassDecorator key="class-decorator" />,
+              <div key="class-decorator-code" style={{display: 'inline-block'}}><ClassDecoratorCode /></div>
             ]}
             { this.state.example === 'method' && [
-              <MethodDecorator />,
-              <div style={{display: 'inline-block'}}><MethodDecoratorCode /></div>
+              <MethodDecorator key="method-decorator" />,
+              <div key="method-decorator-code" style={{display: 'inline-block'}}><MethodDecoratorCode /></div>
             ]}
           </div>
         </div>
