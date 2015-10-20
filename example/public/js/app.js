@@ -20153,12 +20153,16 @@
 	  activate: function activate(instances) {
 	    var instancesArray = [].concat(instances);
 
-	    // deleting and then adding the instance(s) has the effect of sorting the set
-	    // according to instance activation (ascending)
+	    // if no components were found as ancestors of the event target,
+	    // effectively deactivate keydown handling by capping the set of instances
+	    // with `null`.
 	    if (!instancesArray.length) {
 	      _instances.add(null);
 	    } else {
 	      _instances['delete'](null);
+
+	      // deleting and then adding the instance(s) has the effect of sorting the set
+	      // according to instance activation (ascending)
 	      instancesArray.forEach(function (instance) {
 	        _instances['delete'](instance);
 	        _instances.add(instance);
@@ -20175,7 +20179,6 @@
 	   */
 	  deleteInstance: function deleteInstance(target) {
 	    _instances['delete'](target);
-	    return _instances;
 	  },
 
 	  findBindingForEvent: function findBindingForEvent(event) {
@@ -20309,6 +20312,8 @@
 /* 164 */
 /***/ function(module, exports) {
 
+	// TODO: Need better, more complete, and more methodical key definitions
+
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -20336,6 +20341,11 @@
 	  '\\': 220,
 	  ']': 221
 	};
+
+	// Add uppercase versions of keys above for backwards compatibility
+	Object.keys(Keys).forEach(function (key) {
+	  return Keys[key.toUpperCase()] = Keys[key];
+	});
 
 	'0123456789'.split('').forEach(function (num, index) {
 	  return Keys[num] = index + 48;
@@ -21029,13 +21039,6 @@
 	          'div',
 	          null,
 	          'And click again inside/outside box to see scoping.'
-	        ),
-	        _react2['default'].createElement('input', { type: 'text' }),
-	        ' ',
-	        _react2['default'].createElement(
-	          'span',
-	          { tabIndex: '1' },
-	          'foo'
 	        )
 	      );
 	    }
