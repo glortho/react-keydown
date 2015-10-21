@@ -11,7 +11,7 @@ Key advantages:
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys.
 * **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
 * **Modifier keys**: Support for standard modifier key combinations.
-* **Lightweight**: 2kb compressed and gzipped, and only adds a single listener, no matter how many keybindings you specify.
+* **Lightweight**: 2kb compressed and gzipped, and only adds a single keydown listener, no matter how many keybindings you specify.
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
 
