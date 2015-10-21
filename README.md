@@ -52,7 +52,7 @@ Note: Since the only context we have for keydown events is the component, decora
 ```javascript
 import { Keys } from 'react-keydown';
 
-const { enter, tab } = Keys;
+const { ENTER, TAB } = Keys;
 
 @keydown( enter, tab, 'ctrl+z' ) // could also be an array
 autocomplete( event ) {
