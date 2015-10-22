@@ -50,7 +50,7 @@ Note: Since the only context we have for keydown events is the component, decora
 #### Specify multiple keys that should trigger the method
 
 ```javascript
-import { Keys } from 'react-keydown';
+import keydown, { Keys } from 'react-keydown';
 
 const { ENTER, TAB } = Keys; // optionally get key codes from Keys lib to check against later
 
