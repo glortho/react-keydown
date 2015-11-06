@@ -153,6 +153,12 @@ $ open example/public/index.html
 
 Note that this is very much a work in progress!
 
+## Test
+
+```
+$ npm test
+```
+
 ## Notes, disclaimers, and tips
 
 * The decorator pattern `@keydown` currently requires transpilation by

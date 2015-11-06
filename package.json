@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "node ./tasks/compile.js",
     "prepublish": "npm run compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/index.js | node_modules/.bin/tap-difflet"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,7 @@ import test from 'tape';
 
 import Store from '../src/store';
 
-test( 'activate', t => {
+test( 'Store.activate', t => {
   const fixture = {};
   let msg;
 
