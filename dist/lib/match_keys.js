@@ -22,7 +22,7 @@ function matchKeys(_ref) {
         return event[modKey + 'Key'];
       }).sort();
       keysMatch = modifiers.length === evtModKeys.length && modifiers.every(function (modKey, index) {
-        return evtModKeys[index];
+        return evtModKeys[index] === modKey;
       });
     })();
   }

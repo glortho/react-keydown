@@ -1,12 +1,12 @@
 {
   "name": "react-keydown",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "Lightweight keydown wrapper for React components",
   "main": "dist/index.js",
   "scripts": {
     "compile": "node ./tasks/compile.js",
     "prepublish": "npm run compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/index.js | node_modules/.bin/tap-difflet"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,8 @@
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-loader": "^5.3.2",
+    "tap-difflet": "^0.4.0",
+    "tape": "^4.2.2",
     "webpack": "^1.12.2"
   },
   "dependencies": {

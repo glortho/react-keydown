@@ -11,15 +11,18 @@ Key advantages:
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys.
 * **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
 * **Modifier keys**: Support for standard modifier key combinations.
-* **Tiny**: 2kb compressed and gzipped
+* **Lightweight**: 2kb compressed and gzipped, and only attaches a single keydown listener to document, no matter how many keybindings you specify.
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
+
+**NOTE**: If react-keydown isn't working for you, be sure to check that you're not using Babel 6.x, as [decorators are currently broken in Babel 6](https://github.com/babel/babel/issues/2645).
 
 ## Install
 
 ```
 npm install --save react-keydown
 ```
+**Note on versions**: Latest releases (1.4+) are meant to be used with React 0.14. If you are on 0.13- use the 1.3 version.
 
 ## Use
 
@@ -50,8 +53,13 @@ Note: Since the only context we have for keydown events is the component, decora
 #### Specify multiple keys that should trigger the method
 
 ```javascript
-@keydown( 'enter', 'tab', 'ctrl+z' )
-autocomplete() {
+import keydown, { Keys } from 'react-keydown';
+
+const { ENTER, TAB } = Keys; // optionally get key codes from Keys lib to check against later
+
+@keydown( ENTER, TAB, 'ctrl+z' ) // could also be an array
+autocomplete( event ) {
+  if ( event.which === ENTER ) { ... }
   MyApi.get( this.state );
 }
 ```
@@ -144,6 +152,12 @@ $ open example/public/index.html
 ```
 
 Note that this is very much a work in progress!
+
+## Test
+
+```
+$ npm test
+```
 
 ## Notes, disclaimers, and tips
 

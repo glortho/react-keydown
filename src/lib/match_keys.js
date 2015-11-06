@@ -8,7 +8,7 @@ function matchKeys( { keySet: { key, modifiers = [] }, event } ) {
     const evtModKeys = modKeys.filter( modKey => event[ `${modKey}Key` ] ).sort();
     keysMatch = (
       modifiers.length === evtModKeys.length && 
-      modifiers.every( ( modKey, index ) => evtModKeys[ index ] )
+      modifiers.every( ( modKey, index ) => evtModKeys[ index ] === modKey )
     );
   }
   return keysMatch;

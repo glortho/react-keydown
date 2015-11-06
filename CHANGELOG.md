@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.1
+
+- [7fb3e85](https://github.com/jedverity/react-keydown/commit/d194044e2b0a46098f143fd6e29e649137fb3e85) [Fix] Add uppercase version of special keys back in for backwards compatibility
+
 ## 1.4.0
 
 - [699f42c](https://github.com/jedverity/react-keydown/commit/6ba2cc37258f84ff56faa943a75107e81699f42c) [Dependency Update] Switch to [react-dom](https://www.npmjs.com/package/react-dom) for full
