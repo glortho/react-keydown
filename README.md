@@ -38,8 +38,6 @@ import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
 
-  ...
-
   @keydown( 'enter' ) // or specify `which` code directly, in this case 13
   submit( event ) {
     // do something, or not, with the keydown event, maybe event.preventDefault()
