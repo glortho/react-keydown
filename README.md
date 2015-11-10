@@ -26,7 +26,7 @@ npm install --save react-keydown
 
 ## Use
 
-**Note**: The default build of react-keydown uses the CommonJS module system. For
+The default build of react-keydown uses the CommonJS module system. For
 AMD or other support, use the [umd-specific
 branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
 
