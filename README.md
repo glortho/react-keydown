@@ -70,10 +70,6 @@ import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
 
-  constructor( props ) {
-    super( props );
-  }
-
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
       // inspect the keydown event and decide what to do
