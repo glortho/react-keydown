@@ -17,6 +17,12 @@ const _handlers = new Map();
 // all mounted instances that have keybindings
 const _instances = new Set();
 
+// for testing
+export function _resetStore() {
+  _handlers.clear();
+  _instances.clear();
+}
+
 
 /**
  * public
