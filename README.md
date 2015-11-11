@@ -9,7 +9,7 @@ Key advantages:
 
 * **Declarative syntax**: Components say what keys they will respond to.
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys.
-* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
+* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events, and then only when they appear to be active.
 * **Modifier keys**: Support for standard modifier key combinations.
 * **Lightweight**: 2kb compressed and gzipped, and only attaches a single keydown listener to document, no matter how many keybindings you specify.
 
