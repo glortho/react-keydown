@@ -26,7 +26,7 @@ npm install --save react-keydown
 
 ## Use
 
-**Note**: The default build of react-keydown uses the CommonJS module system. For
+The default build of react-keydown uses the CommonJS module system. For
 AMD or other support, use the [umd-specific
 branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
 
@@ -37,8 +37,6 @@ import React from 'react';
 import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
-
-  ...
 
   @keydown( 'enter' ) // or specify `which` code directly, in this case 13
   submit( event ) {
@@ -71,10 +69,6 @@ import React from 'react';
 import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
-
-  constructor( props ) {
-    super( props );
-  }
 
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
