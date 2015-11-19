@@ -21,6 +21,9 @@
   Object.defineProperty(exports, '__esModule', {
     value: true
   });
+  exports._onClick = _onClick;
+  exports._onKeyDown = _onKeyDown;
+  exports._shouldConsider = _shouldConsider;
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -44,6 +47,7 @@
    * @param {object} event The click event object
    * @param {object} event.target The DOM node from the click event
    */
+
   function _onClick(_ref) {
     var target = _ref.target;
 
@@ -59,6 +63,7 @@
    * @param {object} event The keydown event object
    * @param {number} event.which The key code (which) received from the keydown event
    */
+
   function _onKeyDown(event) {
     if (_shouldConsider(event)) {
       var _ref2 = _store2['default'].findBindingForEvent(event) || {};
@@ -84,6 +89,7 @@
    * @param {number} event.target.which The key pressed
    * @return {boolean} Whether to continue procesing the keydown event
    */
+
   function _shouldConsider(_ref3) {
     var ctrlKey = _ref3.ctrlKey;
     var tagName = _ref3.target.tagName;

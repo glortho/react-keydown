@@ -1,8 +1,8 @@
 import test from 'tape';
 
-import matchKeys from '../src/lib/match_keys';
+import eventFixture from './fixtures/event';
+import matchKeys    from '../src/lib/match_keys';
 
-const eventFixture  = { which: null, ctrlKey: null, metaKey: null, shiftKey: null, altKey: null };
 const keySetFixture = { key: null }; // modifiers: null
 let event, keySet, msg;
 

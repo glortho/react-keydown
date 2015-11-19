@@ -74,11 +74,14 @@
    */
   function findContainerNodes(target) {
     return function (memo, instance) {
-      var node = _ReactDOM['default'].findDOMNode(instance);
-      if (node && (node === target || node.contains(target))) {
-        memo.push({ instance: instance, node: node });
+      try {
+        var node = _ReactDOM['default'].findDOMNode(instance);
+        if (node && (node === target || node.contains(target))) {
+          memo.push({ instance: instance, node: node });
+        }
+      } finally {
+        return memo;
       }
-      return memo;
     };
   }
 

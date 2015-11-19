@@ -9,7 +9,7 @@ Key advantages:
 
 * **Declarative syntax**: Components say what keys they will respond to.
 * **Intuitive DX**: Decorate a class or method to bind it to specified keys.
-* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events.
+* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events, and then only when they appear to be active.
 * **Modifier keys**: Support for standard modifier key combinations.
 * **Lightweight**: 2kb compressed and gzipped, and only attaches a single keydown listener to document, no matter how many keybindings you specify.
 
@@ -26,7 +26,7 @@ npm install --save react-keydown
 
 ## Use
 
-**Note**: The default build of react-keydown uses the CommonJS module system. For
+The default build of react-keydown uses the CommonJS module system. For
 AMD or other support, use the [umd-specific
 branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
 
@@ -37,8 +37,6 @@ import React from 'react';
 import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
-
-  ...
 
   @keydown( 'enter' ) // or specify `which` code directly, in this case 13
   submit( event ) {
@@ -71,10 +69,6 @@ import React from 'react';
 import keydown from 'react-keydown';
 
 class MyComponent extends React.Component {
-
-  constructor( props ) {
-    super( props );
-  }
 
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
