@@ -67,11 +67,14 @@ function bindFocusables(instance, activateOnFocus) {
  */
 function findContainerNodes(target) {
   return function (memo, instance) {
-    var node = _reactDom2['default'].findDOMNode(instance);
-    if (node && (node === target || node.contains(target))) {
-      memo.push({ instance: instance, node: node });
+    try {
+      var node = _reactDom2['default'].findDOMNode(instance);
+      if (node && (node === target || node.contains(target))) {
+        memo.push({ instance: instance, node: node });
+      }
+    } finally {
+      return memo;
     }
-    return memo;
   };
 }
 
