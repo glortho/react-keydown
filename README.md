@@ -15,7 +15,7 @@ Key advantages:
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
 
-**NOTE**: If react-keydown isn't working for you, be sure to check that you're not using Babel 6.x, as [decorators are currently broken in Babel 6](https://github.com/babel/babel/issues/2645).
+**NOTE**: If react-keydown isn't working for you and you're using Babel 6, check [this phabricator thread](https://phabricator.babeljs.io/T2645) for updates on Babel's decorator implementation.
 
 ## Install
 
