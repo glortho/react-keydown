@@ -17,6 +17,10 @@
    */
   'use strict';
 
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+  var _store2 = _interopRequireDefault(_store);
+
   /**
    * methodWrapper
    *
@@ -34,7 +38,7 @@
 
     // if we haven't already created a binding for this class (via another
     // decorated method), wrap these lifecycle methods.
-    if (!(0, _store.getBinding)(target)) {
+    if (!_store2['default'].getBinding(target)) {
       (function () {
         var componentDidMount = target.componentDidMount;
         var componentWillUnmount = target.componentWillUnmount;
@@ -52,7 +56,7 @@
     }
 
     // add this binding of keys and method to the target's bindings
-    (0, _store.setBinding)({ keys: keys, target: target, fn: descriptor.value });
+    _store2['default'].setBinding({ keys: keys, target: target, fn: descriptor.value });
 
     return descriptor;
   }
