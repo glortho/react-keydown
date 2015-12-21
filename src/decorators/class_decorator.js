@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-import { setBinding } from '../store';
+import store from '../store';
 import { onMount, onUnmount } from '../event_handlers';
 
 /**
@@ -44,7 +44,7 @@ function componentWrapper( WrappedComponent, keys = null ) {
     }
   }
 
-  setBinding( { keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
+  store.setBinding( { keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
 
   return KeyBoardHelper;
 }

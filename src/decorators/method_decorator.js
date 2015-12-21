@@ -2,7 +2,7 @@
  * @module methodWrapper
  *
  */
-import { getBinding, setBinding } from '../store';
+import store from '../store';
 import { onMount, onUnmount }     from '../event_handlers';
 
 /**
@@ -19,7 +19,7 @@ function methodWrapper( { target, descriptor, keys } ) {
 
   // if we haven't already created a binding for this class (via another
   // decorated method), wrap these lifecycle methods.
-  if ( !getBinding( target ) ) {
+  if ( !store.getBinding( target ) ) {
 
     const { componentDidMount, componentWillUnmount } = target;
     
@@ -35,7 +35,7 @@ function methodWrapper( { target, descriptor, keys } ) {
   }
 
   // add this binding of keys and method to the target's bindings
-  setBinding( { keys, target, fn: descriptor.value } );
+  store.setBinding( { keys, target, fn: descriptor.value } );
 
   return descriptor;
 }
