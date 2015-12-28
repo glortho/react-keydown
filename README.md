@@ -1,0 +1,184 @@
+# React Keydown
+> Lightweight keydown wrapper for React components.
+
+Use react-keydown as a higher-order component or decorator to pass keydown
+events to the wrapped component, or call methods directly via designated keys. Good 
+for implementing keyboard navigation or other shortcuts.
+
+Key advantages:
+
+* **Declarative syntax**: Components say what keys they will respond to.
+* **Intuitive DX**: Decorate a class or method to bind it to specified keys.
+* **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events, and then only when they appear to be active.
+* **Modifier keys**: Support for standard modifier key combinations.
+* **Lightweight**: 2kb compressed and gzipped, and only attaches a single keydown listener to document, no matter how many keybindings you specify.
+
+Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
+
+**NOTE**: If react-keydown isn't working for you and you're using Babel 6, check [this phabricator thread](https://phabricator.babeljs.io/T2645) for updates on Babel's decorator implementation.
+
+## Install
+
+```
+npm install --save react-keydown
+```
+**Note on versions**: Latest releases (1.4+) are meant to be used with React 0.14. If you are on 0.13- use the 1.3 version.
+
+## Use
+
+The default build of react-keydown uses the CommonJS module system. For
+AMD or other support, use the [umd-specific
+branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
+
+### For methods: Decorate with keys that should trigger method
+
+```javascript
+import React from 'react';
+import keydown from 'react-keydown';
+
+class MyComponent extends React.Component {
+
+  @keydown( 'enter' ) // or specify `which` code directly, in this case 13
+  submit( event ) {
+    // do something, or not, with the keydown event, maybe event.preventDefault()
+    MyApi.post( this.state );
+  }
+}
+```
+
+Note: Since the only context we have for keydown events is the component, decorated methods receive the event as their sole argument and the component instance as context.
+
+#### Specify multiple keys that should trigger the method
+
+```javascript
+import keydown, { Keys } from 'react-keydown';
+
+const { ENTER, TAB } = Keys; // optionally get key codes from Keys lib to check against later
+
+@keydown( ENTER, TAB, 'ctrl+z' ) // could also be an array
+autocomplete( event ) {
+  if ( event.which === ENTER ) { ... }
+  MyApi.get( this.state );
+}
+```
+
+### For classes: Pass keydown events into your component
+
+```jsx
+import React from 'react';
+import keydown from 'react-keydown';
+
+class MyComponent extends React.Component {
+
+  componentWillReceiveProps( { keydown } ) {
+    if ( keydown.event ) {
+      // inspect the keydown event and decide what to do
+      console.log( keydown.event.which );
+    }
+  }
+
+  render() {
+    return (
+      <div>keydown events will only get passed down after this DOM node mounts or is clicked on</div>
+    );
+  }
+}
+
+export default keydown( MyComponent );
+```
+
+#### Use decorator pattern:
+
+```javascript
+@keydown
+class MyComponent extends React.Component {
+  ...
+}
+
+export default MyComponent;
+```
+
+#### Monitor only key codes `which` you care about:
+
+```javascript
+const KEYS = [ 'shift+up', 'shift+down', 'enter', 'j', 'k', 'h', 'l' ];
+
+@keydown( KEYS )
+class MyComponent extends React.Component {
+  ...
+}
+```
+
+#### Use the `@keydownScoped` shortcut
+
+When using the class decorator/higher-order component, decorate methods with `@keydownScoped` to identify the `keydown.event` prop as it comes in and bind certain values to methods:
+
+```javascript
+import keydown, { keydownScoped } from 'react-keydown';
+
+@keydown( 'enter' ) // optional to specify a key here. if called with just @keydown, all key events will get passed down
+class MyComponent extends React.Component {
+  render() {
+    return <MyOtherComponent {...this.props} />;
+  }
+}
+
+class MyOtherComponent extends React.Component {
+  ...
+  @keydownScoped( 'enter' ) // inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes
+  submit() {
+    // submit
+  }
+}
+```
+
+This is a convenience method, but also lets you specify a larger view context where this key binding should be active. Sometimes the component where the binding is declared is too small on its own.
+
+This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
+
+## Demo
+
+Go to the [live
+demo](http://jedverity.github.io/react-keydown/example/index.html) or:
+
+```
+$ open example/public/index.html
+```
+
+Note that this is very much a work in progress!
+
+## Test
+
+```
+$ npm test
+```
+
+## Notes, disclaimers, and tips
+
+* The decorator pattern `@keydown` currently requires transpilation by
+  [Babel](babeljs.io/) (set to stage 1) or the equivalent.
+* The default build uses CommonJS modules. For AMD or other support, use the
+  [umd-specific
+  branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
+* This lib has only been tested using ES2015 classes. Some method decoration
+  functionality may work on other types of object methods.
+* Duplicate keybindings for components that are mounted at the same time will
+  not both fire. The more recently mounted component, or the one that has been
+  focused or clicked most recently, will win. If you do want both to fire,
+  decorate a common ancestor class with `@keydown( ... )` and then use
+  `@keydownScoped( ... )` in the child components (or just inspect
+  `nextProps.keydown.event` in both).
+* Since the only context we have for keydown events is the component, decorated
+  methods receive the event as their sole argument and the component instance as
+  context.
+* The method decorators wrap React lifecycle methods in order to work
+  as seamlessly and efficiently as possible. The class decorator does not do
+  this, functioning instead as a higher-order component.
+
+## Questions
+
+Why is this so limited, only working on `keydown` and such?
+
+> I published this out of my particular need on a project. If anyone else ever
+arrives here and needs something else let me know via issues or a pull request.
+
