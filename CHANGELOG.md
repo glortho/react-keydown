@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.5
+
+- Wrong react version dependency was cached.
+
 ## 1.4.4
 
 - [8c00bb2](https://github.com/glortho/react-keydown/commit/39c2c39e8d97b393600cb8d5c40cb212f8c00bb2) [Fix] Use proper es6 module import syntax
