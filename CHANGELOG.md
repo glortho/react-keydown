@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.4
+
+- [8c00bb2](https://github.com/glortho/react-keydown/commit/39c2c39e8d97b393600cb8d5c40cb212f8c00bb2) [Fix] Use proper es6 module import syntax
+
 ## 1.4.1
 
 - [7fb3e85](https://github.com/jedverity/react-keydown/commit/d194044e2b0a46098f143fd6e29e649137fb3e85) [Fix] Add uppercase version of special keys back in for backwards compatibility

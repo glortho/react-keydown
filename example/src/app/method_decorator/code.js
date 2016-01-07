@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 const code = 
 `<code>import React from &#x27;react&#x27;;
-import keydown, { Keys } from &#x27;keydown&#x27;;
+import keydown, { Keys } from &#x27;react-keydown&#x27;;
 
 class MethodDecoratorExample extends React.Component {
   constructor( props ) {
