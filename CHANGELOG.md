@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.7
+
+- React >= 0.14.0 rather than ^0.14.0
+
 ## 1.4.6
 
 - [8626078](https://github.com/glortho/react-keydown/commit/6ceecce53693fd8296449996e7cee6ed18626078) [Feature] Add esc key
