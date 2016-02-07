@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', './lib/keys', './lib/match_keys', './lib/parse_keys'], factory);
+    define(['exports', './lib/keys', './lib/match_keys', './lib/parse_keys', './lib/uuid'], factory);
   } else if (typeof exports !== 'undefined') {
-    factory(exports, require('./lib/keys'), require('./lib/match_keys'), require('./lib/parse_keys'));
+    factory(exports, require('./lib/keys'), require('./lib/match_keys'), require('./lib/parse_keys'), require('./lib/uuid'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.keys, global.matchKeys, global.parseKeys);
+    factory(mod.exports, global.keys, global.matchKeys, global.parseKeys, global.uuid);
     global.store = mod.exports;
   }
-})(this, function (exports, _libKeys, _libMatch_keys, _libParse_keys) {
+})(this, function (exports, _libKeys, _libMatch_keys, _libParse_keys, _libUuid) {
   /**
    * @module store
    *
@@ -32,6 +32,8 @@
   var _matchKeys = _interopRequireDefault(_libMatch_keys);
 
   var _parseKeys = _interopRequireDefault(_libParse_keys);
+
+  var _uuid = _interopRequireDefault(_libUuid);
 
   /**
    * private
@@ -111,7 +113,7 @@
           for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var instance = _step.value;
 
-            var bindings = _handlers.get(instance.constructor.prototype);
+            var bindings = this.getBinding(instance.constructor.prototype);
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -172,8 +174,10 @@
      * @param {object} target Class used as key in dict of key bindings
      * @return {object} The object containing bindings for the given class
      */
-    getBinding: function getBinding(target) {
-      return _handlers.get(target);
+    getBinding: function getBinding(_ref) {
+      var __reactKeydownUUID = _ref.__reactKeydownUUID;
+
+      return _handlers.get(__reactKeydownUUID);
     },
 
     /**
@@ -205,17 +209,20 @@
      * @param {function} args.fn The callback to be triggered when given keys are pressed
      * @param {object} args.target The decorated class
      */
-    setBinding: function setBinding(_ref) {
-      var keys = _ref.keys;
-      var fn = _ref.fn;
-      var target = _ref.target;
+    setBinding: function setBinding(_ref2) {
+      var keys = _ref2.keys;
+      var fn = _ref2.fn;
+      var target = _ref2.target;
 
       var keySets = keys ? (0, _parseKeys['default'])(keys) : (0, _libKeys.allKeys)();
-      var handler = _handlers.get(target);
-      if (!handler) {
-        handler = _handlers.set(target, new Map()).get(target);
+      var __reactKeydownUUID = target.__reactKeydownUUID;
+
+      if (!__reactKeydownUUID) {
+        target.__reactKeydownUUID = (0, _uuid['default'])();
+        _handlers.set(target.__reactKeydownUUID, new Map([[keySets, fn]]));
+      } else {
+        _handlers.get(__reactKeydownUUID).set(keySets, fn);
       }
-      handler.set(keySets, fn);
     }
   };
 

@@ -5,6 +5,7 @@
 import { allKeys } from './lib/keys';
 import matchKeys   from './lib/match_keys';
 import parseKeys   from './lib/parse_keys';
+import uuid        from './lib/uuid';
 
 /**
  * private
@@ -75,7 +76,7 @@ const Store = {
       // loop through instances in reverse activation order so that most
       // recently activated instance gets first dibs on event
       for ( const instance of [ ..._instances ].reverse() ) {
-        const bindings = _handlers.get( instance.constructor.prototype );
+        const bindings = this.getBinding( instance.constructor.prototype );
         for ( const [ keySets, fn ] of bindings ) {
           if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
             // return when matching keybinding is found - i.e. only one
@@ -98,8 +99,8 @@ const Store = {
    * @param {object} target Class used as key in dict of key bindings
    * @return {object} The object containing bindings for the given class
    */
-  getBinding( target ) {
-    return _handlers.get( target );
+  getBinding( { __reactKeydownUUID } ) {
+    return _handlers.get( __reactKeydownUUID );
   },
 
   /**
@@ -133,11 +134,13 @@ const Store = {
    */
   setBinding( { keys, fn, target } ) {
     const keySets = keys ? parseKeys( keys ) : allKeys() ;
-    let handler = _handlers.get( target );
-    if ( !handler ) {
-      handler = _handlers.set( target, new Map() ).get( target );
+    const { __reactKeydownUUID } = target;
+    if ( !__reactKeydownUUID ) {
+      target.__reactKeydownUUID = uuid();
+      _handlers.set( target.__reactKeydownUUID, new Map( [ [ keySets, fn ] ] ) );
+    } else {
+      _handlers.get( __reactKeydownUUID ).set( keySets, fn );
     }
-    handler.set( keySets, fn );
   }
 };
 
