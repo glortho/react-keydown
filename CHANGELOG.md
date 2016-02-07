@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.8
+
+- [025e549](https://github.com/glortho/react-keydown/commit/bb06f1816709093822d57a92d1dc5dd9f025e549) [Fix] Use UUIDs as keys in the bindings map rather than the prototypes themselves,
+  to address HMR issues in webpack (see #16)
+
 ## 1.4.7
 
 - React >= 0.14.0 rather than ^0.14.0
