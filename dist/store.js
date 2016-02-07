@@ -26,6 +26,10 @@ var _libParse_keys = require('./lib/parse_keys');
 
 var _libParse_keys2 = _interopRequireDefault(_libParse_keys);
 
+var _libUuid = require('./lib/uuid');
+
+var _libUuid2 = _interopRequireDefault(_libUuid);
+
 /**
  * private
  * 
@@ -104,7 +108,7 @@ var Store = {
         for (var _iterator = [].concat(_toConsumableArray(_instances)).reverse()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var instance = _step.value;
 
-          var bindings = _handlers.get(instance.constructor.prototype);
+          var bindings = this.getBinding(instance.constructor.prototype);
           var _iteratorNormalCompletion2 = true;
           var _didIteratorError2 = false;
           var _iteratorError2 = undefined;
@@ -165,8 +169,10 @@ var Store = {
    * @param {object} target Class used as key in dict of key bindings
    * @return {object} The object containing bindings for the given class
    */
-  getBinding: function getBinding(target) {
-    return _handlers.get(target);
+  getBinding: function getBinding(_ref) {
+    var __reactKeydownUUID = _ref.__reactKeydownUUID;
+
+    return _handlers.get(__reactKeydownUUID);
   },
 
   /**
@@ -198,17 +204,20 @@ var Store = {
    * @param {function} args.fn The callback to be triggered when given keys are pressed
    * @param {object} args.target The decorated class
    */
-  setBinding: function setBinding(_ref) {
-    var keys = _ref.keys;
-    var fn = _ref.fn;
-    var target = _ref.target;
+  setBinding: function setBinding(_ref2) {
+    var keys = _ref2.keys;
+    var fn = _ref2.fn;
+    var target = _ref2.target;
 
     var keySets = keys ? (0, _libParse_keys2['default'])(keys) : (0, _libKeys.allKeys)();
-    var handler = _handlers.get(target);
-    if (!handler) {
-      handler = _handlers.set(target, new Map()).get(target);
+    var __reactKeydownUUID = target.__reactKeydownUUID;
+
+    if (!__reactKeydownUUID) {
+      target.__reactKeydownUUID = (0, _libUuid2['default'])();
+      _handlers.set(target.__reactKeydownUUID, new Map([[keySets, fn]]));
+    } else {
+      _handlers.get(__reactKeydownUUID).set(keySets, fn);
     }
-    handler.set(keySets, fn);
   }
 };
 
