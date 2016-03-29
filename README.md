@@ -139,7 +139,7 @@ This can also be a good way to set up app-wide shortcuts. Wrap your root compone
 ## Demo
 
 Go to the [live
-demo](http://jedverity.github.io/react-keydown/example/index.html) or:
+demo](http://glortho.github.io/react-keydown/example/index.html) or:
 
 ```
 $ open example/public/index.html
