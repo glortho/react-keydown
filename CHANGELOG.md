@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.5.0
 
-- [Feature] Add function key codes
+- [fb6b4a6](https://github.com/glortho/react-keydown/commit/5803c883864516ff30bb6f8ef971344c8fb6b4a6) [Feature] Add function key codes
 
 ## 1.4.9
 
