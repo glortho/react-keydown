@@ -43,6 +43,11 @@ Object.keys(Keys).forEach(function (key) {
   Keys[letter.toLowerCase()] = index + 65;
 });
 
+// fn keys
+Array(12).fill().forEach(function (item, index) {
+  return Keys['f' + (index + 1)] = 112 + index;
+});
+
 var modifiers = {
   control: 'ctrl',
   ctrl: 'ctrl',
