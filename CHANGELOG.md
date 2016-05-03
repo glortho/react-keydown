@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.0
+
+- [Feature] Add function key codes
+
 ## 1.4.9
 
 - [6d00ef9](https://github.com/glortho/react-keydown/commit/6d00ef98a0ed1d66f6ab39c156d2314a06505b81) [Fix] Correct version typo for react-dom in package.json (fixes [#21](https://github.com/glortho/react-keydown/issues/21))
