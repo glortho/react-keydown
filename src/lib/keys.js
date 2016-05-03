@@ -33,6 +33,9 @@ Object.keys( Keys ).forEach( key => Keys[ key.toUpperCase() ] = Keys[ key ] );
   Keys[letter.toLowerCase()] = index + 65;
 });
 
+// fn keys
+Array( 12 ).fill().forEach( ( item, index ) => Keys[ `f${ index + 1 }` ] = 112 + index );
+
 export const modifiers = {
   control: 'ctrl',
   ctrl:    'ctrl',
