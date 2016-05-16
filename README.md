@@ -1,6 +1,6 @@
-# React Keydown
-> Lightweight keydown wrapper for React components.
-
+<p align="center">
+  <a href="http://glortho.github.io/react-keydown/example/index.html" target="_blank"><img src="https://raw.githubusercontent.com/glortho/react-keydown/master/example/public/react-keydown-logo.png" /></a>
+</p>
 Use react-keydown as a higher-order component or decorator to pass keydown
 events to the wrapped component, or call methods directly via designated keys. Good 
 for implementing keyboard navigation or other shortcuts.
