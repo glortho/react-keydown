@@ -17,6 +17,18 @@ var _store2 = _interopRequireDefault(_store);
 var _event_handlers = require('../event_handlers');
 
 /**
+ * _isReactKeyDown
+ *
+ * @access private
+ * @param {object} event The possibly synthetic event passed as an argument with
+ * the method invocation.
+ * @return {boolean}
+ */
+function _isReactKeyDown(event) {
+  return event && typeof event === 'object' && event.nativeEvent instanceof KeyboardEvent && event.type === 'keydown';
+}
+
+/**
  * methodWrapper
  *
  * @access public
@@ -30,6 +42,8 @@ function methodWrapper(_ref) {
   var target = _ref.target;
   var descriptor = _ref.descriptor;
   var keys = _ref.keys;
+
+  var fn = descriptor.value;
 
   // if we haven't already created a binding for this class (via another
   // decorated method), wrap these lifecycle methods.
@@ -51,11 +65,8 @@ function methodWrapper(_ref) {
   }
 
   // add this binding of keys and method to the target's bindings
-  _store2['default'].setBinding({ keys: keys, target: target, fn: descriptor.value });
+  _store2['default'].setBinding({ keys: keys, target: target, fn: fn });
 
-  // proxy method in order to use @keydown as filter for keydown events coming
-  // from an actual onKeyDown binding (as identified by react's addition of
-  // 'nativeEvent' + type === 'keydown')
   descriptor.value = function () {
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
@@ -63,8 +74,15 @@ function methodWrapper(_ref) {
 
     var maybeEvent = args[0];
 
-    if (maybeEvent.nativeEvent instanceof KeyboardEvent && maybeEvent.type === 'keydown') {
-      _onKeyDown(maybeEvent, true);
+    if (_isReactKeyDown(maybeEvent)) {
+      // proxy method in order to use @keydown as filter for keydown events coming
+      // from an actual onKeyDown binding (as identified by react's addition of
+      // 'nativeEvent' + type === 'keydown')
+      (0, _event_handlers._onKeyDown)(maybeEvent, true);
+    } else if (!maybeEvent || !(maybeEvent instanceof KeyboardEvent) || maybeEvent.type !== 'keydown') {
+      // if our first argument is a keydown event it is being handled by our
+      // binding system. if it's anything else, just pass through.
+      fn.call.apply(fn, [this].concat(args));
     }
   };
 
