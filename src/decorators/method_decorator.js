@@ -3,7 +3,22 @@
  *
  */
 import store from '../store';
-import { onMount, onUnmount }     from '../event_handlers';
+import { onMount, onUnmount, _onKeyDown } from '../event_handlers';
+
+/**
+ * _isReactKeyDown
+ *
+ * @access private
+ * @param {object} event The possibly synthetic event passed as an argument with
+ * the method invocation.
+ * @return {boolean}
+ */
+function _isReactKeyDown( event ) {
+   return event &&
+    typeof event === 'object' &&
+    event.nativeEvent instanceof KeyboardEvent &&
+    event.type === 'keydown';
+}
 
 /**
  * methodWrapper
@@ -16,6 +31,8 @@ import { onMount, onUnmount }     from '../event_handlers';
  * @return {object} The method descriptor
  */
 function methodWrapper( { target, descriptor, keys } ) {
+
+  const fn = descriptor.value;
 
   // if we haven't already created a binding for this class (via another
   // decorated method), wrap these lifecycle methods.
@@ -35,15 +52,19 @@ function methodWrapper( { target, descriptor, keys } ) {
   }
 
   // add this binding of keys and method to the target's bindings
-  store.setBinding( { keys, target, fn: descriptor.value } );
+  store.setBinding( { keys, target, fn } );
 
-  // proxy method in order to use @keydown as filter for keydown events coming
-  // from an actual onKeyDown binding (as identified by react's addition of
-  // 'nativeEvent' + type === 'keydown')
   descriptor.value = function( ...args ) {
     const [ maybeEvent ] = args;
-    if ( maybeEvent.nativeEvent instanceof KeyboardEvent && maybeEvent.type === 'keydown' ) {
+    if ( _isReactKeyDown( maybeEvent ) ) {
+      // proxy method in order to use @keydown as filter for keydown events coming
+      // from an actual onKeyDown binding (as identified by react's addition of
+      // 'nativeEvent' + type === 'keydown')
       _onKeyDown( maybeEvent, true );
+    } else if ( !maybeEvent || !( maybeEvent instanceof KeyboardEvent ) || maybeEvent.type !== 'keydown' ) {
+      // if our first argument is a keydown event it is being handled by our
+      // binding system. if it's anything else, just pass through.
+      fn.call( this, ...args );
     }
   }
 
