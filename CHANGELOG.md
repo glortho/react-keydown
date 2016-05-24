@@ -5,7 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.6.1
 
 - [f3a8ed0](https://github.com/glortho/react-keydown/commit/e0cfb05832233a141a1c5cb1da45829449e6a71b) [Fix] 1.6.0 introduced a bug wherein a decorated method would not fire when called programmatically.
-- [8aa893f](https://github.com/glortho/react-keydown/commit/0d4d6cdf7488fd4aa44dcea7b5e11b0178aa893f)[Maintenance] Switch to simple indices rather than uuids (fixes [#19](https://github.com/glortho/react-keydown/issues/19) via pr [#24](https://github.com/glortho/react-keydown/pull/24) from [@jeffijoe](https://github.com/jeffijoe))
+- [8aa893f](https://github.com/glortho/react-keydown/commit/0d4d6cdf7488fd4aa44dcea7b5e11b0178aa893f) [Maintenance] Switch to simple indices rather than uuids (fixes [#19](https://github.com/glortho/react-keydown/issues/19) via pr [#24](https://github.com/glortho/react-keydown/pull/24) from [@jeffijoe](https://github.com/jeffijoe))
 
 ## 1.6.0
 
