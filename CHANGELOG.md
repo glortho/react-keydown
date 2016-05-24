@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.1
+
+- [Fix] 1.6.0 introduced a bug wherein a decorated method would not fire when called programmatically.
+- [Maintenance] Switch to simple indices rather than uuids (fixes #19 via pr #24 from @jeffijoe)
+
 ## 1.6.0
 
 - [e0cfb05](https://github.com/glortho/react-keydown/commit/e0cfb05832233a141a1c5cb1da45829449e6a71b) [Feature] Add experimental support for using the @keydown method decorator as a filter for handlers bound via onKeyDown to input, textarea, etc.
