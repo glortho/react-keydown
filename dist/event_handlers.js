@@ -30,7 +30,7 @@ var _store2 = _interopRequireDefault(_store);
 
 /**
  * private
- * 
+ *
  */
 
 /**
@@ -58,7 +58,9 @@ function _onClick(_ref) {
  */
 
 function _onKeyDown(event) {
-  if (_shouldConsider(event)) {
+  var forceConsider = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+  if (forceConsider || _shouldConsider(event)) {
     var _ref2 = _store2['default'].findBindingForEvent(event) || {};
 
     var fn = _ref2.fn;

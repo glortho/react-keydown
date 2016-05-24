@@ -22,7 +22,7 @@ function methodWrapper( { target, descriptor, keys } ) {
   if ( !store.getBinding( target ) ) {
 
     const { componentDidMount, componentWillUnmount } = target;
-    
+
     target.componentDidMount = function() {
       onMount( this );
       if ( componentDidMount ) return componentDidMount.call( this );
@@ -36,6 +36,16 @@ function methodWrapper( { target, descriptor, keys } ) {
 
   // add this binding of keys and method to the target's bindings
   store.setBinding( { keys, target, fn: descriptor.value } );
+
+  // proxy method in order to use @keydown as filter for keydown events coming
+  // from an actual onKeyDown binding (as identified by react's addition of
+  // 'nativeEvent' + type === 'keydown')
+  descriptor.value = function( ...args ) {
+    const [ maybeEvent ] = args;
+    if ( maybeEvent.nativeEvent instanceof KeyboardEvent && maybeEvent.type === 'keydown' ) {
+      _onKeyDown( maybeEvent, true );
+    }
+  }
 
   return descriptor;
 }

@@ -9,7 +9,7 @@ import store      from './store';
 
 /**
  * private
- * 
+ *
  */
 
 /**
@@ -35,8 +35,8 @@ export function _onClick( { target } ) {
  * @param {object} event The keydown event object
  * @param {number} event.which The key code (which) received from the keydown event
  */
-export function _onKeyDown( event ) {
-  if ( _shouldConsider( event ) ) {
+export function _onKeyDown( event, forceConsider = false ) {
+  if ( forceConsider || _shouldConsider( event ) ) {
     const { fn, instance } = store.findBindingForEvent( event ) || {};
     if ( fn ) {
       fn.call( instance, event );
@@ -93,4 +93,3 @@ function onUnmount( instance ) {
 }
 
 export { onMount, onUnmount };
-

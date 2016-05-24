@@ -53,6 +53,21 @@ function methodWrapper(_ref) {
   // add this binding of keys and method to the target's bindings
   _store2['default'].setBinding({ keys: keys, target: target, fn: descriptor.value });
 
+  // proxy method in order to use @keydown as filter for keydown events coming
+  // from an actual onKeyDown binding (as identified by react's addition of
+  // 'nativeEvent' + type === 'keydown')
+  descriptor.value = function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var maybeEvent = args[0];
+
+    if (maybeEvent.nativeEvent instanceof KeyboardEvent && maybeEvent.type === 'keydown') {
+      _onKeyDown(maybeEvent, true);
+    }
+  };
+
   return descriptor;
 }
 
