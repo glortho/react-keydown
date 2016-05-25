@@ -139,7 +139,7 @@ This is a convenience method, but also lets you specify a larger view context wh
 
 This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
 
-### Caveat: Input, textarea, and select fields
+### Caveat: Input, textarea, and select elements
 
 By default, bindings will not work when these fields have focus, in order not to interfere with user input and shortcuts related to these controls. You can override this in two ways:
 
