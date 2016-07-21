@@ -44,8 +44,8 @@ Object.keys(Keys).forEach(function (key) {
 });
 
 // fn keys
-Array(12).fill().forEach(function (item, index) {
-  return Keys['f' + (index + 1)] = 112 + index;
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(function (item, index) {
+  return Keys['f' + index] = 111 + index;
 });
 
 var modifiers = {
