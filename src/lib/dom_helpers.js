@@ -32,9 +32,9 @@ function bindFocusables( instance, activateOnFocus ) {
             if ( onFocusPrev ) onFocusPrev.call( element, event );
           };
         };
-        for ( let element of [ ...focusables ] ) {
-          element.onfocus = onFocus( element );
-        }
+        Array.prototype.slice.call( focusables ).forEach( element => (
+          element.onfocus = onFocus( element )
+        ) );
       }
     }
   }
