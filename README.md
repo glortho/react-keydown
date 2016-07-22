@@ -15,6 +15,7 @@ Key advantages:
 * **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events, and then only when they appear to be active.
 * **Modifier keys**: Support for standard modifier key combinations.
 * **Lightweight**: 2kb compressed and gzipped, and only attaches a single keydown listener to document, no matter how many keybindings you specify.
+* **Cross-browser**: Works in all browsers except IE 8 and below.
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
 
