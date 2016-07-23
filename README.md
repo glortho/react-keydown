@@ -15,6 +15,7 @@ Key advantages:
 * **Scoping**: Designate the scope of your bindings by decorating/wrapping components. Only those components and their children will receive the designated key events, and then only when they appear to be active.
 * **Modifier keys**: Support for standard modifier key combinations.
 * **Lightweight**: 2kb compressed and gzipped, and only attaches a single keydown listener to document, no matter how many keybindings you specify.
+* **Cross-browser**: Works in all browsers except IE 8 and below.
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
 
@@ -139,6 +140,30 @@ This is a convenience method, but also lets you specify a larger view context wh
 
 This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
 
+### Caveat: Input, textarea, and select elements
+
+By default, bindings will not work when these fields have focus, in order not to interfere with user input and shortcuts related to these controls. You can override this in two ways:
+
+1. Give your shortcut a `ctrl` modifier.
+
+2. Since v1.6.0, there is experimental support for adding an `onKeyDown` binding to the element, specifying a method decorated with `@keydown` as the handler. For example:
+
+```javascript
+class MyClass extends React.Component {
+
+  @keydown( 'a' )
+  myMethod( event ) {
+    console.log( event ); // should log only on 'a' keystroke, whether input is focused or not
+  }
+  
+  render() {
+    return <input onKeyDown={ this.myMethod } />;
+  }
+}
+```
+
+In the second case you could make multiple inputs work this way by spreading `{ onKeyDown: this.myMethod }` into them, or by making this a reusable input component that takes the method as a prop (or composes multiple methods passed in as props).
+
 ## Demo
 
 Go to the [live
@@ -155,6 +180,7 @@ Note that this is very much a work in progress!
 ```
 $ npm test
 ```
+  
 
 ## Notes, disclaimers, and tips
 

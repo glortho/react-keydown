@@ -34,7 +34,7 @@ Object.keys( Keys ).forEach( key => Keys[ key.toUpperCase() ] = Keys[ key ] );
 });
 
 // fn keys
-Array( 12 ).fill().forEach( ( item, index ) => Keys[ `f${ index + 1 }` ] = 112 + index );
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach( ( item, index ) => Keys[ `f${ index }` ] = 111 + index );
 
 export const modifiers = {
   control: 'ctrl',

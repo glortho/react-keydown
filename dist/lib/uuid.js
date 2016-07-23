@@ -11,11 +11,6 @@
     global.uuid = mod.exports;
   }
 })(this, function (exports, module) {
-  /**
-   * http://jsperf.com/uuid-generator-opt/4 
-   *
-   */
-
   // Counter being incremented. JS is single-threaded, so it'll Just Work™.
   "use strict";
 

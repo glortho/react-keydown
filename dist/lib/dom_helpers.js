@@ -19,8 +19,6 @@
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
   var _ReactDOM = _interopRequireDefault(_reactDom);
 
   var focusableSelector = 'a[href], button, input, object, select, textarea, [tabindex]';
@@ -44,20 +42,18 @@
       if (node) {
         var focusables = node.querySelectorAll(focusableSelector);
         if (focusables.length) {
-          var onFocus = function onFocus(element) {
-            var onFocusPrev = element.onfocus;
-            return function (event) {
-              activateOnFocus(instance);
-              if (onFocusPrev) onFocusPrev.call(element, event);
+          (function () {
+            var onFocus = function onFocus(element) {
+              var onFocusPrev = element.onfocus;
+              return function (event) {
+                activateOnFocus(instance);
+                if (onFocusPrev) onFocusPrev.call(element, event);
+              };
             };
-          };
-
-          var _arr = [].concat(_toConsumableArray(focusables));
-
-          for (var _i = 0; _i < _arr.length; _i++) {
-            var element = _arr[_i];
-            element.onfocus = onFocus(element);
-          }
+            Array.prototype.slice.call(focusables).forEach(function (element) {
+              return element.onfocus = onFocus(element);
+            });
+          })();
         }
       }
     }
