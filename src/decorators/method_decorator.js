@@ -30,7 +30,7 @@ function _isReactKeyDown( event ) {
  * @param {array} args.keys The array of keys bound to the given method
  * @return {object} The method descriptor
  */
-function methodWrapper( { target, descriptor, keys } ) {
+function methodWrapper( { target, descriptor, keys }, options = {} ) {
 
   const fn = descriptor.value;
 
