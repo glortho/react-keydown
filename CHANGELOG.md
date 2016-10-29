@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.3
+
+- [Fix] Use Array.from polyfill (fixes #29 and #33)
+- [Maintenance] Switching to Yarn
+
+## 1.6.2
+
+- [146920a](https://github.com/glortho/react-keydown/commit/1253776a3d8d299c78ccfbd43d1413311146920a) [Fix] Avoid transpilation to Array.from (thanks to [@elyobo](http://github.com/elyobo) for pr [#27](https://github.com/glortho/react-keydown/pull/27))
+- [3a6821f](https://github.com/glortho/react-keydown/commit/a672753926ecd7e7b2232cab49e9804a23a6821f) [Fix] Do not use Array.fill in order to maximize compatibility with IE (thanks to [@elyobo](http://github.com/elyobo) for pr [#26](https://github.com/glortho/react-keydown/pull/26))
+
 ## 1.6.1
 
 - [f3a8ed0](https://github.com/glortho/react-keydown/commit/e0cfb05832233a141a1c5cb1da45829449e6a71b) [Fix] 1.6.0 introduced a bug wherein a decorated method would not fire when called programmatically.

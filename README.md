@@ -26,7 +26,7 @@ Consult the [API & Reference Documentation](https://github.com/jedverity/react-k
 ```
 npm install --save react-keydown
 ```
-**Note on versions**: Latest releases (1.4+) are meant to be used with React 0.14. If you are on 0.13- use the 1.3 version.
+**Note on versions**: Latest releases (1.4+) are meant to be used with React 0.14+. If you are on 0.13- use the 1.3 version.
 
 ## Use
 
