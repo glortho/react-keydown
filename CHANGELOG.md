@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.3
+
+- [Fix] Use Array.from polyfill (fixes #29 and #33)
+- [Maintenance] Switching to Yarn
+
 ## 1.6.2
 
 - [146920a](https://github.com/glortho/react-keydown/commit/1253776a3d8d299c78ccfbd43d1413311146920a) [Fix] Avoid transpilation to Array.from (thanks to [@elyobo](http://github.com/elyobo) for pr [#27](https://github.com/glortho/react-keydown/pull/27))
