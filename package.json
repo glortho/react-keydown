@@ -37,7 +37,7 @@
     "tape": "^4.2.2",
     "webpack": "^1.12.2"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": ">= 0.14.0",
     "react-dom": ">= 0.14.0"
   }
