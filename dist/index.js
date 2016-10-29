@@ -1,4 +1,4 @@
-// @keydown and @keydownScoped
+// polyfill array.from (mainly for IE)
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -6,6 +6,10 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
+
+require('./lib/array.from');
+
+// @keydown and @keydownScoped
 
 var _decorators = require('./decorators');
 
