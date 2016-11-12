@@ -25,7 +25,7 @@ var _event_handlers = require('../event_handlers');
  * @return {boolean}
  */
 function _isReactKeyDown(event) {
-  return event && typeof event === 'object' && event.nativeEvent instanceof KeyboardEvent && event.type === 'keydown';
+  return event && typeof event === 'object' && event.nativeEvent instanceof window.KeyboardEvent && event.type === 'keydown';
 }
 
 /**
@@ -79,7 +79,7 @@ function methodWrapper(_ref) {
       // from an actual onKeyDown binding (as identified by react's addition of
       // 'nativeEvent' + type === 'keydown')
       (0, _event_handlers._onKeyDown)(maybeEvent, true);
-    } else if (!maybeEvent || !(maybeEvent instanceof KeyboardEvent) || maybeEvent.type !== 'keydown') {
+    } else if (!maybeEvent || !(maybeEvent instanceof window.KeyboardEvent) || maybeEvent.type !== 'keydown') {
       // if our first argument is a keydown event it is being handled by our
       // binding system. if it's anything else, just pass through.
       fn.call.apply(fn, [this].concat(args));
