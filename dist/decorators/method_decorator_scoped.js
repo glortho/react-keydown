@@ -71,7 +71,7 @@ function methodWrapperScoped(_ref2) {
           if (keySets.some(function (keySet) {
             return (0, _libMatch_keys2['default'])({ keySet: keySet, event: keydown.event });
           })) {
-            fn.call(this, keydown.event);
+            return fn.call(this, keydown.event);
           }
         }
 

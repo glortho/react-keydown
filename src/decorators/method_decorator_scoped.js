@@ -50,7 +50,7 @@ function methodWrapperScoped( { target, descriptor, keys } ) {
       const { keydown } = nextProps;
       if ( _shouldTrigger( this.props, keydown ) ) {
         if ( keySets.some( keySet => matchKeys( { keySet, event: keydown.event } ) ) ) {
-          fn.call( this, keydown.event );
+          return fn.call( this, keydown.event );
         }
       }
       if ( componentWillReceiveProps ) return componentWillReceiveProps.call( this, nextProps, ...args );

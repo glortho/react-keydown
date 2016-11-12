@@ -78,11 +78,11 @@ function methodWrapper(_ref) {
       // proxy method in order to use @keydown as filter for keydown events coming
       // from an actual onKeyDown binding (as identified by react's addition of
       // 'nativeEvent' + type === 'keydown')
-      (0, _event_handlers._onKeyDown)(maybeEvent, true);
+      return (0, _event_handlers._onKeyDown)(maybeEvent, true);
     } else if (!maybeEvent || !(maybeEvent instanceof window.KeyboardEvent) || maybeEvent.type !== 'keydown') {
       // if our first argument is a keydown event it is being handled by our
       // binding system. if it's anything else, just pass through.
-      fn.call.apply(fn, [this].concat(args));
+      return fn.call.apply(fn, [this].concat(args));
     }
   };
 
