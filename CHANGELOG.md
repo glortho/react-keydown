@@ -4,15 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.6.5
 
-- [Feature] Patch feature: add "delete" and "del" as aliases to key code 46. 
-- [Fix] Return values from decorated methods (fixes #35)
-- [Fix] Use window.KeyboardEvent instead of just KeyboardEvent for better
+- [f6c6c01](https://github.com/glortho/react-keydown/commit/f6c6c0178288a20d0539b3dbd9cefb244a8ba98f) [Feature] Patch feature: add "delete" and "del" as aliases to key code 46. 
+- [3870148](https://github.com/glortho/react-keydown/commit/3870148c9bd1ba05dcb19ee1fa0103e919a564c8) [Fix] Return values from decorated methods (fixes #35)
+- [f694b33](https://github.com/glortho/react-keydown/commit/f694b33f5c9ff97fabf09e6019420727a46bde4b) [Fix] Use window.KeyboardEvent instead of just KeyboardEvent for better
   clarity and testability with jsdom. (fixes #35)
 
 ## 1.6.3
 
-- [Fix] Use Array.from polyfill (fixes #29 and #33)
-- [Maintenance] Switching to Yarn
+- [7f322a5](https://github.com/glortho/react-keydown/commit/7f322a50735b84649b2460402afe325928e154f2) [Fix] Use Array.from polyfill (fixes #29 and #33)
+- [065f313](https://github.com/glortho/react-keydown/commit/065f3139f736b7799d0c4f2f98fc3d37172ae52b) [Maintenance] Switching to Yarn
 
 ## 1.6.2
 
