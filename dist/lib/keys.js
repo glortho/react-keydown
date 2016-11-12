@@ -21,6 +21,8 @@
   exports.allKeys = allKeys;
   var Keys = {
     backspace: 8,
+    del: 46,
+    'delete': 46,
     tab: 9,
     enter: 13,
     'return': 13,

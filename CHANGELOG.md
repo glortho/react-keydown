@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.5
+
+- [Feature] Patch feature: add "delete" and "del" as aliases to key code 46. 
+- [Fix] Return values from decorated methods (fixes #35)
+- [Fix] Use window.KeyboardEvent instead of just KeyboardEvent for better
+  clarity and testability with jsdom. (fixes #35)
+
 ## 1.6.3
 
 - [Fix] Use Array.from polyfill (fixes #29 and #33)

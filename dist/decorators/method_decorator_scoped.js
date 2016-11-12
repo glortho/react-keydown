@@ -76,7 +76,7 @@
             if (keySets.some(function (keySet) {
               return (0, _matchKeys['default'])({ keySet: keySet, event: keydown.event });
             })) {
-              fn.call(this, keydown.event);
+              return fn.call(this, keydown.event);
             }
           }
 
