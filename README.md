@@ -19,14 +19,13 @@ Key advantages:
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
 
-**NOTE**: If react-keydown isn't working for you and you're using Babel 6, check [this phabricator thread](https://phabricator.babeljs.io/T2645) for updates on Babel's decorator implementation.
+**NOTE**: react-keydown doesn't use decorators itself, but to use the `@keydown` pattern in your application you will need a transpiler like Babel and a decorator transform plugin like this: https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy.
 
 ## Install
 
 ```
 npm install --save react-keydown
 ```
-**Note on versions**: Latest releases (1.4+) are meant to be used with React 0.14+. If you are on 0.13- use the 1.3 version.
 
 ## Use
 
