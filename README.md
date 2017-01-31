@@ -67,12 +67,9 @@ autocomplete( event ) {
 
 ### For classes: Pass keydown events into your component
 
-```jsx
-import React from 'react';
-import keydown from 'react-keydown';
-
+```javascript
+@keydown
 class MyComponent extends React.Component {
-
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
       // inspect the keydown event and decide what to do
@@ -85,17 +82,6 @@ class MyComponent extends React.Component {
       <div>keydown events will only get passed down after this DOM node mounts or is clicked on</div>
     );
   }
-}
-
-export default keydown( MyComponent );
-```
-
-#### Use decorator pattern:
-
-```javascript
-@keydown
-class MyComponent extends React.Component {
-  ...
 }
 
 export default MyComponent;
