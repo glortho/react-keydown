@@ -170,7 +170,7 @@ $ npm test
 ## Notes, disclaimers, and tips
 
 * The decorator pattern `@keydown` currently requires transpilation by
-  [Babel](babeljs.io/) (set to stage 1) or the equivalent.
+  the [Babel legacy decorators transform](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) or the equivalent.
 * The default build uses CommonJS modules. For AMD or other support, use the
   [umd-specific
   branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
