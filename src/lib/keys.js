@@ -50,7 +50,7 @@ export const modifiers = {
 };
 
 export function allKeys( arg ) {
-  return arg ? typeof arg === 'symbol' : Symbol( 'allKeys' );
+  return arg ? (arg.constructor === Symbol || typeof arg === 'symbol') : Symbol( 'allKeys' );
 }
 
 export default Keys;
