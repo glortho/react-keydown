@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.7
+
+- [b015d8b](https://github.com/glortho/react-keydown/commit/b015d8b4441f87c6ecc9729a1691ed7670381cde) [Fix] Better Symbol type checking. Thank you @AntonovAv (fixes #42).
+
 ## 1.6.5
 
 - [f6c6c01](https://github.com/glortho/react-keydown/commit/f6c6c0178288a20d0539b3dbd9cefb244a8ba98f) [Feature] Patch feature: add "delete" and "del" as aliases to key code 46. 
