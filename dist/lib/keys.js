@@ -77,7 +77,7 @@
   exports.modifiers = modifiers;
 
   function allKeys(arg) {
-    return arg ? typeof arg === 'symbol' : Symbol('allKeys');
+    return arg ? arg.constructor === Symbol || typeof arg === 'symbol' : Symbol('allKeys');
   }
 
   exports['default'] = Keys;

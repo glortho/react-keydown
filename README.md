@@ -19,14 +19,13 @@ Key advantages:
 
 Consult the [API & Reference Documentation](https://github.com/jedverity/react-keydown/wiki/API-&-Reference) or continue reading below for quick start.
 
-**NOTE**: If react-keydown isn't working for you and you're using Babel 6, check [this phabricator thread](https://phabricator.babeljs.io/T2645) for updates on Babel's decorator implementation.
+**NOTE**: react-keydown doesn't use decorators itself, but to use the `@keydown` pattern in your application you will need a transpiler like Babel and a decorator transform plugin like this: https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy.
 
 ## Install
 
 ```
 npm install --save react-keydown
 ```
-**Note on versions**: Latest releases (1.4+) are meant to be used with React 0.14+. If you are on 0.13- use the 1.3 version.
 
 ## Use
 
@@ -68,12 +67,9 @@ autocomplete( event ) {
 
 ### For classes: Pass keydown events into your component
 
-```jsx
-import React from 'react';
-import keydown from 'react-keydown';
-
+```javascript
+@keydown
 class MyComponent extends React.Component {
-
   componentWillReceiveProps( { keydown } ) {
     if ( keydown.event ) {
       // inspect the keydown event and decide what to do
@@ -86,17 +82,6 @@ class MyComponent extends React.Component {
       <div>keydown events will only get passed down after this DOM node mounts or is clicked on</div>
     );
   }
-}
-
-export default keydown( MyComponent );
-```
-
-#### Use decorator pattern:
-
-```javascript
-@keydown
-class MyComponent extends React.Component {
-  ...
 }
 
 export default MyComponent;
@@ -185,7 +170,7 @@ $ npm test
 ## Notes, disclaimers, and tips
 
 * The decorator pattern `@keydown` currently requires transpilation by
-  [Babel](babeljs.io/) (set to stage 1) or the equivalent.
+  the [Babel legacy decorators transform](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) or the equivalent.
 * The default build uses CommonJS modules. For AMD or other support, use the
   [umd-specific
   branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
