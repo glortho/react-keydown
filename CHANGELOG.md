@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.6.9
 
-- [Fix] Prevent double firing of onKeyDown handlers when one of the bindings already has a ctrl modifier (which fires in text fields already)
+- [83df6fd](https://github.com/glortho/react-keydown/commit/83df6fd9569f9307e7568ba3ca267903258f417d) [Fix] Prevent double firing of onKeyDown handlers when one of the bindings already has a ctrl modifier (which fires in text fields already)
 
 ## 1.6.7
 
