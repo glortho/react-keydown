@@ -78,9 +78,7 @@ function methodWrapper(_ref) {
       // proxy method in order to use @keydown as filter for keydown events coming
       // from an actual onKeyDown binding (as identified by react's addition of
       // 'nativeEvent' + type === 'keydown')
-      if (!keys.find(function (key) {
-        return ~key.indexOf('ctrl');
-      })) {
+      if (!maybeEvent.ctrlKey) {
         // we already whitelist shortcuts with ctrl modifiers so if we were to
         // fire it again here the method would trigger twice. see https://github.com/glortho/react-keydown/issues/38
         return (0, _event_handlers._onKeyDown)(maybeEvent, true);
