@@ -1,27 +1,24 @@
-// polyfill array.from (mainly for IE)
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
-
-require('./lib/array.from');
-
-// @keydown and @keydownScoped
+exports.Keys = exports.setBinding = exports.keydownScoped = exports.default = undefined;
 
 var _decorators = require('./decorators');
 
-exports['default'] = _interopRequire(_decorators);
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_decorators).default;
+  }
+});
 Object.defineProperty(exports, 'keydownScoped', {
   enumerable: true,
   get: function get() {
     return _decorators.keydownScoped;
   }
 });
-
-// setBinding - only useful if you're not going to use decorators
 
 var _store = require('./store');
 
@@ -32,8 +29,15 @@ Object.defineProperty(exports, 'setBinding', {
   }
 });
 
-// Keys - use this to find key codes for strings. for example: Keys.j, Keys.enter
+var _keys = require('./lib/keys');
 
-var _libKeys = require('./lib/keys');
+Object.defineProperty(exports, 'Keys', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_keys).default;
+  }
+});
 
-exports.Keys = _interopRequire(_libKeys);
+require('./lib/array.from');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

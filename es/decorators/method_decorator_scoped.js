@@ -1,18 +1,9 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _match_keys = require('../lib/match_keys');
-
-var _match_keys2 = _interopRequireDefault(_match_keys);
-
-var _parse_keys = require('../lib/parse_keys');
-
-var _parse_keys2 = _interopRequireDefault(_parse_keys);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/**
+ * @module methodWrapperScoped
+ *
+ */
+import matchKeys from '../lib/match_keys';
+import parseKeys from '../lib/parse_keys';
 
 /**
  * _shouldTrigger
@@ -26,10 +17,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * component (class_decorator)
  * @param {array} keys The keys bound to the decorated method
  * @return {boolean} Whether all tests have passed
- */
-/**
- * @module methodWrapperScoped
- *
  */
 function _shouldTrigger(_ref, keydownNext) {
   var keydownThis = _ref.keydown;
@@ -57,7 +44,7 @@ function methodWrapperScoped(_ref2) {
   if (!keys) {
     console.warn(fn + ': keydownScoped requires one or more keys');
   } else {
-    var keySets = (0, _parse_keys2.default)(keys);
+    var keySets = parseKeys(keys);
 
     // wrap the component's lifecycle method to intercept key codes coming down
     // from the wrapped/scoped component up the view hierarchy. if new keydown
@@ -68,7 +55,7 @@ function methodWrapperScoped(_ref2) {
 
       if (_shouldTrigger(this.props, keydown)) {
         if (keySets.some(function (keySet) {
-          return (0, _match_keys2.default)({ keySet: keySet, event: keydown.event });
+          return matchKeys({ keySet: keySet, event: keydown.event });
         })) {
           return fn.call(this, keydown.event);
         }
@@ -85,4 +72,4 @@ function methodWrapperScoped(_ref2) {
   return descriptor;
 }
 
-exports.default = methodWrapperScoped;
+export default methodWrapperScoped;

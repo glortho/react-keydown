@@ -1,14 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/**
+ * @module domHelpers
+ *
+ */
+import ReactDOM from 'react-dom';
 
 var focusableSelector = 'a[href], button, input, object, select, textarea, [tabindex]';
 
@@ -25,13 +19,9 @@ var focusableSelector = 'a[href], button, input, object, select, textarea, [tabi
  * @param {object} instance The key-bound component instance
  * @param {callback} activateOnFocus The fn to fire when element is focused
  */
-/**
- * @module domHelpers
- *
- */
 function bindFocusables(instance, activateOnFocus) {
   if (document.querySelectorAll) {
-    var node = _reactDom2.default.findDOMNode(instance);
+    var node = ReactDOM.findDOMNode(instance);
     if (node) {
       var focusables = node.querySelectorAll(focusableSelector);
       if (focusables.length) {
@@ -62,7 +52,7 @@ function bindFocusables(instance, activateOnFocus) {
 function findContainerNodes(target) {
   return function (memo, instance) {
     try {
-      var node = _reactDom2.default.findDOMNode(instance);
+      var node = ReactDOM.findDOMNode(instance);
       if (node && (node === target || node.contains(target))) {
         memo.push({ instance: instance, node: node });
       }
@@ -83,4 +73,4 @@ function sortByDOMPosition(a, b) {
   return a.node.compareDocumentPosition(b.node) === 10 ? 1 : -1;
 }
 
-exports.default = { bindFocusables: bindFocusables, findContainerNodes: findContainerNodes, sortByDOMPosition: sortByDOMPosition };
+export default { bindFocusables: bindFocusables, findContainerNodes: findContainerNodes, sortByDOMPosition: sortByDOMPosition };

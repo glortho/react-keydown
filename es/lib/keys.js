@@ -1,12 +1,5 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-exports.allKeys = allKeys;
 // TODO: Need better, more complete, and more methodical key definitions
 
 var Keys = {
@@ -53,7 +46,7 @@ Object.keys(Keys).forEach(function (key) {
   return Keys['f' + index] = 111 + index;
 });
 
-var modifiers = exports.modifiers = {
+export var modifiers = {
   control: 'ctrl',
   ctrl: 'ctrl',
   shift: 'shift',
@@ -64,8 +57,8 @@ var modifiers = exports.modifiers = {
   alt: 'alt'
 };
 
-function allKeys(arg) {
+export function allKeys(arg) {
   return arg ? arg.constructor === Symbol || (typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'symbol' : Symbol('allKeys');
 }
 
-exports.default = Keys;
+export default Keys;

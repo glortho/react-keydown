@@ -1,14 +1,14 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _keys = require('./keys');
 
 var _keys2 = _interopRequireDefault(_keys);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function parseKeys(keysArray) {
   return keysArray.map(function (key) {
@@ -16,8 +16,8 @@ function parseKeys(keysArray) {
     if (typeof key === 'string') {
       var keyString = key.toLowerCase().trim();
       var matches = keyString.split(/\s?\+\s?/);
-      keySet = matches.length === 1 ? { key: _keys2['default'][keyString] } : {
-        key: _keys2['default'][matches.pop()],
+      keySet = matches.length === 1 ? { key: _keys2.default[keyString] } : {
+        key: _keys2.default[matches.pop()],
         modifiers: matches.map(function (modKey) {
           return _keys.modifiers[modKey];
         }).sort()
@@ -27,5 +27,4 @@ function parseKeys(keysArray) {
   });
 }
 
-exports['default'] = parseKeys;
-module.exports = exports['default'];
+exports.default = parseKeys;
