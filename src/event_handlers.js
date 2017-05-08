@@ -58,7 +58,7 @@ export function _shouldConsider( { ctrlKey, target } ) {
   return (
     ctrlKey ||
     !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( target.tagName ) ||
-    target.getAttribute( 'role' ) === 'textbox'
+    target.getAttribute( 'role' ) !== 'textbox'
   );
 }
 
