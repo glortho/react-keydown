@@ -2,9 +2,22 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.6.8
+## 1.7.3
 
-- [Fix] Prevent double firing of onKeyDown handlers when one of the bindings already has a ctrl modifier (which fires in text fields already)
+- [Fix] Actually fix the muting of keybindings when role=textbox + tests
+- [Fix] Fix tests
+
+## 1.7.2
+
+- [Fix] Mute keybindings when role=textbox (fixes [#51](https://github.com/glortho/react-keydown/issues/51))
+
+## 1.7.0
+
+- [abdd314](https://github.com/glortho/react-keydown/commit/abdd314f07fab3a6980033cd5c5ad74b9ea534df) [Feature] Add native es modules build (fixes [#47](https://github.com/glortho/react-keydown/issues/47))
+
+## 1.6.9
+
+- [83df6fd](https://github.com/glortho/react-keydown/commit/83df6fd9569f9307e7568ba3ca267903258f417d) [Fix] Prevent double firing of onKeyDown handlers when one of the bindings already has a ctrl modifier (which fires in text fields already)
 
 ## 1.6.7
 

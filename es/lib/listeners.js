@@ -1,8 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 /**
  * @module Listeners
  *
@@ -67,4 +62,4 @@ var Listeners = {
   }
 };
 
-exports.default = Listeners;
+export default Listeners;

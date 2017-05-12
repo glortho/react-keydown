@@ -1,34 +1,15 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-exports._resetStore = _resetStore;
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var _keys = require('./lib/keys');
-
-var _match_keys = require('./lib/match_keys');
-
-var _match_keys2 = _interopRequireDefault(_match_keys);
-
-var _parse_keys = require('./lib/parse_keys');
-
-var _parse_keys2 = _interopRequireDefault(_parse_keys);
-
-var _uuid = require('./lib/uuid');
-
-var _uuid2 = _interopRequireDefault(_uuid);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
-                                                                                                                                                                                                     * @module store
-                                                                                                                                                                                                     *
-                                                                                                                                                                                                     */
-
+/**
+ * @module store
+ *
+ */
+import { allKeys } from './lib/keys';
+import matchKeys from './lib/match_keys';
+import parseKeys from './lib/parse_keys';
+import uuid from './lib/uuid';
 
 /**
  * private
@@ -42,7 +23,7 @@ var _handlers = new Map();
 var _instances = new Set();
 
 // for testing
-function _resetStore() {
+export function _resetStore() {
   _handlers.clear();
   _instances.clear();
 }
@@ -94,7 +75,7 @@ var Store = {
   findBindingForEvent: function findBindingForEvent(event) {
     if (!_instances.has(null)) {
       var keyMatchesEvent = function keyMatchesEvent(keySet) {
-        return (0, _match_keys2.default)({ keySet: keySet, event: event });
+        return matchKeys({ keySet: keySet, event: event });
       };
 
       // loop through instances in reverse activation order so that most
@@ -118,7 +99,7 @@ var Store = {
                   keySets = _step2$value[0],
                   fn = _step2$value[1];
 
-              if ((0, _keys.allKeys)(keySets) || keySets.some(keyMatchesEvent)) {
+              if (allKeys(keySets) || keySets.some(keyMatchesEvent)) {
                 // return when matching keybinding is found - i.e. only one
                 // keybound component can respond to a given key code. to get around this,
                 // scope a common ancestor component class with @keydown and use
@@ -211,11 +192,11 @@ var Store = {
         fn = _ref2.fn,
         target = _ref2.target;
 
-    var keySets = keys ? (0, _parse_keys2.default)(keys) : (0, _keys.allKeys)();
+    var keySets = keys ? parseKeys(keys) : allKeys();
     var __reactKeydownUUID = target.__reactKeydownUUID;
 
     if (!__reactKeydownUUID) {
-      target.__reactKeydownUUID = (0, _uuid2.default)();
+      target.__reactKeydownUUID = uuid();
       _handlers.set(target.__reactKeydownUUID, new Map([[keySets, fn]]));
     } else {
       _handlers.get(__reactKeydownUUID).set(keySets, fn);
@@ -223,4 +204,4 @@ var Store = {
   }
 };
 
-exports.default = Store;
+export default Store;

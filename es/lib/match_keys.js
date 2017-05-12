@@ -1,12 +1,6 @@
-'use strict';
+import { modifiers as modifierKeys } from './keys';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _keys = require('./keys');
-
-var modKeys = Object.keys(_keys.modifiers);
+var modKeys = Object.keys(modifierKeys);
 
 function matchKeys(_ref) {
   var _ref$keySet = _ref.keySet,
@@ -27,4 +21,4 @@ function matchKeys(_ref) {
   return keysMatch;
 }
 
-exports.default = matchKeys;
+export default matchKeys;

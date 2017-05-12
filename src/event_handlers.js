@@ -52,12 +52,15 @@ export function _onKeyDown( event, forceConsider = false ) {
  * @access private
  * @param {object} event The keydown event object
  * @param {object} event.target The node origin of the event
- * @param {string} event.target.tagName The name of the element tag
- * @param {number} event.target.which The key pressed
  * @return {boolean} Whether to continue procesing the keydown event
  */
-export function _shouldConsider( { ctrlKey, target: { tagName } } ) {
-  return !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( tagName ) || ctrlKey;
+export function _shouldConsider( { ctrlKey, target } ) {
+  return (
+    ctrlKey || (
+      !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( target.tagName ) &&
+      target.getAttribute( 'role' ) !== 'textbox'
+    )
+  );
 }
 
 /**

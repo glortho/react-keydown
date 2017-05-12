@@ -1,29 +1,12 @@
-'use strict';
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.keydownScoped = undefined;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
-                                                                                                                                                                                                                                                                               * @module decorators
-                                                                                                                                                                                                                                                                               *
-                                                                                                                                                                                                                                                                               */
-
-
-var _class_decorator = require('./class_decorator');
-
-var _class_decorator2 = _interopRequireDefault(_class_decorator);
-
-var _method_decorator = require('./method_decorator');
-
-var _method_decorator2 = _interopRequireDefault(_method_decorator);
-
-var _method_decorator_scoped = require('./method_decorator_scoped');
-
-var _method_decorator_scoped2 = _interopRequireDefault(_method_decorator_scoped);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/**
+ * @module decorators
+ *
+ */
+import classWrapper from './class_decorator';
+import methodWrapper from './method_decorator';
+import methodWrapperScoped from './method_decorator_scoped';
 
 /**
  * _decorator
@@ -53,14 +36,14 @@ function _decorator(methodFn) {
     // the presence of a method name to determine if this is a wrapped method
     // or component
     return function (target, methodName, descriptor) {
-      return methodName ? methodFn({ target: target, descriptor: descriptor, keys: keys }) : (0, _class_decorator2.default)(target, keys);
+      return methodName ? methodFn({ target: target, descriptor: descriptor, keys: keys }) : classWrapper(target, keys);
     };
   } else {
     var methodName = args[1];
 
     // method decorators without keycode (which) arguments are not allowed.
     if (!methodName) {
-      return _class_decorator2.default.apply(undefined, args);
+      return classWrapper.apply(undefined, args);
     } else {
       console.warn(methodName + ': Method decorators must have keycode arguments, so the decorator for this method will not do anything');
     }
@@ -86,7 +69,7 @@ function keydownScoped() {
     args[_key2] = arguments[_key2];
   }
 
-  return _decorator.apply(undefined, [_method_decorator_scoped2.default].concat(args));
+  return _decorator.apply(undefined, [methodWrapperScoped].concat(args));
 }
 
 /**
@@ -103,8 +86,9 @@ function keydown() {
     args[_key3] = arguments[_key3];
   }
 
-  return _decorator.apply(undefined, [_method_decorator2.default].concat(args));
+  return _decorator.apply(undefined, [methodWrapper].concat(args));
 }
 
-exports.default = keydown;
-exports.keydownScoped = keydownScoped;
+export default keydown;
+
+export { keydownScoped };

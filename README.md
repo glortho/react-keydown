@@ -1,6 +1,7 @@
 <p align="center">
   <a href="http://glortho.github.io/react-keydown/example/index.html" target="_blank"><img src="https://raw.githubusercontent.com/glortho/react-keydown/master/example/public/react-keydown-logo.png" /></a>
 </p>
+
 [![npm version](https://badge.fury.io/js/react-keydown.svg)](https://badge.fury.io/js/react-keydown)
 [![dependencies](https://david-dm.org/glortho/react-keydown.svg)](https://david-dm.org/glortho/react-keydown.svg)
 
