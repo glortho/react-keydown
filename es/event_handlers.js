@@ -64,7 +64,7 @@ export function _shouldConsider(_ref3) {
   var ctrlKey = _ref3.ctrlKey,
       target = _ref3.target;
 
-  return ctrlKey || !~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(target.tagName) || target.getAttribute('role') !== 'textbox';
+  return ctrlKey || !~['INPUT', 'SELECT', 'TEXTAREA'].indexOf(target.tagName) && target.getAttribute('role') !== 'textbox';
 }
 
 /**
