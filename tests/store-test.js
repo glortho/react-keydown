@@ -4,7 +4,7 @@ import eventFixture from './fixtures/event';
 import Keys, { allKeys } from '../src/lib/keys';
 import Store, { _resetStore } from '../src/store';
 
-const bindingFixture = { keys: [], fn: () => {}, target: {} };
+const bindingFixture = () => ({ keys: [], fn: () => {}, target: {} });
 let msg;
 
 test( 'Store - activate', t => {
@@ -55,8 +55,9 @@ test( 'Store - delete', t => {
 test( 'Store - setBinding', t => {
   _resetStore();
 
-  Store.setBinding( bindingFixture );
-  const binding = Store.getBinding( bindingFixture.target );
+  let fixture = bindingFixture();
+  Store.setBinding( fixture );
+  const binding = Store.getBinding( fixture.target );
 
   msg = 'binding is created with target as key';
   t.ok( binding, msg );
@@ -65,21 +66,23 @@ test( 'Store - setBinding', t => {
   t.ok( binding instanceof Map, msg );
 
   _resetStore();
-  Store.setBinding( { ...bindingFixture, keys: [ 'a' ] } );
-  const [ key, val ] = [ ...Store.getBinding( bindingFixture.target ) ][0];
+  fixture = bindingFixture();
+  Store.setBinding( { ...fixture, keys: [ 'a' ] } );
+  const [ key, val ] = [ ...Store.getBinding( fixture.target ) ][0];
 
   msg = 'binding map is keyed by array of user-specified keys';
   t.deepEqual( key, [ { key: Keys.a } ], msg )
 
   msg = 'binding map val is target fn';
-  t.equal( val, bindingFixture.fn, msg );
+  t.equal( val, fixture.fn, msg );
 
 
   msg = 'binding map key is allKeys when no keys specified';
   {
     _resetStore();
-    Store.setBinding( { ...bindingFixture, keys: null } );
-    const [ key ] = [ ...Store.getBinding( bindingFixture.target ) ][0];
+    let fixture = bindingFixture();
+    Store.setBinding( { ...fixture, keys: null } );
+    const [ key ] = [ ...Store.getBinding( fixture.target ) ][0];
     t.ok( allKeys( key ), msg );
   }
 
@@ -94,7 +97,8 @@ test( 'Store - find binding for event', t => {
     const fixtureClass = class Foo { bar() {} };
     const fixtureInstance = new fixtureClass();
     const fn = fixtureClass.prototype.bar;
-    Store.setBinding( { ...bindingFixture, target: fixtureClass.prototype, keys, fn } );
+    const fixture = bindingFixture();
+    Store.setBinding( { ...fixture, target: fixtureClass.prototype, keys, fn } );
     Store.activate( fixtureInstance );
     return { instance: fixtureInstance, fn };
   }

@@ -9,7 +9,7 @@
     "build": "BABEL_ENV=production babel -d ./dist ./src",
     "build:es": "babel -d ./es ./src",
     "prepublish": "npm run build & npm run build:es",
-    "test": "node_modules/.bin/babel-node node_modules/.bin/tape tests/*.js | node_modules/.bin/tap-difflet"
+    "test": "BABEL_ENV=testing babel-node node_modules/.bin/tape tests/*.js | node_modules/.bin/tap-difflet"
   },
   "repository": {
     "type": "git",
@@ -47,5 +47,8 @@
   "peerDependencies": {
     "react": ">= 0.14.0",
     "react-dom": ">= 0.14.0"
+  },
+  "dependencies": {
+    "babel-preset-stage-1": "^6.24.1"
   }
 }
