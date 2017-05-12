@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.3
+
+- [Fix] Actually fix the muting of keybindings when role=textbox + tests
+- [Fix] Fix tests
+
 ## 1.7.2
 
 - [Fix] Mute keybindings when role=textbox (fixes [#51](https://github.com/glortho/react-keydown/issues/51))
