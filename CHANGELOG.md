@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.4
+
+- [Fix] Check for existence of `getAttribute` before calling it, mainly so
+  jsdom tests will pass (fixes
+  [#53](http:s//github.com/glortho/react-keydown/issues/53))
+
 ## 1.7.3
 
 - [Fix] Actually fix the muting of keybindings when role=textbox + tests
