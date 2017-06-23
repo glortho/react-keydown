@@ -57,8 +57,10 @@ export function _onKeyDown( event, forceConsider = false ) {
 export function _shouldConsider( { ctrlKey, target } ) {
   return (
     ctrlKey || (
-      !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( target.tagName ) &&
-      target.getAttribute( 'role' ) !== 'textbox'
+      !~[ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( target.tagName ) && (
+        !target.getAttribute ||
+        target.getAttribute( 'role' ) !== 'textbox'
+      )
     )
   );
 }
