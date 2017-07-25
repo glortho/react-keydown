@@ -81,4 +81,4 @@ function sortByDOMPosition( a, b ) {
   return a.node.compareDocumentPosition( b.node ) === 10 ? 1 : -1;
 }
 
-export default { bindFocusables, findContainerNodes, sortByDOMPosition };
+export default { bindFocusables, findContainerNodes, sAttached, sortByDOMPosition };
