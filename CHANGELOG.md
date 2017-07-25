@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.7.5-6
+## 1.7.5-7
 
 - [Fix] Do not reshuffle activation order of bound instances on click if the
   click target has already been removed from the DOM. See [#55](https://github.com/glortho/react-keydown/issues/55)
