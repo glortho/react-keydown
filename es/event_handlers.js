@@ -24,9 +24,13 @@ import store from './store';
 export function _onClick(_ref) {
   var target = _ref.target;
 
-  store.activate([].concat(_toConsumableArray(store.getInstances())).reduce(domHelpers.findContainerNodes(target), []).sort(domHelpers.sortByDOMPosition).map(function (item) {
-    return item.instance;
-  }));
+  // only reshuffle order if the click target is no longer in the
+  // DOM. See https://github.com/glortho/react-keydown/issues/55
+  if (domHelpers.isAttached(target)) {
+    store.activate([].concat(_toConsumableArray(store.getInstances())).reduce(domHelpers.findContainerNodes(target), []).sort(domHelpers.sortByDOMPosition).map(function (item) {
+      return item.instance;
+    }));
+  }
 }
 
 /**

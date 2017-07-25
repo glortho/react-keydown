@@ -44,9 +44,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _onClick(_ref) {
   var target = _ref.target;
 
-  _store2.default.activate([].concat(_toConsumableArray(_store2.default.getInstances())).reduce(_dom_helpers2.default.findContainerNodes(target), []).sort(_dom_helpers2.default.sortByDOMPosition).map(function (item) {
-    return item.instance;
-  }));
+  // only reshuffle order if the click target is no longer in the
+  // DOM. See https://github.com/glortho/react-keydown/issues/55
+  if (_dom_helpers2.default.isAttached(target)) {
+    _store2.default.activate([].concat(_toConsumableArray(_store2.default.getInstances())).reduce(_dom_helpers2.default.findContainerNodes(target), []).sort(_dom_helpers2.default.sortByDOMPosition).map(function (item) {
+      return item.instance;
+    }));
+  }
 }
 
 /**

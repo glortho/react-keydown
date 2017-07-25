@@ -62,6 +62,10 @@ function findContainerNodes(target) {
   };
 }
 
+function isAttached(node) {
+  return node && node !== document && node.parentNode;
+}
+
 /**
  * sortByDOMPosition: Called by our click handler to sort a list of instances
  * according to least -> most nested. This is so that if multiple keybound
