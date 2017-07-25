@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.5
+
+- [Fix] Do not reshuffle activation order of bound instances on click if the
+  click target has already been removed from the DOM. See [#55](https://github.com/glortho/react-keydown/issues/55)
+
 ## 1.7.4
 
 - [Fix] Check for existence of `getAttribute` before calling it, mainly so
@@ -31,7 +36,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.6.5
 
-- [f6c6c01](https://github.com/glortho/react-keydown/commit/f6c6c0178288a20d0539b3dbd9cefb244a8ba98f) [Feature] Patch feature: add "delete" and "del" as aliases to key code 46. 
+- [f6c6c01](https://github.com/glortho/react-keydown/commit/f6c6c0178288a20d0539b3dbd9cefb244a8ba98f) [Feature] Patch feature: add "delete" and "del" as aliases to key code 46.
 - [3870148](https://github.com/glortho/react-keydown/commit/3870148c9bd1ba05dcb19ee1fa0103e919a564c8) [Fix] Return values from decorated methods (fixes #35)
 - [f694b33](https://github.com/glortho/react-keydown/commit/f694b33f5c9ff97fabf09e6019420727a46bde4b) [Fix] Use window.KeyboardEvent instead of just KeyboardEvent for better
   clarity and testability with jsdom. (fixes #35)
