@@ -41,7 +41,7 @@ const Listeners = {
    */
   bindClicks( callback ) {
     if ( !_clicksBound ) {
-      document.addEventListener( 'click', callback );
+      document.addEventListener( 'click', callback, true );
       _clicksBound = true;
     }
   },
@@ -53,7 +53,7 @@ const Listeners = {
    */
   unbindClicks( callback ) {
     if ( _clicksBound ) {
-      document.removeEventListener( 'click', callback );
+      document.removeEventListener( 'click', callback, true );
       _clicksBound = false;
     }
   }
