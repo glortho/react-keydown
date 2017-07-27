@@ -2,27 +2,9 @@
  * @module methodWrapperScoped
  *
  */
+import { ALL_KEYS } from '../lib/keys';
 import matchKeys from '../lib/match_keys';
 import parseKeys from '../lib/parse_keys';
-
-/**
- * _shouldTrigger
- *
- * @access private
- * @param {object} thisProps Exsting props from the wrapped component
- * @param {object} thisProps.keydown The namespaced state from the higher-order
- * component (class_decorator)
- * @param {object} nextProps The incoming props from the wrapped component
- * @param {object} nextProps.keydown The namescaped state from the higher-order
- * component (class_decorator)
- * @param {array} keys The keys bound to the decorated method
- * @return {boolean} Whether all tests have passed
- */
-function _shouldTrigger( { keydown: keydownThis }, keydownNext ) {
-  return keydownNext &&
-         keydownNext.event && 
-         !keydownThis.event;
-}
 
 /**
  * methodWrapperScoped
@@ -42,17 +24,40 @@ function methodWrapperScoped( { target, descriptor, keys } ) {
   } else {
     const keySets = parseKeys( keys );
 
+    /**
+     * _shouldTrigger
+     *
+     * @access private
+     * @param {object} thisProps Exsting props from the wrapped component
+     * @param {object} thisProps.keydown The namespaced state from the higher-order
+     * component (class_decorator)
+     * @param {object} nextProps The incoming props from the wrapped component
+     * @param {object} nextProps.keydown The namescaped state from the higher-order
+     * component (class_decorator)
+     * @param {array} keys The keys bound to the decorated method
+     * @return {boolean} Whether all tests have passed
+     */
+    function _shouldTrigger (keydownThis, keydownNext) {
+      if (!(keydownNext && keydownNext.event && !keydownThis.event)) return false;
+
+      return (
+        ( ALL_KEYS === keys[0] ) ||
+        ( keySets.some( keySet => matchKeys( { keySet, event: keydownNext.event } ) ) )
+      )
+    }
+
     // wrap the component's lifecycle method to intercept key codes coming down
     // from the wrapped/scoped component up the view hierarchy. if new keydown
     // event has arrived and the key codes match what was specified in the
     // decorator, call the wrapped method.
     target.componentWillReceiveProps = function( nextProps, ...args ) {
-      const { keydown } = nextProps;
-      if ( _shouldTrigger( this.props, keydown ) ) {
-        if ( keySets.some( keySet => matchKeys( { keySet, event: keydown.event } ) ) ) {
-          return fn.call( this, keydown.event );
-        }
+      const { keydown: keydownNext } = nextProps;
+      const { keydown: keydownThis } = this.props;
+
+      if ( _shouldTrigger( keydownThis, keydownNext ) ) {
+        return fn.call( this, keydownNext.event );
       }
+
       if ( componentWillReceiveProps ) return componentWillReceiveProps.call( this, nextProps, ...args );
     };
   }

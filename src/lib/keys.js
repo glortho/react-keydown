@@ -53,4 +53,6 @@ export function allKeys( arg ) {
   return arg ? (arg.constructor === Symbol || typeof arg === 'symbol') : Symbol( 'allKeys' );
 }
 
+export const ALL_KEYS = Symbol('ALL_KEYS')
+
 export default Keys;
