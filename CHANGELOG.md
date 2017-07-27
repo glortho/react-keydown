@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.8
+
+- [Fix] Reverted changes made in 1.7.5 to 1.7.7 & added click check in capture mode
+  See [#55 (comment)](https://github.com/glortho/react-keydown/issues/55#issuecomment-318456804)
+
 ## 1.7.5-7
 
 - [Fix] Do not reshuffle activation order of bound instances on click if the
