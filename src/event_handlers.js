@@ -22,14 +22,12 @@ import store      from './store';
 export function _onClick( { target } ) {
   // only reshuffle order if the click target is no longer in the
   // DOM. See https://github.com/glortho/react-keydown/issues/55
-  if ( domHelpers.isAttached( target ) ) {
-    store.activate(
-      [ ...store.getInstances() ]
-        .reduce( domHelpers.findContainerNodes( target ), [] )
-        .sort( domHelpers.sortByDOMPosition )
-        .map( item => item.instance )
-    );
-  }
+  store.activate(
+    [ ...store.getInstances() ]
+      .reduce( domHelpers.findContainerNodes( target ), [] )
+      .sort( domHelpers.sortByDOMPosition )
+      .map( item => item.instance )
+  );
 }
 
 /**
