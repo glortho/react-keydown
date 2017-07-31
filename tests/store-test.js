@@ -1,7 +1,7 @@
 import test from 'tape';
 
 import eventFixture from './fixtures/event';
-import Keys, { allKeys } from '../src/lib/keys';
+import Keys, { ALL_KEYS } from '../src/lib/keys';
 import Store, { _resetStore } from '../src/store';
 
 const bindingFixture = () => ({ keys: [], fn: () => {}, target: {} });
@@ -77,13 +77,13 @@ test( 'Store - setBinding', t => {
   t.equal( val, fixture.fn, msg );
 
 
-  msg = 'binding map key is allKeys when no keys specified';
+  msg = 'binding map key is ALL_KEYS when no keys specified';
   {
     _resetStore();
     let fixture = bindingFixture();
     Store.setBinding( { ...fixture, keys: null } );
     const [ key ] = [ ...Store.getBinding( fixture.target ) ][0];
-    t.ok( allKeys( key ), msg );
+    t.ok( ALL_KEYS === key, msg );
   }
 
   t.end();

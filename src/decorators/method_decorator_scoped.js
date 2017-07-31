@@ -2,7 +2,6 @@
  * @module methodWrapperScoped
  *
  */
-import { ALL_KEYS } from '../lib/keys';
 import matchKeys from '../lib/match_keys';
 import parseKeys from '../lib/parse_keys';
 

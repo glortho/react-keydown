@@ -1,8 +1,6 @@
 import Keys, { modifiers, ALL_KEYS } from './keys';
 
 function parseKeys( keysArray ) {
-  if (ALL_KEYS === keysArray[0]) return
-
   return keysArray.map( key => {
     let keySet = { key };
     if ( typeof key === 'string' ) {
