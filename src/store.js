@@ -2,14 +2,13 @@
  * @module store
  *
  */
-import { allKeys } from './lib/keys';
 import matchKeys   from './lib/match_keys';
 import parseKeys   from './lib/parse_keys';
 import uuid        from './lib/uuid';
 
 /**
  * private
- * 
+ *
  */
 
 // dict for class prototypes => bindings
@@ -48,7 +47,7 @@ const Store = {
       _instances.add( null );
     } else {
       _instances.delete( null );
-      
+
       // deleting and then adding the instance(s) has the effect of sorting the set
       // according to instance activation (ascending)
       instancesArray.forEach( instance => {
@@ -78,7 +77,7 @@ const Store = {
       for ( const instance of [ ..._instances ].reverse() ) {
         const bindings = this.getBinding( instance.constructor.prototype );
         for ( const [ keySets, fn ] of bindings ) {
-          if ( allKeys( keySets ) || keySets.some( keyMatchesEvent ) ) {
+          if ( keySets.some( keyMatchesEvent ) ) {
             // return when matching keybinding is found - i.e. only one
             // keybound component can respond to a given key code. to get around this,
             // scope a common ancestor component class with @keydown and use
@@ -133,7 +132,8 @@ const Store = {
    * @param {object} args.target The decorated class
    */
   setBinding( { keys, fn, target } ) {
-    const keySets = keys ? parseKeys( keys ) : allKeys() ;
+    const keySets = parseKeys( keys );
+
     const { __reactKeydownUUID } = target;
     if ( !__reactKeydownUUID ) {
       target.__reactKeydownUUID = uuid();

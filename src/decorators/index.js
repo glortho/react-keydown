@@ -2,9 +2,21 @@
  * @module decorators
  *
  */
+import { ALL_KEYS } from '../lib/keys';
+
 import classWrapper        from './class_decorator';
 import methodWrapper       from './method_decorator';
 import methodWrapperScoped from './method_decorator_scoped';
+
+/**
+ * noopDecorator
+ *
+ * @access private
+ * @return {undefined} Returns `undefined` so that the original undecorated instance/method is used
+ */
+function noopDecorator () {
+  return undefined
+}
 
 /**
  * _decorator
@@ -15,7 +27,6 @@ import methodWrapperScoped from './method_decorator_scoped';
  * @return {Function} The decorated class or method
  */
 function _decorator( methodFn, ...args ) {
-
   // check the first argument to see if it's a user-supplied keycode or array
   // of keycodes, or if it's the wrapped class or method
   const testArg = args[0];
@@ -24,7 +35,7 @@ function _decorator( methodFn, ...args ) {
   // if the test argument is not an object or function, it is user-supplied
   // keycodes. else there are no arguments and it's just the wrapped class
   // (method decorators must have keycode arguments).
-  if ( isArray || ~[ 'string', 'number' ].indexOf( typeof testArg ) ) {
+  if ( isArray || ~[ 'string', 'number' ].indexOf( typeof testArg ) || ALL_KEYS === testArg) {
     const keys = isArray ? testArg : args;
 
     // return the decorator function, which on the next call will look for
@@ -36,13 +47,15 @@ function _decorator( methodFn, ...args ) {
         classWrapper( target, keys );
     };
   } else {
+    const WrappedComponent = args[0];
     const methodName = args[1];
 
     // method decorators without keycode (which) arguments are not allowed.
-    if ( !methodName ) {
+    if ( WrappedComponent && !methodName ) {
       return classWrapper( ...args );
     } else {
       console.warn( `${methodName}: Method decorators must have keycode arguments, so the decorator for this method will not do anything` );
+      return noopDecorator
     }
   }
 }

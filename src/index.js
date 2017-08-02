@@ -8,4 +8,4 @@ export { default, keydownScoped } from './decorators';
 export { setBinding } from './store';
 
 // Keys - use this to find key codes for strings. for example: Keys.j, Keys.enter
-export { default as Keys } from './lib/keys';
+export { default as Keys, ALL_KEYS } from './lib/keys';

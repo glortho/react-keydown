@@ -6,7 +6,7 @@
 [![dependencies](https://david-dm.org/glortho/react-keydown.svg)](https://david-dm.org/glortho/react-keydown.svg)
 
 Use react-keydown as a higher-order component or decorator to pass keydown
-events to the wrapped component, or call methods directly via designated keys. Good 
+events to the wrapped component, or call methods directly via designated keys. Good
 for implementing keyboard navigation or other shortcuts.
 
 Key advantages:
@@ -126,6 +126,19 @@ This is a convenience method, but also lets you specify a larger view context wh
 
 This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
 
+### Handling all keys using `keydownScoped` decorator
+
+In some cases you might want to handle keys on your own. For that, you can specify the following
+
+```
+import { keydownScoped, ALL_KEYS } from 'react-keydown'
+
+@keydownScoped(ALL_KEYS)
+beginEdit() {
+  // Start editing
+}
+```
+
 ### Caveat: Input, textarea, and select elements
 
 By default, bindings will not work when these fields have focus, in order not to interfere with user input and shortcuts related to these controls. You can override this in two ways:
@@ -141,7 +154,7 @@ class MyClass extends React.Component {
   myMethod( event ) {
     console.log( event ); // should log only on 'a' keystroke, whether input is focused or not
   }
-  
+
   render() {
     return <input onKeyDown={ this.myMethod } />;
   }
@@ -166,7 +179,7 @@ Note that this is very much a work in progress!
 ```
 $ npm test
 ```
-  
+
 
 ## Notes, disclaimers, and tips
 

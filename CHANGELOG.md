@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.8.0
+
+- [Fix] Added support for ALL_KEYS in `keydownScoped` decorator.
+  See [#56](https://github.com/glortho/react-keydown/issues/56)
+
 ## 1.7.8
 
 - [Fix] Reverted changes made in 1.7.5 to 1.7.7 & added click check in capture mode
