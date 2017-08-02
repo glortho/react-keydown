@@ -2,8 +2,6 @@
  * @module decorators
  *
  */
-import { ALL_KEYS } from '../lib/keys';
-
 import classWrapper        from './class_decorator';
 import methodWrapper       from './method_decorator';
 import methodWrapperScoped from './method_decorator_scoped';
@@ -34,8 +32,7 @@ function _decorator( methodFn, ...args ) {
 
   // if the test argument is not an object or function, it is user-supplied
   // keycodes. else there are no arguments and it's just the wrapped class
-  // (method decorators must have keycode arguments).
-  if ( isArray || ~[ 'string', 'number' ].indexOf( typeof testArg ) || ALL_KEYS === testArg) {
+  if ( isArray || ~[ 'string', 'number', 'symbol' ].indexOf( typeof testArg ) ) {
     const keys = isArray ? testArg : args;
 
     // return the decorator function, which on the next call will look for

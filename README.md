@@ -126,14 +126,14 @@ This is a convenience method, but also lets you specify a larger view context wh
 
 This can also be a good way to set up app-wide shortcuts. Wrap your root component with `@keydown` and then use  `@keydownScoped` or manually inspect the `keydown.event` props in the child components where those bindings are relevant.
 
-### Handling all keys using `keydownScoped` decorator
+### Handling all keys
 
-In some cases you might want to handle keys on your own. For that, you can specify the following
+In some cases you might want to handle all keys on your own. For that, you can specify the following:
 
 ```
-import { keydownScoped, ALL_KEYS } from 'react-keydown'
+import { keydown, ALL_KEYS } from 'react-keydown'
 
-@keydownScoped(ALL_KEYS)
+@keydown( ALL_KEYS )
 beginEdit() {
   // Start editing
 }

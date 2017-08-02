@@ -76,16 +76,6 @@ test( 'Store - setBinding', t => {
   msg = 'binding map val is target fn';
   t.equal( val, fixture.fn, msg );
 
-
-  msg = 'binding map key is ALL_KEYS when no keys specified';
-  {
-    _resetStore();
-    let fixture = bindingFixture();
-    Store.setBinding( { ...fixture, keys: null } );
-    const [ key ] = [ ...Store.getBinding( fixture.target ) ][0];
-    t.ok( ALL_KEYS === key, msg );
-  }
-
   t.end();
 });
 
@@ -118,8 +108,8 @@ test( 'Store - find binding for event', t => {
   t.deepEqual( Store.findBindingForEvent( { ...eventFixture, which: 1 } ), results, msg );
 
   msg = 'returns instance + fn if all keys matched';
-  results = setUp( { keys: null } );
-  t.deepEqual( Store.findBindingForEvent( { ...eventFixture, which: 'foo' } ), results, msg );
+  results = setUp( { keys: [ ALL_KEYS ] } );
+  t.deepEqual( Store.findBindingForEvent( { ...eventFixture, which: 1 } ), results, msg );
 
   t.end();
 });
