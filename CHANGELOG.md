@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.8.0
+## 1.9.0
 
 - [Fix] Added support for ALL_KEYS decorators.
   See [#56](https://github.com/glortho/react-keydown/issues/56)
