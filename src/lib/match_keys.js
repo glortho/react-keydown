@@ -3,6 +3,10 @@ import { modifiers as modifierKeys, ALL_KEYS } from './keys';
 const modKeys = Object.keys( modifierKeys );
 
 function matchKeys( { keySet, event } ) {
+  if (ALL_KEYS === keySet) {
+    return true
+  }
+
   const { key, modifiers = [] } = keySet;
 
   let keysMatch = false;

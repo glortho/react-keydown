@@ -2,7 +2,6 @@
  * @module store
  *
  */
-import { ALL_KEYS }   from './lib/keys';
 import matchKeys   from './lib/match_keys';
 import parseKeys   from './lib/parse_keys';
 import uuid        from './lib/uuid';
@@ -78,7 +77,7 @@ const Store = {
       for ( const instance of [ ..._instances ].reverse() ) {
         const bindings = this.getBinding( instance.constructor.prototype );
         for ( const [ keySets, fn ] of bindings ) {
-          if ( ALL_KEYS === keySets || keySets.some( keyMatchesEvent ) ) {
+          if ( keySets.some( keyMatchesEvent ) ) {
             // return when matching keybinding is found - i.e. only one
             // keybound component can respond to a given key code. to get around this,
             // scope a common ancestor component class with @keydown and use
@@ -133,9 +132,7 @@ const Store = {
    * @param {object} args.target The decorated class
    */
   setBinding( { keys, fn, target } ) {
-    const keySets = keys ? (
-      ALL_KEYS === keys[0] ? ALL_KEYS : parseKeys( keys )
-    ) : ALL_KEYS;
+    const keySets = parseKeys( keys );
 
     const { __reactKeydownUUID } = target;
     if ( !__reactKeydownUUID ) {

@@ -39,10 +39,7 @@ function methodWrapperScoped( { target, descriptor, keys } ) {
     function _shouldTrigger (keydownThis, keydownNext) {
       if (!(keydownNext && keydownNext.event && !keydownThis.event)) return false;
 
-      return (
-        ( ALL_KEYS === keys[0] ) ||
-        ( keySets.some( keySet => matchKeys( { keySet, event: keydownNext.event } ) ) )
-      )
+      return ( keySets.some( keySet => matchKeys( { keySet, event: keydownNext.event } ) ) )
     }
 
     // wrap the component's lifecycle method to intercept key codes coming down
