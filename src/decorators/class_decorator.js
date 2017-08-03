@@ -6,6 +6,7 @@ import React from 'react';
 
 import store from '../store';
 import { onMount, onUnmount } from '../event_handlers';
+import { ALL_KEYS } from '../lib/keys';
 
 /**
  * componentWrapper
@@ -15,7 +16,7 @@ import { onMount, onUnmount } from '../event_handlers';
  * @param {array} [keys] The key(s) bound to the class
  * @return {object} The higher-order function that wraps the decorated class
  */
-function componentWrapper( WrappedComponent, keys = null ) {
+function componentWrapper( WrappedComponent, keys = ALL_KEYS ) {
 
   class KeyBoardHelper extends React.Component {
 
@@ -44,7 +45,7 @@ function componentWrapper( WrappedComponent, keys = null ) {
     }
   }
 
-  store.setBinding( { keys, fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
+  store.setBinding( { keys: [].concat( keys ), fn: KeyBoardHelper.prototype.handleKeyDown, target: KeyBoardHelper.prototype } );
 
   return KeyBoardHelper;
 }
