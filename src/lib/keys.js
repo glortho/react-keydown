@@ -51,4 +51,6 @@ export const modifiers = {
 
 export const ALL_KEYS = Symbol('ALL_KEYS')
 
+export const ALL_PRINTABLE_KEYS = Symbol('ALL_PRINTABLE_KEYS')
+
 export default Keys;

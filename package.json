@@ -28,6 +28,12 @@
     "key-navigation"
   ],
   "author": "Jed Verity",
+  "contributors": [
+    {
+      "name": "Salman Mitha",
+      "email": "salmanmitha@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/glortho/react-keydown/issues"
