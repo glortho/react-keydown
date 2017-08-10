@@ -134,7 +134,20 @@ In some cases you might want to handle all keys on your own. For that, you can s
 import { keydown, ALL_KEYS } from 'react-keydown'
 
 @keydown( ALL_KEYS )
-beginEdit() {
+handleKeys(ev) {
+  // handle keys here
+}
+```
+
+### Handling all printable keys
+
+Another useful feature is handling all printable characters.
+
+```
+import { keydown, ALL_PRINTABLE_KEYS } from 'react-keydown'
+
+@keydown( ALL_PRINTABLE_KEYS )
+beginEdit(ev) {
   // Start editing
 }
 ```
