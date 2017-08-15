@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.9.2
+
+- Add ALL_PRINTABLE_CHARACTERS symbol for binding. See [#61](https://github.com/glortho/react-keydown/pull/61)
+
 ## 1.9.0-1
 
 - [Fix] Added support for ALL_KEYS in decorators.
