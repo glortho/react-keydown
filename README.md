@@ -131,7 +131,7 @@ This can also be a good way to set up app-wide shortcuts. Wrap your root compone
 In some cases you might want to handle all keys on your own. For that, you can specify the following:
 
 ```
-import { keydown, ALL_KEYS } from 'react-keydown'
+import keydown, { ALL_KEYS } from 'react-keydown'
 
 @keydown( ALL_KEYS )
 handleKeys(ev) {
@@ -144,7 +144,7 @@ handleKeys(ev) {
 Another useful feature is handling all printable characters.
 
 ```
-import { keydown, ALL_PRINTABLE_KEYS } from 'react-keydown'
+import keydown, { ALL_PRINTABLE_KEYS } from 'react-keydown'
 
 @keydown( ALL_PRINTABLE_KEYS )
 beginEdit(ev) {
