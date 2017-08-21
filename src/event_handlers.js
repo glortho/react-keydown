@@ -76,9 +76,7 @@ export function _shouldConsider( { ctrlKey, target } ) {
  * @access public
  */
 function onMount( instance ) {
-  // have to bump this to next event loop because component mounting routinely
-  // preceeds the dom click event that triggered the mount (wtf?)
-  setTimeout(() => store.activate( instance ), 0);
+  store.activate( instance );
   listeners.bindKeys( _onKeyDown );
   listeners.bindClicks( _onClick );
   domHelpers.bindFocusables( instance, store.activate );

@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.9.3
+
+- Remove smelly setTimeout from mount event handler now that we're capturing
+  instead of bubbling and don't need to bump activation. See [#64](https://github.com/glortho/react-keydown/issues/64) and [#66](https://github.com/glortho/react-keydown/issues/66)
+
 ## 1.9.2
 
 - Add ALL_PRINTABLE_CHARACTERS symbol for binding. See [#61](https://github.com/glortho/react-keydown/pull/61)
