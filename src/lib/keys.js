@@ -1,3 +1,5 @@
+import 'core-js/es6/symbol';
+
 // TODO: Need better, more complete, and more methodical key definitions
 
 const Keys = {
