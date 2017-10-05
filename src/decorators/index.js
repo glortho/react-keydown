@@ -24,7 +24,7 @@ function noopDecorator () {
  * @param {Array} ...args Remainder of arguments passed in
  * @return {Function} The decorated class or method
  */
-function _decorator( methodFn, ...args ) {
+function _decorator( methodFn, options, ...args ) {
   // check the first argument to see if it's a user-supplied keycode or array
   // of keycodes, or if it's the wrapped class or method
   const testArg = args[0];
@@ -40,8 +40,8 @@ function _decorator( methodFn, ...args ) {
     // or component
     return ( target, methodName, descriptor ) => {
       return methodName ?
-        methodFn( { target, descriptor, keys } ) :
-        classWrapper( target, keys );
+        methodFn( { target, descriptor, keys, options } ) :
+        classWrapper( target, keys, options );
     };
   } else {
     const WrappedComponent = args[0];
@@ -72,7 +72,7 @@ function _decorator( methodFn, ...args ) {
  * @return {Function} The decorated class or method
  */
 function keydownScoped( ...args ) {
-  return _decorator( methodWrapperScoped, ...args );
+  return _decorator( methodWrapperScoped, {}, ...args );
 }
 
 /**
@@ -85,9 +85,13 @@ function keydownScoped( ...args ) {
  * @return {Function} The decorated class or method
  */
 function keydown( ...args ) {
-  return _decorator( methodWrapper, ...args );
+  return _decorator( methodWrapper, {}, ...args );
+}
+
+function keydownGlobal( ...args ) {
+  return _decorator( methodWrapper, { global: true }, ...args);
 }
 
 export default keydown;
 
-export { keydownScoped };
+export { keydownScoped, keydownGlobal };

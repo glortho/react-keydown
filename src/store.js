@@ -69,21 +69,28 @@ const Store = {
   },
 
   findBindingForEvent( event ) {
-    if ( !_instances.has( null ) ) {
-      const keyMatchesEvent = keySet => matchKeys( { keySet, event } );
+    const keyMatchesEvent = keySet => matchKeys( { keySet, event } );
+    const hasNull = _instances.has(null);
 
-      // loop through instances in reverse activation order so that most
-      // recently activated instance gets first dibs on event
-      for ( const instance of [ ..._instances ].reverse() ) {
-        const bindings = this.getBinding( instance.constructor.prototype );
-        for ( const [ keySets, fn ] of bindings ) {
+    // loop through instances in reverse activation order so that most
+    // recently activated instance gets first dibs on event
+    for ( const instance of [ ..._instances ].reverse() ) {
+      if (!instance) {
+        continue;
+      }
+      const bindings = this.getBinding( instance.constructor.prototype );
+      for ( const [ keySets, binding ] of bindings ) {
+        if (binding.options.global || !hasNull) {
           if ( keySets.some( keyMatchesEvent ) ) {
             // return when matching keybinding is found - i.e. only one
             // keybound component can respond to a given key code. to get around this,
             // scope a common ancestor component class with @keydown and use
             // @keydownScoped to bind the duplicate keys in your child components
             // (or just inspect nextProps.keydown.event).
-            return { fn, instance };
+            return {
+              fn: binding.fn,
+              instance
+            };
           }
         }
       }
@@ -131,15 +138,16 @@ const Store = {
    * @param {function} args.fn The callback to be triggered when given keys are pressed
    * @param {object} args.target The decorated class
    */
-  setBinding( { keys, fn, target } ) {
+  setBinding( { keys, fn, target, options } ) {
     const keySets = parseKeys( keys );
 
     const { __reactKeydownUUID } = target;
+    const binding = { fn, options };
     if ( !__reactKeydownUUID ) {
       target.__reactKeydownUUID = uuid();
-      _handlers.set( target.__reactKeydownUUID, new Map( [ [ keySets, fn ] ] ) );
+      _handlers.set( target.__reactKeydownUUID, new Map( [ [ keySets, binding ] ] ) );
     } else {
-      _handlers.get( __reactKeydownUUID ).set( keySets, fn );
+      _handlers.get( __reactKeydownUUID ).set( keySets, binding );
     }
   }
 };

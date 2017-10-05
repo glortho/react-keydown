@@ -30,7 +30,7 @@ function _isReactKeyDown( event ) {
  * @param {array} args.keys The array of keys bound to the given method
  * @return {object} The method descriptor
  */
-function methodWrapper( { target, descriptor, keys } ) {
+function methodWrapper( { target, descriptor, keys, options } ) {
 
   const fn = descriptor.value;
 
@@ -52,7 +52,7 @@ function methodWrapper( { target, descriptor, keys } ) {
   }
 
   // add this binding of keys and method to the target's bindings
-  store.setBinding( { keys, target, fn } );
+  store.setBinding( { keys, target, fn, options } );
 
   descriptor.value = function( ...args ) {
     const [ maybeEvent ] = args;
