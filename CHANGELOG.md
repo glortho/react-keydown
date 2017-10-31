@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.9.5
+
+- Add pageUp, pageDown, home, end keys. See [#72](https://github.com/glortho/react-keydown/pull/72).
+
+Thank you @dariuszpaluch!
+
 ## 1.9.4
 
 - Make sure Symbol is getting polyfilled. See [#67](https://github.com/glortho/react-keydown/issues/67)
