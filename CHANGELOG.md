@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.9.6
+
+- Suppress "Unable to find node on an unmounted component" error during shallow
+  rendering in enzyme. See [#76](https://github.com/glortho/react-keydown/issues/76)
+
 ## 1.9.5
 
 - Add pageUp, pageDown, home, end keys. See [#72](https://github.com/glortho/react-keydown/pull/72).

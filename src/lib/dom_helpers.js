@@ -21,21 +21,25 @@ const focusableSelector = 'a[href], button, input, object, select, textarea, [ta
  */
 function bindFocusables( instance, activateOnFocus ) {
   if ( document.querySelectorAll ) {
-    const node = ReactDOM.findDOMNode( instance );
-    if ( node ) {
-      const focusables = node.querySelectorAll( focusableSelector );
-      if ( focusables.length ) {
-        const onFocus = element => {
-          const onFocusPrev = element.onfocus;
-          return function( event ) {
-            activateOnFocus( instance );
-            if ( onFocusPrev ) onFocusPrev.call( element, event );
+    try {
+      const node = ReactDOM.findDOMNode( instance );
+      if ( node ) {
+        const focusables = node.querySelectorAll( focusableSelector );
+        if ( focusables.length ) {
+          const onFocus = element => {
+            const onFocusPrev = element.onfocus;
+            return function( event ) {
+              activateOnFocus( instance );
+              if ( onFocusPrev ) onFocusPrev.call( element, event );
+            };
           };
-        };
-        Array.prototype.slice.call( focusables ).forEach( element => (
-          element.onfocus = onFocus( element )
-        ) );
+          Array.prototype.slice.call( focusables ).forEach( element => (
+            element.onfocus = onFocus( element )
+          ) );
+        }
       }
+    } catch ( error ) {
+      // noop, mostly suppressing error here https://github.com/glortho/react-keydown/issues/76
     }
   }
 }
