@@ -8,10 +8,10 @@ module.exports = {
     filename: 'app.js'
   },
   module: {
-    loaders: [{
+    rules: [{
       exclude: /node_modules/,
       test: /\.js$/,
-      loader: 'babel'
+      loader: 'babel-loader'
     }]
   }
 };
