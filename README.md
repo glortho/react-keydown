@@ -198,10 +198,11 @@ $ npm test
 
 * The decorator pattern `@keydown` currently requires transpilation by
   the [Babel legacy decorators transform](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) or the equivalent.
-* The default build uses CommonJS modules. For AMD or other support, use the
+* Components that have a [React 16 fragment](https://reactjs.org/docs/fragments.html) at their root may not be activated properly when clicked. See [this issue](https://github.com/glortho/react-keydown/issues/80) for more detail.
+* The default build outputs CommonJS modules and native ES modules. For AMD or other support, use the
   [umd-specific
-  branch](https://github.com/jedverity/react-keydown/tree/master-umd) instead.
-* This lib has only been tested using ES2015 classes. Some method decoration
+  branch](https://github.com/glortho/react-keydown/tree/master-umd) instead.
+* This lib has only been tested using ES2015 classes and class methods. Some method decoration
   functionality may work on other types of object methods.
 * Duplicate keybindings for components that are mounted at the same time will
   not both fire. The more recently mounted component, or the one that has been
