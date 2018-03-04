@@ -5,7 +5,7 @@
  */
 import domHelpers from './lib/dom_helpers';
 import listeners  from './lib/listeners';
-import store      from './store';
+import * as store from './store';
 
 /**
  * private

@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-import store from '../store';
+import * as store from '../store';
 import { onMount, onUnmount } from '../event_handlers';
 import { ALL_KEYS } from '../lib/keys';
 

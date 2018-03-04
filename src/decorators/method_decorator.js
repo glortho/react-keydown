@@ -2,7 +2,7 @@
  * @module methodWrapper
  *
  */
-import store from '../store';
+import * as store from '../store';
 import { onMount, onUnmount, _onKeyDown } from '../event_handlers';
 
 /**
