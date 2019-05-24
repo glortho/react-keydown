@@ -2,13 +2,13 @@ import test from 'tape';
 
 import eventFixture from './fixtures/event';
 import Keys, { ALL_KEYS } from '../src/lib/keys';
-import Store, { _resetStore } from '../src/store';
+import * as Store from '../src/store';
 
 const bindingFixture = () => ({ keys: [], fn: () => {}, target: {} });
 let msg;
 
 test( 'Store - activate', t => {
-  _resetStore();
+  Store._resetStore();
 
   const fixture = {};
 
@@ -40,7 +40,7 @@ test( 'Store - activate', t => {
 });
 
 test( 'Store - delete', t => {
-  _resetStore();
+  Store._resetStore();
 
   const fixture = {};
 
@@ -53,7 +53,7 @@ test( 'Store - delete', t => {
 });
 
 test( 'Store - setBinding', t => {
-  _resetStore();
+  Store._resetStore();
 
   let fixture = bindingFixture();
   Store.setBinding( fixture );
@@ -65,7 +65,7 @@ test( 'Store - setBinding', t => {
   msg = 'binding is a map';
   t.ok( binding instanceof Map, msg );
 
-  _resetStore();
+  Store._resetStore();
   fixture = bindingFixture();
   Store.setBinding( { ...fixture, keys: [ 'a' ] } );
   const [ key, val ] = [ ...Store.getBinding( fixture.target ) ][0];
@@ -83,7 +83,7 @@ test( 'Store - find binding for event', t => {
   let results = null;
 
   function setUp( { keys } ) {
-    _resetStore();
+    Store._resetStore();
     const fixtureClass = class Foo { bar() {} };
     const fixtureInstance = new fixtureClass();
     const fn = fixtureClass.prototype.bar;
@@ -93,7 +93,7 @@ test( 'Store - find binding for event', t => {
     return { instance: fixtureInstance, fn };
   }
 
-  _resetStore();
+  Store._resetStore();
 
   msg = 'returns null if instances capped with null';
   Store.activate( [] );

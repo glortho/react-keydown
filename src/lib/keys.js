@@ -1,4 +1,4 @@
-import 'core-js/es6/symbol';
+import 'core-js/es/symbol';
 
 // TODO: Need better, more complete, and more methodical key definitions
 
