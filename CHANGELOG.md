@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.9.10
+
+- Removes Symbol import from core-js, now that it is part of ECMAScript. See
+  [#91](https://github.com/glortho/react-keydown/pull/91)
+
+## 1.9.9
+
+- Updates to core-js 3 and fixes tests. See [#90](https://github.com/glortho/react-keydown/pull/90)
+
 ## 1.9.6
 
 - Suppress "Unable to find node on an unmounted component" error during shallow
