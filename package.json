@@ -1,6 +1,6 @@
 {
   "name": "react-keydown",
-  "version": "1.9.9",
+  "version": "1.9.10",
   "description": "Lightweight keydown wrapper for React components",
   "main": "dist/index.js",
   "jsnext:main": "es/index.js",
