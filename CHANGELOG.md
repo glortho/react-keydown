@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.9.12
+
+- Another security fix
+
 ## 1.9.11
 
 - Security fixes
