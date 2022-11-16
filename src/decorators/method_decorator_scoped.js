@@ -16,7 +16,7 @@ import parseKeys from '../lib/parse_keys';
  * @return {object} The method's descriptor object
  */
 function methodWrapperScoped( { target, descriptor, keys } ) {
-  const { componentWillReceiveProps } = target;
+  const { componentDidUpdate } = target;
   const fn = descriptor.value;
   if ( !keys ) {
     console.warn( `${fn}: keydownScoped requires one or more keys` );
@@ -46,15 +46,15 @@ function methodWrapperScoped( { target, descriptor, keys } ) {
     // from the wrapped/scoped component up the view hierarchy. if new keydown
     // event has arrived and the key codes match what was specified in the
     // decorator, call the wrapped method.
-    target.componentWillReceiveProps = function( nextProps, ...args ) {
-      const { keydown: keydownNext } = nextProps;
-      const { keydown: keydownThis } = this.props;
+    target.componentDidUpdate = function( prevProps, ...args ) {
+      const { keydown: keydownNext } = this.props;
+      const { keydown: keydownThis } = prevProps;
 
       if ( _shouldTrigger( keydownThis, keydownNext ) ) {
         return fn.call( this, keydownNext.event );
       }
 
-      if ( componentWillReceiveProps ) return componentWillReceiveProps.call( this, nextProps, ...args );
+      if ( componentDidUpdate ) return componentDidUpdate.call( this, prevProps, ...args );
     };
   }
 
