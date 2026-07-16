@@ -10,7 +10,8 @@
     "build:es": "babel -d ./es ./src",
     "build:es:watch": "babel --watch -d ./es ./src",
     "prepublish": "npm run build & npm run build:es",
-    "test": "BABEL_ENV=testing babel-node node_modules/.bin/tape tests/*.js | node_modules/.bin/tap-difflet"
+    "test": "BABEL_ENV=testing babel-node node_modules/.bin/tape tests/*.js | node_modules/.bin/tap-difflet",
+    "test:coverage": "BABEL_ENV=testing nyc --reporter=text --reporter=html --extension=.js --require babel-core/register tape tests/*.js"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
   "homepage": "https://github.com/glortho/react-keydown#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
@@ -48,6 +50,7 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-1": "^6.24.1",
     "eslint": "^5.16.0",
+    "nyc": "^18.0.0",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "tap-difflet": "^0.4.0",
