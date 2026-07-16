@@ -76,6 +76,17 @@ test( 'Store - setBinding', t => {
   msg = 'binding map val is target fn';
   t.equal( val, fixture.fn, msg );
 
+  msg = 'adds an additional binding to the existing map when target already has a UUID';
+  Store._resetStore();
+  fixture = bindingFixture();
+  Store.setBinding( { ...fixture, keys: [ 'a' ] } );
+  const secondFn = () => {};
+  Store.setBinding( { ...fixture, keys: [ 'b' ], fn: secondFn } );
+  const binding2 = Store.getBinding( fixture.target );
+  t.equal( binding2.size, 2, msg );
+  const bBinding = [ ...binding2 ].find( ( [ keySet ] ) => keySet[ 0 ].key === Keys.b );
+  t.equal( bBinding[ 1 ], secondFn, msg );
+
   t.end();
 });
 
