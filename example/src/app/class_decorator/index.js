@@ -11,7 +11,8 @@ class MyComponent extends React.Component {
     };
   }
 
-  componentWillReceiveProps( { keydown: { event } } ) {
+  componentDidUpdate() {
+    const { keydown: { event } } = this.props;
     if ( event ) {
       this.setState( { key: event.which } );
     }

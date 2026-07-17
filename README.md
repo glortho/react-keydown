@@ -71,7 +71,8 @@ autocomplete( event ) {
 ```javascript
 @keydown
 class MyComponent extends React.Component {
-  componentWillReceiveProps( { keydown } ) {
+  componentDidUpdate() {
+    const { keydown } = this.props;
     if ( keydown.event ) {
       // inspect the keydown event and decide what to do
       console.log( keydown.event.which );
@@ -115,7 +116,7 @@ class MyComponent extends React.Component {
 
 class MyOtherComponent extends React.Component {
   ...
-  @keydownScoped( 'enter' ) // inspects nextProps.keydown.event in componentWillReceiveProps behind the scenes
+  @keydownScoped( 'enter' ) // inspects this.props.keydown.event in componentDidUpdate behind the scenes
   submit() {
     // submit
   }
